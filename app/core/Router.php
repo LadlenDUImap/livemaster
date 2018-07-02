@@ -28,7 +28,6 @@ class Router
 
         $path .= '/Controller';
 
-
         $file = \app\core\Config::inst()->appDir . '..' . $path . '.php';
         if (file_exists($file))
         {
