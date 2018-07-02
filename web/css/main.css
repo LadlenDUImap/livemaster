@@ -1,0 +1,49 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: .8em;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.header {
+    background-color: #EEE;
+    text-align: center;
+    padding: 5px;
+}
+
+.container {
+    margin: 1em auto;
+    width: 80%;
+}
+
+.t-row {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+}
+
+.t-row.head {
+    color: white;
+    font-weight: bold;
+    background-color: black;
+}
+
+.col {
+    float: left;
+    text-align: center;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+@media only screen and (max-width: 320px) {
+    .container {
+        width: 100%;
+    }
+}

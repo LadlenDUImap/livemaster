@@ -13,11 +13,11 @@
 
     <title><?= $this->title ?></title>
 
+    <link href="css/main.css" rel="stylesheet" media="all" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-    <style>
     <?= $this->css ?>
-    </style>
 
 </head>
 <body>

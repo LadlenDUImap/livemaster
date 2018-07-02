@@ -3,20 +3,13 @@
 
 $this->title = 'Список пользователей';
 
-$this->css .= <<<CSS
-.header {
-    background-color: grey;
-}
-
-CSS
-;
-
-
 ?>
 <main>
     <h3 class="header">Список пользователей</h3>
-    <div class="global_message">
-        <br>
-        <a href="/">Домой</a>
+    <div class="t-row head">
+        <div class="col col-3">ID</div>
+        <div class="col col-3">Имя</div>
+        <div class="col col-3">Возраст</div>
+        <div class="col col-3">Город</div>
     </div>
 </main>
