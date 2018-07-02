@@ -1,11 +1,11 @@
-CREATE DATABASE IF NOT EXISTS `livemaster`;
+CREATE DATABASE IF NOT EXISTS `livemaster` CHARSET=UTF8;
 
 USE `livemaster`;
 
 DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` (
   `id`   INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` CHAR(40),
+  `name` VARCHAR(30),
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -14,7 +14,7 @@ CREATE TABLE `cities` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id`        INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name`      CHAR(40),
+  `name`      VARCHAR(100),
   `birthdate` DATETIME,
   `city_id`   INT(11) UNSIGNED NULL,
   PRIMARY KEY (`id`),
