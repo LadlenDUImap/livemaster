@@ -11,23 +11,35 @@ class Pattern extends Safe
         $this->pattern = $pattern;
     }
 
-    public function fillPatternWithValues($values)
+    public static function fillPatternWithValues($pattern, $values, $encodeFunction)
     {
-        $filledPattern = $this->pattern;
+        $filledPattern = $pattern;
         foreach ($values as $name => $val) {
-            $valEncoded = self::htmlEncode($val);
+            $valEncoded = $encodeFunction ? self::$encodeFunction($val) : $val;
             $filledPattern = str_replace('{' . $name . '}', $valEncoded, $filledPattern);
         }
         return $filledPattern;
     }
 
-    public function getEmptyJsPattern()
+    public function fillPatternWithValuesHtml($values)
     {
-        return self::jsEncode(self::php2NewHtmlPattern($this->pattern));
+        return self::fillPatternWithValues($this->pattern, $values, 'htmlEncode');
+
+        /*$filledPattern = $this->pattern;
+        foreach ($values as $name => $val) {
+            $valEncoded = self::htmlEncode($val);
+            $filledPattern = str_replace('{' . $name . '}', $valEncoded, $filledPattern);
+        }
+        return $filledPattern;*/
     }
 
-    public static function php2NewHtmlPattern($html)
+    public function fillPatternWithValuesJs($values, $encode = 'htmlEncode')
+    {
+        return self::jsEncode(self::fillPatternWithValues($this->pattern, $values, $encode));
+    }
+
+    /*public static function php2NewHtmlPattern($html)
     {
         return preg_replace('/\{\S+\}/', '', $html);
-    }
+    }*/
 }

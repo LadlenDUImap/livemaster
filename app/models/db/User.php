@@ -7,7 +7,7 @@ use app\base\Model;
 class User extends Model
 {
     protected $name;
-    protected $birthdate;
+    protected $age;
     protected $city_id;
 
     public static $tableName = 'users';
@@ -31,17 +31,17 @@ class User extends Model
     /**
      * @return mixed
      */
-    public function getBirthdate()
+    public function getAge()
     {
-        return $this->birthdate;
+        return $this->age;
     }
 
     /**
-     * @param mixed $birthdate
+     * @param mixed $age
      */
-    public function setBirthdate($birthdate)
+    public function setAge($age)
     {
-        $this->birthdate = $birthdate;
+        $this->age= $age;
     }
 
     /**
