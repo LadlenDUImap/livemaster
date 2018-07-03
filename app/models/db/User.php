@@ -41,7 +41,7 @@ class User extends Model
      */
     public function setAge($age)
     {
-        $this->age= $age;
+        $this->age = $age;
     }
 
     /**
@@ -61,8 +61,30 @@ class User extends Model
     }
 
 
-    /*public function getCityId()
+    public function verifyName()
     {
-        return $this->city_id;
-    }*/
+        $this->name = trim($this->name);
+        $nameLength = mb_strlen($this->name, 'UTF-8');
+
+        if (!$nameLength) {
+            throw new \Exception('Имя пользователя должно быть заполнено');
+        }
+        if ($nameLength > 30) {
+            throw new \Exception('Имя пользователя НЕ должно быть больше 30 символов');
+        }
+
+        return true;
+    }
+
+    public function verifyAge()
+    {
+        $this->age = trim($this->age);
+        if (!preg_match('^\d+$', $this->age)) {
+            throw new \Exception('Возраст пользователя должен быть неотрицательным целым числом');
+        }
+        if ($this->age > 120) {
+            throw new \Exception('Дубы и черепахи не могут быть пользователями');
+        }
+        return true;
+    }
 }

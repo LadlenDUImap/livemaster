@@ -1,11 +1,12 @@
-CREATE DATABASE IF NOT EXISTS `livemaster` CHARSET=UTF8;
+CREATE DATABASE IF NOT EXISTS `livemaster`
+  CHARSET = UTF8;
 
 USE `livemaster`;
 
 DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` (
   `id`   INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(30) NOT NULL,
+  `name` VARCHAR(30)      NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -13,12 +14,19 @@ CREATE TABLE `cities` (
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `id`        INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name`      VARCHAR(30) NOT NULL,
-  `age`       INT UNSIGNED NOT NULL,
-  `city_id`   INT(11) UNSIGNED NULL,
+  `id`      INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name`    VARCHAR(30)      NOT NULL,
+  `age`     INT UNSIGNED     NOT NULL,
+  `city_id` INT(11) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`)
 )
   ENGINE = InnoDB
   CHARACTER SET = UTF8;
+
+INSERT INTO `cities`
+SET `name` = 'Москва';
+INSERT INTO `cities`
+SET `name` = 'Владивосток';
+INSERT INTO `cities`
+SET `name` = 'Смоленск';

@@ -54,4 +54,13 @@ abstract class Model
 
         return $items;
     }
+
+    public function actionVerifyData($field)
+    {
+        $fname = 'verify' . ucfirst($field);
+        if (!is_callable([$this, $fname])) {
+            throw new \Exception('Нет такого поля: ' . $field);
+        }
+        return $this->$fname;
+    }
 }

@@ -22,7 +22,7 @@ $userRowPattern = new Pattern($userRow);
 ?>
 <main>
     <h3 class="header">Список пользователей</h3>
-    <div class="user-list">
+    <div class="user-list" id="user-list">
         <div class="t-row head">
             <div class="col col-3">ID</div>
             <div class="col col-3">Имя</div>
@@ -35,7 +35,7 @@ $userRowPattern = new Pattern($userRow);
             $userRowPatternMod = str_replace('{name}', $usr['name'], $userRowPatternMod);
             $userRowPatternMod = str_replace('{age}', $usr['age'], $userRowPatternMod);
             $userRowPatternMod = str_replace('{city}', $usr['city'], $userRowPatternMod);*/
-            echo $userRowPattern->fillPatternWithValues($usr) . "\n";
+            echo $userRowPattern->fillPatternWithValuesHtml($usr) . "\n";
         }
         ?>
     </div>
@@ -44,7 +44,12 @@ $userRowPattern = new Pattern($userRow);
 
 <script>
     $(function () {
-        var userRowPatternNew = <?= $userRowPattern->getEmptyJsPattern() ?>;
+        var userRowPatternNew = <?= $userRowPattern->fillPatternWithValuesJs([
+            'id' => '&nbsp;',
+            'name' => '<input type="text" class="new-input new-name">',
+            'age' => '<input type="text" class="new-input new-age">',
+            'city' => '<input type="text" class="new-input new-city">',
+        ], false) ?>;
 
         $("#btn-add-user").click(function () {
             $(".user-list .t-row:last-child").after(userRowPatternNew);

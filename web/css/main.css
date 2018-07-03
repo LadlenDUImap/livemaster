@@ -1,3 +1,9 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -24,7 +30,7 @@ table {
 .t-row {
     display: inline-block;
     width: 100%;
-    padding: 5px;
+    /*padding: 5px;*/
 }
 
 .t-row.head {
@@ -36,6 +42,7 @@ table {
 .col {
     float: left;
     text-align: center;
+    padding: 5px;
 }
 
 .col-3 {
@@ -48,7 +55,16 @@ table {
     float: right;
 }
 
-@media only screen and (max-width: 320px) {
+.new-input {
+    width: 100%;
+}
+
+.new-age {
+    text-align: center;
+}
+
+/*@media only screen and (max-width: 320px) {*/
+@media only screen and (max-width: 720px) {
     .container {
         width: 100%;
     }
