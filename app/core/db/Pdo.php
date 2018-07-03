@@ -18,7 +18,7 @@ class Pdo extends \app\base\Component
         $this->DBH->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
-    public function selectQuery($query, $params): array
+    public function selectQuery($query, $params = []): array
     {
         $result = [];
 

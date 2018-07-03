@@ -42,6 +42,12 @@ table {
     width: 25%;
 }
 
+#btn-add-user {
+    margin-top: 1em;
+    padding: .5em 2em;
+    float: right;
+}
+
 @media only screen and (max-width: 320px) {
     .container {
         width: 100%;

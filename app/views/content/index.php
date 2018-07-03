@@ -4,6 +4,15 @@
 
 $this->title = 'Список пользователей';
 
+$userRowPattern = <<<HTML
+<div class="t-row">
+    <div class="col col-3">{id}</div>
+    <div class="col col-3">{name}</div>
+    <div class="col col-3">{age}</div>
+    <div class="col col-3">{city}</div>
+</div>
+HTML;
+
 ?>
 <main>
     <h3 class="header">Список пользователей</h3>
@@ -14,12 +23,11 @@ $this->title = 'Список пользователей';
             <div class="col col-3">Возраст</div>
             <div class="col col-3">Город</div>
         </div>
-        <div class="t-row">
-            <div class="col col-3">10</div>
-            <div class="col col-3">Дима Долгов Станиславович</div>
-            <div class="col col-3">45</div>
-            <div class="col col-3">Нет города</div>
-        </div>
+        <?php
+        foreach ($users as $usr) {
+            str_replace('{id}', '', $userRowPattern);
+        }
+        ?>
     </div>
     <button id="btn-add-user">Добавить пользователя</button>
 </main>
@@ -27,7 +35,7 @@ $this->title = 'Список пользователей';
 <script>
     $(function () {
         $("#btn-add-user").click(function () {
-            
+
         });
     });
 </script>

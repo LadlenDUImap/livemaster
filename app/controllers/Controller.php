@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\db\User;
+
 class Controller extends \app\base\Controller
 {
     public function actionIndex()
     {
-        return $this->render('index');
+        $users = User::getAll();
+        return $this->render('index', ['users' => $users]);
     }
 
     public function action404()

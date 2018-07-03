@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\db;
 
 use app\base\Model;
 
@@ -9,6 +9,8 @@ class User extends Model
     protected $name;
     protected $birthdate;
     protected $city_id;
+
+    public static $tableName = 'users';
 
     /**
      * @return mixed
@@ -59,4 +61,8 @@ class User extends Model
     }
 
 
+    /*public function getCityId()
+    {
+        return $this->city_id;
+    }*/
 }
