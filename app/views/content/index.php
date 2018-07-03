@@ -1,6 +1,6 @@
 <?php
 /* @var $this app\core\View */
-/* @var $users array */
+/* @var $values array */
 
 $this->title = 'Список пользователей';
 
@@ -12,6 +12,8 @@ $userRowPattern = <<<HTML
     <div class="col col-3">{city}</div>
 </div>
 HTML;
+
+$users = $values['users'];
 
 ?>
 <main>

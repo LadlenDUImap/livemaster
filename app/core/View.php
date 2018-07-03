@@ -37,14 +37,13 @@ class View
      * Сгенерировать PHP файл.
      *
      * @param string $_file_ Путь к файлу.
-     * @param Container $values Контейнер с переменными для файла.
+     * @param mixed $values
      * @return string
      */
-    public function render($_file_, Container $values = null)
+    public function render($_file_, $values = null)
     {
         if (!$values)
         {
-            // Контейнер должен всегда присутствовать.
             $values = new Container;
         }
 

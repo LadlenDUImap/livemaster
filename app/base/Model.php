@@ -43,7 +43,7 @@ abstract class Model
     {
         $items = [];
 
-        $query = 'SELECT * FROM `' . static::$tableName;
+        $query = 'SELECT * FROM `' . static::$tableName . '`';
         if ($rows = Lm::inst()->db->selectQuery($query)) {
             foreach ($rows as $vals) {
                 $newItem = new get_called_class();
