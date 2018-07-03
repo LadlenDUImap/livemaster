@@ -15,11 +15,13 @@ class Di
         return $class;
     }
 
-    public static function configure($object, $properties)
+    public static function configure(\app\base\Component $object, $properties)
     {
         foreach ($properties as $name => $value) {
             $object->$name = $value;
         }
+
+        $object->init();
 
         return $object;
     }

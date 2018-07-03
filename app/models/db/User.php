@@ -4,7 +4,7 @@ namespace app\models;
 
 use app\base\Model;
 
-class Users extends Model
+class User extends Model
 {
     protected $name;
     protected $birthdate;

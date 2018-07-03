@@ -5,7 +5,7 @@ USE `livemaster`;
 DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` (
   `id`   INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(30),
+  `name` VARCHAR(30) NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -14,8 +14,8 @@ CREATE TABLE `cities` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id`        INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name`      VARCHAR(100),
-  `birthdate` DATETIME,
+  `name`      VARCHAR(30) NOT NULL,
+  `birthdate` DATETIME NOT NULL,
   `city_id`   INT(11) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`)

@@ -9,7 +9,7 @@ abstract class Model
     public function __construct($id = false)
     {
         if ($id) {
-            LM::inst()
+            Lm::inst()
         }
     }
 

@@ -7,6 +7,9 @@ use app\base\Singleton;
 
 class Lm extends Singleton
 {
+    public static $app;
+
+    //TODO: что не так с Singleton
     public function __construct($config)
     {
         Di::set($this, $config['components']);
@@ -14,6 +17,8 @@ class Lm extends Singleton
 
     public function run()
     {
+        self::$app = $this;
+
         try {
             /*if (!Csrf::inst()->validateCsrfToken()) {
                 //TODO: похоже неправильное поведение (см. validateCsrfToken())
