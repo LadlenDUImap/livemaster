@@ -2,7 +2,11 @@
 /* @var $this app\core\View */
 /* @var $values array */
 
+use app\core\html\Html;
+
 $this->title = 'Список пользователей';
+
+$users = $values['users'];
 
 $userRowPattern = <<<HTML
 <div class="t-row">
@@ -13,7 +17,7 @@ $userRowPattern = <<<HTML
 </div>
 HTML;
 
-$users = $values['users'];
+$userRowPatternNew = Html::php2NewHtmlPattern($userRowPattern);
 
 ?>
 <main>
@@ -27,7 +31,10 @@ $users = $values['users'];
         </div>
         <?php
         foreach ($users as $usr) {
-            str_replace('{id}', '', $userRowPattern);
+            $userRowPatternMod = str_replace('{id}', $usr['id'], $userRowPattern);
+            $userRowPatternMod = str_replace('{name}', $usr['name'], $userRowPatternMod);
+            $userRowPatternMod = str_replace('{age}', $usr['age'], $userRowPatternMod);
+            $userRowPatternMod = str_replace('{city}', $usr['city'], $userRowPatternMod);
         }
         ?>
     </div>
@@ -36,6 +43,9 @@ $users = $values['users'];
 
 <script>
     $(function () {
+
+        var userRowPatternNew = <?= json_encode($userRowPatternNew) ?>
+
         $("#btn-add-user").click(function () {
 
         });
