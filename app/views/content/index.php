@@ -2,13 +2,13 @@
 /* @var $this app\core\View */
 /* @var $values array */
 
-use app\core\html\Html;
+use app\core\html\Pattern;
 
 $this->title = 'Список пользователей';
 
 $users = $values['users'];
 
-$userRowPattern = <<<HTML
+$userRow = <<<HTML
 <div class="t-row">
     <div class="col col-3">{id}</div>
     <div class="col col-3">{name}</div>
@@ -17,7 +17,7 @@ $userRowPattern = <<<HTML
 </div>
 HTML;
 
-$userRowPatternNew = Html::php2NewHtmlPattern($userRowPattern);
+$userRowPattern = new Pattern($userRow);
 
 ?>
 <main>
@@ -31,10 +31,11 @@ $userRowPatternNew = Html::php2NewHtmlPattern($userRowPattern);
         </div>
         <?php
         foreach ($users as $usr) {
-            $userRowPatternMod = str_replace('{id}', $usr['id'], $userRowPattern);
+            /*$userRowPatternMod = str_replace('{id}', $usr['id'], $userRowPattern);
             $userRowPatternMod = str_replace('{name}', $usr['name'], $userRowPatternMod);
             $userRowPatternMod = str_replace('{age}', $usr['age'], $userRowPatternMod);
-            $userRowPatternMod = str_replace('{city}', $usr['city'], $userRowPatternMod);
+            $userRowPatternMod = str_replace('{city}', $usr['city'], $userRowPatternMod);*/
+            echo $userRowPattern->fillPatternWithValues($usr) . "\n";
         }
         ?>
     </div>
@@ -43,11 +44,10 @@ $userRowPatternNew = Html::php2NewHtmlPattern($userRowPattern);
 
 <script>
     $(function () {
-
-        var userRowPatternNew = <?= json_encode($userRowPatternNew) ?>
+        var userRowPatternNew = <?= $userRowPattern->getEmptyJsPattern() ?>;
 
         $("#btn-add-user").click(function () {
-
+            $(".user-list .t-row:last-child").after(userRowPatternNew);
         });
     });
 </script>

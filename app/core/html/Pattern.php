@@ -2,10 +2,32 @@
 
 namespace app\core\html;
 
-class Pattern
+class Pattern extends Safe
 {
-    public static function php2NewHtmlPattern($phpHtml)
+    protected $pattern;
+
+    public function __construct($pattern)
     {
-        return preg_replace('/\{\S+\}/', '', $phpHtml);
+        $this->pattern = $pattern;
+    }
+
+    public function fillPatternWithValues($values)
+    {
+        $filledPattern = $this->pattern;
+        foreach ($values as $name => $val) {
+            $valEncoded = self::htmlEncode($val);
+            $filledPattern = str_replace('{' . $name . '}', $valEncoded, $filledPattern);
+        }
+        return $filledPattern;
+    }
+
+    public function getEmptyJsPattern()
+    {
+        return self::jsEncode(self::php2NewHtmlPattern($this->pattern));
+    }
+
+    public static function php2NewHtmlPattern($html)
+    {
+        return preg_replace('/\{\S+\}/', '', $html);
     }
 }
