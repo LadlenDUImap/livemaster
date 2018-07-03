@@ -7,17 +7,13 @@ use app\base\Singleton;
 
 class Lm extends Singleton
 {
-    public static $app;
+    //public static $app;
 
-    //TODO: что не так с Singleton
-    public function __construct($config)
+    public function run($config)
     {
         Di::set($this, $config['components']);
-    }
 
-    public function run()
-    {
-        self::$app = $this;
+        //self::$app = $this;
 
         try {
             /*if (!Csrf::inst()->validateCsrfToken()) {

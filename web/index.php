@@ -25,4 +25,4 @@ $config = require APP_DIR . 'config/app.php';
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(__DIR__ . '/../'));
 spl_autoload_register();
 
-(new \app\core\Lm($config))->run();
+\app\core\Lm::inst()->run($config);
