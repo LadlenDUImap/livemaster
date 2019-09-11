@@ -2,13 +2,23 @@
 
 namespace app\core\db;
 
-class Pdo extends \app\base\Component
+use app\base\IDatabase;
+
+class Pdo extends \app\base\Component implements IDatabase
 {
+    /** @var  string */
     public $dsn;
+
+    /** @var  string */
     public $username;
+
+    /** @var  string */
     public $password;
 
+
+    /** @var  \PDO */
     protected $DBH;
+
 
     public function init()
     {

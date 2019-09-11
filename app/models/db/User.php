@@ -2,9 +2,9 @@
 
 namespace app\models\db;
 
-use app\base\Model;
+use app\base\DbModel;
 
-class User extends Model
+class User extends DbModel
 {
     protected $name;
     protected $age;
@@ -59,7 +59,6 @@ class User extends Model
     {
         $this->city_id = $city_id;
     }
-
 
     public function verifyName()
     {

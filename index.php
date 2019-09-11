@@ -1,22 +1,21 @@
 <?php
 
-if (version_compare(phpversion(), '7.0', '<') == true) {
-    die('Please use version of PHP not less than 7.0');
+if (version_compare(phpversion(), '7.1', '<') == true) {
+    die('Версия PHP должна быть не ниже 7.1');
 }
 
 define('LM_DEBUG', true);
 
 define('WEB_DIR', __DIR__ . '/');
-define('APP_DIR', realpath(__DIR__ . '/../app') . '/');
+define('APP_DIR', realpath(__DIR__ . '/app') . '/');
 
 ini_set('log_errors', 1);
 ini_set('error_log', APP_DIR . 'runtime/php-livemaster-error.log');
+error_reporting(E_ALL);
 
 if (LM_DEBUG) {
-    error_reporting(E_ALL);
     ini_set('display_errors', 1);
 } else {
-    error_reporting(0);
     ini_set('display_errors', 0);
 }
 

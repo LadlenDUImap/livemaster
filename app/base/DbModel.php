@@ -4,7 +4,7 @@ namespace app\base;
 
 use app\core\Lm;
 
-abstract class Model
+abstract class DbModel
 {
     private $isNew = true;
 

@@ -2,7 +2,7 @@
 
 namespace app\base;
 
-class Component
+abstract class Component
 {
     public function init()
     {

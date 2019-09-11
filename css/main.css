@@ -53,6 +53,7 @@ table {
     margin-top: 1em;
     padding: .5em 2em;
     float: right;
+    cursor: pointer;
 }
 
 .new-input {

@@ -26,7 +26,7 @@ class Lm extends Singleton
             if (LM_DEBUG) {
                 $displayMsg = Lm::inst()->log($e);
             } else {
-                $msg = sprintf(_('Server error, code %s. Please contact administrator.'), $e->getCode());
+                $msg = sprintf(_('Ошибка на сервере, код %s. Пожалуйста сообщите администрации.'), $e->getCode());
                 $displayMsg = Lm::inst()->log($msg);
             }
             echo $displayMsg;

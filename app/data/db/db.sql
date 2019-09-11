@@ -1,4 +1,6 @@
-CREATE DATABASE IF NOT EXISTS `livemaster` CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `livemaster`
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 USE `livemaster`;
 
@@ -9,7 +11,8 @@ CREATE TABLE `cities` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -21,11 +24,15 @@ CREATE TABLE `users` (
   FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`)
 )
   ENGINE = InnoDB
-  CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
 
 INSERT INTO `cities`
 SET `name` = 'Москва';
+
 INSERT INTO `cities`
 SET `name` = 'Владивосток';
+
 INSERT INTO `cities`
 SET `name` = 'Смоленск';

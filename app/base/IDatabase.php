@@ -33,7 +33,7 @@ interface IDatabase
      * @param string $val Строка для экранирования.
      * @return string
      */
-    public function quote($val);
+    //public function quote($val);
 
     /**
      * Экранирование специальных символов для названий (таблиц, столбцов).
@@ -41,35 +41,35 @@ interface IDatabase
      * @param string $name Строка для экранирования.
      * @return string
      */
-    public function quoteName($name);
+    //public function quoteName($name);
 
     /**
      * Возвращает идентификатор последней операции по вставке.
      *
      * @return mixed
      */
-    public function lastInsertId();
+    //public function lastInsertId();
 
     /**
      * Старт транзакции.
      *
      * @return bool признак успешности операции
      */
-    public function beginTransaction();
+    //public function beginTransaction();
 
     /**
      * Конец транзакции.
      *
      * @return bool признак успешности операции
      */
-    public function commitTransaction();
+    //public function commitTransaction();
 
     /**
      * Откат транзакции.
      *
      * @return bool признак успешности операции
      */
-    public function rollbackTransaction();
+    //public function rollbackTransaction();
 
     /**
      * Возвращает максимальные длины текстовых колонок в таблице.
@@ -78,5 +78,10 @@ interface IDatabase
      * @param string[] $columns названия колонок
      * @return string[] длина колонок (в символах)
      */
-    public function getTextColumnMaximumLength($table, $columns);
+    //public function getTextColumnMaximumLength($table, $columns);
+
+    public function selectQuery($query, $params = []): array;
+
+    public function query($query, $params);
+
 }

@@ -27,6 +27,5 @@
 </div>
 
 <?= $this->js ?>
-
 </body>
 </html>
