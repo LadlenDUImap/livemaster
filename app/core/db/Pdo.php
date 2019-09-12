@@ -28,9 +28,19 @@ class Pdo extends \app\base\Component implements IDatabase
         $this->DBH->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
-    public function selectQuery($query, $params = []): array
+    protected function makeWhere($where)
+    {
+
+    }
+
+    public function select(string $tableName, array $toSelect = ['*'], array $where = []): array
     {
         $result = [];
+
+        $query = 'SELECT ' . implode(', ', $toSelect) . ' FROM `' . $tableName . '`';
+        if ($whereString = $this->makeWhere($where)) {
+            $query .= ' WHERE ' . $whereString;
+        }
 
         $STH = $this->DBH->prepare($query);
         $STH->setFetchMode(\PDO::FETCH_ASSOC);

@@ -6,15 +6,19 @@ use app\core\Lm;
 
 abstract class DatabaseRecord
 {
+    public $db;
+
     private $isNew = true;
 
     public static $tableName;
 
-    public function __construct($id = false)
+    public function __construct(IDatabase $db, $id = false)
     {
+        $this->db = $db;
+
         if ($id) {
             $query = 'SELECT * FROM `' . static::$tableName . '` WHERE `id` = :id';
-            if ($rows = Lm::inst()->db->selectQuery($query, ['id' => $id])) {
+            if ($rows = $db->select($query, ['id' => $id])) {
                 /*foreach ($rows as $name => $val) {
                     $this->$name = $val;
                 }*/
