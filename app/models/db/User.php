@@ -2,9 +2,9 @@
 
 namespace app\models\db;
 
-use app\base\DbModel;
+use app\base\DbRecord;
 
-class User extends DbModel
+class User extends DbRecord
 {
     protected $name;
     protected $age;
