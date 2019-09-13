@@ -14,13 +14,13 @@ use app\base\Singleton;
  */
 class Lm extends Singleton
 {
-    //public static $app;
+    protected $config;
 
     public function run($config)
     {
-        DiConfiguration::set($this, $config['components']);
+        $this->config = $config;
 
-        //self::$app = $this;
+        DiConfiguration::set($this, $config['components']);
 
         try {
             /*if (!Csrf::inst()->validateCsrfToken()) {
@@ -31,13 +31,18 @@ class Lm extends Singleton
             (new Router)->run();
         } catch (\Exception $e) {
             if (LM_DEBUG) {
-                $displayMsg = Lm::inst()->log($e);
+                $displayMsg = Lm::inst()->log->set($e);
             } else {
                 $msg = sprintf(_('Ошибка на сервере, код %s. Пожалуйста сообщите администрации.'), $e->getCode());
-                $displayMsg = Lm::inst()->log($msg);
+                $displayMsg = Lm::inst()->log->set($msg);
             }
             echo $displayMsg;
         }
+    }
+
+    public function config()
+    {
+        return $this->config;
     }
 
     /**
@@ -46,7 +51,7 @@ class Lm extends Singleton
      * @param string|\Exception $message Сообщение или объект исключения.
      * @return string Текст, подготовленный для сохранения в лог.
      */
-    public function log($message)
+    /*public function log($message)
     {
         $errorStr = '';
 
@@ -69,5 +74,5 @@ class Lm extends Singleton
         error_log($msg);
 
         return $errorStr;
-    }
+    }*/
 }
