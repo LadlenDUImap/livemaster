@@ -28,23 +28,36 @@ class Pdo extends \app\base\Component implements IDatabase
         $this->DBH->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
-    protected function makeWhere($where)
+    protected function makeWhere($condition)
     {
+        $resultElements = [];
 
+        foreach ($condition as $name => $value) {
+            $resultElements[] = "`$name` = :$name";
+        }
+
+        return implode(', ', $resultElements);
     }
 
-    public function select(string $tableName, array $toSelect = ['*'], array $where = []): array
+    public function select(string $tableName, array $condition = [], array $toSelect = ['*']): array
     {
         $result = [];
 
+        $toSelect = array_unique($toSelect);
+
+        array_map(function ($vl) {
+            $vl = trim($vl);
+            return ($vl == '*') ? $vl : "`$vl`";
+        }, $toSelect);
+
         $query = 'SELECT ' . implode(', ', $toSelect) . ' FROM `' . $tableName . '`';
-        if ($whereString = $this->makeWhere($where)) {
+        if ($whereString = $this->makeWhere($condition)) {
             $query .= ' WHERE ' . $whereString;
         }
 
         $STH = $this->DBH->prepare($query);
         $STH->setFetchMode(\PDO::FETCH_ASSOC);
-        $STH->execute($params);
+        $STH->execute($condition);
 
         while ($row = $STH->fetch()) {
             $result[] = $row;
@@ -53,9 +66,9 @@ class Pdo extends \app\base\Component implements IDatabase
         return $result;
     }
 
-    public function query($query, $params)
+    /*public function query($query, $params)
     {
         $STH = $this->DBH->prepare($query);
         $STH->execute($params);
-    }
+    }*/
 }
