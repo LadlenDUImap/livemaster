@@ -6,28 +6,27 @@ use app\core\Lm;
 
 abstract class DatabaseRecord
 {
-    public $db;
-
     private $isNew = true;
 
     public static $tableName;
 
-    public function __construct(IDatabase $db, $id = false)
-    {
-        $this->db = $db;
+    public static $idName = 'id';
 
+    public function __construct($id = false)
+    {
         if ($id) {
-            $query = 'SELECT * FROM `' . static::$tableName . '` WHERE `id` = :id';
-            if ($rows = $db->select($query, ['id' => $id])) {
-                /*foreach ($rows as $name => $val) {
-                    $this->$name = $val;
-                }*/
-                self::fillModelWithProperties($this, $rows);
-                $this->isNew = false;
-            } else {
+            if (!$this->load([self::$idName => $id])) {
                 throw new \Exception('Неправильный ID: ' . $id);
             }
         }
+    }
+
+    public function load($condition)
+    {
+        if ($rows = Lm::inst()->db->select(static::$tableName, $condition)) {
+            $this->loadModelWithProperties($rows);
+        }
+        return $rows;
     }
 
     public function getIsNew()
@@ -35,23 +34,23 @@ abstract class DatabaseRecord
         return $this->isNew;
     }
 
-    public static function fillModelWithProperties($model, array $properties)
+    public function loadModelWithProperties(array $properties)
     {
         foreach ($properties as $name => $value) {
-            $model->$name = $value;
+            $this->$name = $value;
         }
-        return $model;
+        $this->isNew = false;
+        return $this;
     }
 
     public static function getAll()
     {
         $items = [];
 
-        $query = 'SELECT * FROM `' . static::$tableName . '`';
-        if ($rows = Lm::inst()->db->selectQuery($query)) {
+        if ($rows = Lm::inst()->db->select(static::$tableName)) {
             foreach ($rows as $vals) {
                 $newItem = new get_called_class();
-                self::fillModelWithProperties($newItem, $vals);
+                $newItem->loadModelWithProperties($vals);
                 $items[] = $newItem;
             }
         }

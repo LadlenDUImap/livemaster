@@ -5,6 +5,13 @@ namespace app\core;
 use app\helpers\Helper;
 use app\base\Singleton;
 
+/**
+ * Class Lm
+ *
+ * Главный класс приложения.
+ *
+ * @package app\core
+ */
 class Lm extends Singleton
 {
     //public static $app;
