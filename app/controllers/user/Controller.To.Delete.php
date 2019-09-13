@@ -6,6 +6,6 @@ class Controller extends \app\base\Controller
 {
     public function actionIndex()
     {
-        //die("2334");
+        die("user controller - index action");
     }
 }

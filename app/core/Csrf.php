@@ -2,15 +2,14 @@
 
 namespace app\core;
 
-//use core\Web;
-use app\base\Singleton;
+use app\base\Component;
 
 /**
  * Csrf служит для защиты от CSRF атак.
  *
  * @package core
  */
-class Csrf extends Singleton
+class Csrf extends Component
 {
     /** @var array методы при которых нужна проверка на CSRF */
     protected $requestMethodsToCheck = ['POST', 'PUT', 'DELETE'];
@@ -20,7 +19,7 @@ class Csrf extends Singleton
 
     public function getCsrfTokenName()
     {
-        return Config::inst()->csrf['tokenName'];
+        return Lm::inst()->csrf->token_name;
     }
 
     /**
@@ -32,7 +31,7 @@ class Csrf extends Singleton
     {
         if (!$csrfToken = $this->loadCsrfToken())
         {
-            $salt = Config::inst()->csrf['salt'];
+            $salt = Lm::inst()->csrf->token_salt;       //'uIlmkI873d';
             $csrfToken = $salt . ':' .  md5(openssl_random_pseudo_bytes(15));
             $this->storeCsrfToken($csrfToken);
         }
@@ -57,11 +56,11 @@ class Csrf extends Singleton
      *
      * @return bool
      */
-    public function validateCsrfToken()
+    /*public function validateCsrfToken()
     {
         $ret = false;
 
-        $tokenName = Config::inst()->csrf['tokenName'];
+        $tokenName = $this->getCsrfTokenName();
 
         if (!empty($_SERVER['REQUEST_METHOD']))
         {
@@ -88,5 +87,5 @@ class Csrf extends Singleton
         }
 
         return $ret;
-    }
+    }*/
 }

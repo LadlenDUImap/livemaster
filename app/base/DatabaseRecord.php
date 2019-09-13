@@ -4,12 +4,21 @@ namespace app\base;
 
 use app\core\Lm;
 
+/**
+ * Class DatabaseRecord
+ *
+ * Отражает строку в БД. Публичные свойства в производном классе соответствуют полям в БД (кроме начинающихся на "_").
+ *
+ * @package app\base
+ */
 abstract class DatabaseRecord
 {
     private $_isNew = true;
 
+    /** @var string название таблицы, должно быть переопределено в производном классе */
     protected static $_tableName;
 
+    /** @var string имя первичного ключа */
     protected static $_idName = 'id';
 
 
@@ -57,6 +66,23 @@ abstract class DatabaseRecord
         }
 
         return $items;
+    }
+
+    public function traverseProperties($includeId = false)
+    {
+        $reflect = new \ReflectionClass($this);
+        $props = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+        foreach ($props as $pr) {
+            if ($pr->name[0] !== '_') {
+                if (!$includeId && $pr->name == self::$_idName) {
+                    continue;
+                }
+                yield [
+                    'name' => $pr->name,
+                    'value' => $this->{$pr->name},
+                ];
+            }
+        }
     }
 
     /*public function actionVerifyData($field)
