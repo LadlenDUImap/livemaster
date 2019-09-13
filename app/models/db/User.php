@@ -6,11 +6,11 @@ use app\base\DatabaseRecord;
 
 class User extends DatabaseRecord
 {
-    protected $name;
-    protected $age;
-    protected $city_id;
+    public $name;
+    public $age;
+    public $city_id;
 
-    public static $tableName = 'users';
+    protected static $_tableName = 'users';
 
     /**
      * @return mixed

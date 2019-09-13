@@ -6,16 +6,17 @@ use app\core\Lm;
 
 abstract class DatabaseRecord
 {
-    private $isNew = true;
+    private $_isNew = true;
 
-    public static $tableName;
+    protected static $_tableName;
 
-    public static $idName = 'id';
+    protected static $_idName = 'id';
+
 
     public function __construct($id = false)
     {
         if ($id) {
-            if (!$this->load([self::$idName => $id])) {
+            if (!$this->load([self::$_idName => $id])) {
                 throw new \Exception('Неправильный ID: ' . $id);
             }
         }
@@ -23,7 +24,7 @@ abstract class DatabaseRecord
 
     public function load($condition)
     {
-        if ($rows = Lm::inst()->db->select(static::$tableName, $condition)) {
+        if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {
             $this->loadModelWithProperties($rows);
         }
         return $rows;
@@ -31,7 +32,7 @@ abstract class DatabaseRecord
 
     public function getIsNew()
     {
-        return $this->isNew;
+        return $this->_isNew;
     }
 
     public function loadModelWithProperties(array $properties)
@@ -39,7 +40,7 @@ abstract class DatabaseRecord
         foreach ($properties as $name => $value) {
             $this->$name = $value;
         }
-        $this->isNew = false;
+        $this->_isNew = false;
         return $this;
     }
 
@@ -47,7 +48,7 @@ abstract class DatabaseRecord
     {
         $items = [];
 
-        if ($rows = Lm::inst()->db->select(static::$tableName)) {
+        if ($rows = Lm::inst()->db->select(static::$_tableName)) {
             foreach ($rows as $vals) {
                 $newItem = new get_called_class();
                 $newItem->loadModelWithProperties($vals);
@@ -58,12 +59,12 @@ abstract class DatabaseRecord
         return $items;
     }
 
-    public function actionVerifyData($field)
+    /*public function actionVerifyData($field)
     {
         $fname = 'verify' . ucfirst($field);
         if (!is_callable([$this, $fname])) {
             throw new \Exception('Нет такого поля: ' . $field);
         }
         return $this->$fname;
-    }
+    }*/
 }
