@@ -11,7 +11,7 @@ class Lm extends Singleton
 
     public function run($config)
     {
-        Di::set($this, $config['components']);
+        DiConfiguration::set($this, $config['components']);
 
         //self::$app = $this;
 

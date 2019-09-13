@@ -3,13 +3,13 @@
 namespace app\core;
 
 /**
- * Class Di
+ * Class DiConfiguration
  *
  * Внедрение зависимостей по конфигурационным значениям.
  *
  * @package app\core
  */
-class Di
+class DiConfiguration
 {
     public static function set($class, $properties)
     {
