@@ -59,7 +59,8 @@ abstract class DatabaseRecord implements IProperties
 
         if ($rows = Lm::inst()->db->select(static::$_tableName)) {
             foreach ($rows as $vals) {
-                $newItem = new get_called_class();
+                $className = get_called_class();
+                $newItem = new $className;
                 $newItem->loadProperties($vals);
                 $items[] = $newItem;
             }
