@@ -2,14 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\db\City;
 use app\models\db\User;
 
 class Controller extends \app\base\Controller
 {
     public function actionIndex()
     {
-        $users = User::getAll();
-        return $this->render('index', ['users' => $users]);
+        return $this->render('index', ['users' => User::getAll(), 'cities' => City::getAll()]);
     }
 
     public function action404()

@@ -8,6 +8,16 @@ use app\core\html\Form;
 $this->title = 'Список пользователей';
 
 $users = $values['users'];
+$cities[] = [
+    'name' => '-- Город не выбран --',
+    'value' => 0,
+];
+foreach ($values['cities'] as $city) {
+    $cities[] = [
+        'name' => $city->name,
+        'value' => $city->id,
+    ];
+}
 
 ?>
 <main>
@@ -21,14 +31,14 @@ $users = $values['users'];
         </div>
         <?php
         if ($users) {
-            $rowParams = ['style' => 'width:100%'];
+            $rowParams = ['style' => 'width:100%;text-align:center;'];
             foreach ($users as $usr) {
                 $form = new Form($usr);
                 echo $form->start()
                     . '<div class="row item">'
                     . '<div class="col">' . $form->textInput('name', $rowParams) . '</div>'
                     . '<div class="col">' . $form->textInput('age', $rowParams) . '</div>'
-                    . '<div class="col">' . $form->textInput('city_id', $rowParams) . '</div>'
+                    . '<div class="col">' . $form->selectInput('city_id', $cities, $usr->city_id, $rowParams) . '</div>'
                     . '<div class="col">#</div>'
                     . '</div>'
                     . $form->end();
