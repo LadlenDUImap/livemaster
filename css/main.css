@@ -27,26 +27,15 @@ table {
     width: 80%;
 }
 
-.t-row {
-    display: inline-block;
-    width: 100%;
-    /*padding: 5px;*/
-}
-
-.t-row.head {
+.head {
     color: white;
     font-weight: bold;
     background-color: black;
 }
 
 .col {
-    float: left;
     text-align: center;
     padding: 5px;
-}
-
-.col-3 {
-    width: 25%;
 }
 
 #btn-add-user {
