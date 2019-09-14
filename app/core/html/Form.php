@@ -81,18 +81,26 @@ class Form
         $nameHtml = $this->partHtmlName($name);
         $paramsHtml = $this->partHtmlParams($params);
 
-        $html = '<select' . $nameHtml . $paramsHtml . '>';
+        $selectedName = '';
+
+        $html = '<div style="display:none;"><select' . $nameHtml . $paramsHtml . '>';
 
         foreach ($options as $opt) {
             $html .= '<option';
             if (!empty($opt['value'])) {
-                $selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '';
+                if ($selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '') {
+                    $selectedName = $opt['name'];
+                }
                 $html .= ' value="' . Safe::htmlEncode($opt['value']) . '"' . $selected;
+            } else {
+                $selectedName = $opt['name'];
             }
             $html .= '>' . Safe::htmlEncode($opt['name']) . '</option>';
         }
 
-        $html .= '</select>';
+        $html .= '</select></div>';
+
+        $html = '<div' . $paramsHtml . '>' . Safe::htmlEncode($selectedName) . '</div>' . $html;
 
         return $html;
     }

@@ -31,7 +31,7 @@ foreach ($values['cities'] as $city) {
         </div>
         <?php
         if ($users) {
-            $rowParams = ['style' => 'width:100%;text-align:center;'];
+            $rowParams = ['style' => 'width:100%;text-align:center;border:none;', 'readonly' => 'readonly'];
             foreach ($users as $usr) {
                 $form = new Form($usr);
                 echo $form->start()
