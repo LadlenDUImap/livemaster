@@ -1,5 +1,49 @@
 <?php
 
+/*class T {
+    public $pub = 1;
+    public $pub33 = 31;
+    protected $priv = 2;
+
+    public function sPub() {
+
+        $reflect = new ReflectionClass($this);
+        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+        print_r($props);
+        return;
+
+        if (isset($this->pub)) {
+            echo 'PUB TRUE 2';
+        } else {
+            echo 'PUB FALSE 2';
+        }
+
+        if (isset($this->priv)) {
+            echo 'PRIV TRUE 2';
+        } else {
+            echo 'PRIV FALSE 2';
+        }
+    }
+}
+
+$t = new T;
+$t->sPub();
+exit;
+
+if (isset($t->pub)) {
+    echo 'PUB TRUE';
+} else {
+    echo 'PUB FALSE';
+}
+
+if (isset($t->priv)) {
+    echo 'PRIV TRUE';
+} else {
+    echo 'PRIV FALSE';
+}
+
+exit;*/
+
 if (version_compare(phpversion(), '7.1', '<') == true) {
     die('Версия PHP должна быть не ниже 7.1');
 }

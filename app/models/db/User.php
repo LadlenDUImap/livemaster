@@ -6,6 +6,7 @@ use app\base\DatabaseRecord;
 
 class User extends DatabaseRecord
 {
+    public $id;
     public $name;
     public $age;
     public $city_id;

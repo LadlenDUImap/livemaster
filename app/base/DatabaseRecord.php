@@ -11,7 +11,7 @@ use app\core\Lm;
  *
  * @package app\base
  */
-abstract class DatabaseRecord
+abstract class DatabaseRecord implements IProperties
 {
     private $_isNew = true;
 
@@ -34,7 +34,7 @@ abstract class DatabaseRecord
     public function load($condition)
     {
         if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {
-            $this->loadModelWithProperties($rows);
+            $this->loadProperties($rows);
         }
         return $rows;
     }
@@ -44,7 +44,7 @@ abstract class DatabaseRecord
         return $this->_isNew;
     }
 
-    public function loadModelWithProperties(array $properties)
+    public function loadProperties(array $properties)
     {
         foreach ($properties as $name => $value) {
             $this->$name = $value;
@@ -60,7 +60,7 @@ abstract class DatabaseRecord
         if ($rows = Lm::inst()->db->select(static::$_tableName)) {
             foreach ($rows as $vals) {
                 $newItem = new get_called_class();
-                $newItem->loadModelWithProperties($vals);
+                $newItem->loadProperties($vals);
                 $items[] = $newItem;
             }
         }
@@ -68,19 +68,20 @@ abstract class DatabaseRecord
         return $items;
     }
 
-    public function traverseProperties($includeId = false)
+    public static function traverseProperties($includeId = false)
     {
-        $reflect = new \ReflectionClass($this);
+        $reflect = new \ReflectionClass(get_called_class());
         $props = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
         foreach ($props as $pr) {
             if ($pr->name[0] !== '_') {
                 if (!$includeId && $pr->name == self::$_idName) {
                     continue;
                 }
-                yield [
+                $ret = [
                     'name' => $pr->name,
-                    'value' => $this->{$pr->name},
+                    //'value' => self::{$pr->name},
                 ];
+                yield $ret;
             }
         }
     }

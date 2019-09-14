@@ -3,10 +3,19 @@
 /* @var $values array */
 
 use app\core\html\Pattern;
+use app\models\db\User;
 
 $this->title = 'Список пользователей';
 
 $users = $values['users'];
+
+#$usr = new User;
+#$prop = $usr->traverseProperties();
+
+/*foreach (User::traverseProperties() as $tp) {
+    $prop = $tp;
+    print_r($prop);
+}*/
 
 $userRow = <<<HTML
 <div class="t-row">
