@@ -9,6 +9,7 @@ use app\helpers\ClassHelper;
 class Form
 {
     /** @var  DatabaseRecord */
+    //TODO: остановился. Убрать и вынести в параметры
     protected $model;
 
 
@@ -54,6 +55,7 @@ class Form
         return $paramsHtml;
     }
 
+    //TODO: не $name а attribute
     public function textInput($name = '', $params = [])
     {
         $nameHtml = $this->partHtmlName($name);
