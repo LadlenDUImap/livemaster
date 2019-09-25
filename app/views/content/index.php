@@ -31,15 +31,21 @@ foreach ($values['cities'] as $city) {
         </div>
         <?php
         if ($users) {
-            $rowParams = ['style' => 'width:100%;text-align:center;border:none;', 'readonly' => 'readonly'];
+            $rowParams = [
+                'class' => 'clicked-elem',
+                'style' => 'width:100%;text-align:center;border:none;',
+                //'readonly' => 'readonly'
+            ];
             foreach ($users as $usr) {
                 $form = new Form($usr);
                 echo $form->start()
                     . '<div class="row item">'
+                    . '<input type="hidden" class="elem-id" value="' . $usr->id . '">'
+                    . '<input type="hidden" class="row-id" value="' . $form::getCurrentId() . '">'
                     . '<div class="col">' . $form->textInput('name', $rowParams) . '</div>'
                     . '<div class="col">' . $form->textInput('age', $rowParams) . '</div>'
                     . '<div class="col">' . $form->selectInput('city_id', $cities, $usr->city_id, $rowParams) . '</div>'
-                    . '<div class="col">#</div>'
+                    . '<div class="col"><button>Удалить</button></div>'
                     . '</div>'
                     . $form->end();
             }
@@ -52,6 +58,13 @@ foreach ($values['cities'] as $city) {
 <input type="hidden" id="next-form-id" value="<?= Form::getCurrentId() ?>"/>
 
 <script>
+    $('.clicked-elem').click(function (elem) {
+        var elemId = $(this).parents(':eq(1)').find(".elem-id");
+        //alert("elemId: " + elemId.val());
+        /*if () {
+
+        }*/
+    });
     <?php /* ?>
     $(function () {
         var userRowPatternNew = <?= $userRowPattern->fillPatternWithValuesJs([

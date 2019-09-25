@@ -53,9 +53,18 @@ table {
     text-align: center;
 }
 
+.clicked-elem {
+    cursor: pointer;
+}
+
+.clicked-elem:hover {
+    background-color: grey;
+}
+
 /*@media only screen and (max-width: 320px) {*/
 @media only screen and (max-width: 720px) {
     .container {
         width: 100%;
     }
 }
+

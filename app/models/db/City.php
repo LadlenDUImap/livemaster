@@ -11,6 +11,11 @@ class City extends DatabaseRecord
 
     protected static $_tableName = 'cities';
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * @return mixed
      */

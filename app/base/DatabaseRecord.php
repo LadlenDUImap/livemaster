@@ -31,6 +31,8 @@ abstract class DatabaseRecord implements IProperties
         }
     }
 
+    public abstract function getId();
+
     public function load($condition)
     {
         if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {

@@ -13,6 +13,11 @@ class User extends DatabaseRecord
 
     protected static $_tableName = 'users';
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * @return mixed
      */

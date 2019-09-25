@@ -6,7 +6,7 @@ use app\base\DatabaseRecord;
 use app\core\Lm;
 use app\helpers\ClassHelper;
 
-class Form
+class ModelList
 {
     /** @var  DatabaseRecord */
     protected $model;
@@ -19,15 +19,20 @@ class Form
 
     public function start()
     {
-        $id = Safe::htmlEncode($this->model->getId());
-        return '<form id="lm_form_' . $id . '">'
+        return '<form id="lm_form_' . Safe::htmlEncode($this->model->getId()) . '">'
             . '<input type="hidden" id="lm_form_csrf_name_' . $id . '" value="' . Lm::inst()->csrf->getCsrfTokenName() . '" />'
             . '<input type="hidden" id="lm_form_csrf_value_' . $id . '" value="' . Lm::inst()->csrf->getCsrfToken() . '" />';
     }
 
     public function end()
     {
+        ++self::$id;
         return '</form>';
+    }
+
+    public static function getCurrentId()
+    {
+        return self::$id;
     }
 
     public function partHtmlName($name = '')
