@@ -31,7 +31,9 @@ abstract class DatabaseRecord implements IProperties
         }
     }
 
-    //public abstract function getId();
+    public function getId() {
+        throw new \Exception('ID не реализован для записи');
+    }
 
     public function load($condition)
     {
