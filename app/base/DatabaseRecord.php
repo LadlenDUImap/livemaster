@@ -31,7 +31,7 @@ abstract class DatabaseRecord implements IProperties
         }
     }
 
-    public abstract function getId();
+    //public abstract function getId();
 
     public function load($condition)
     {
