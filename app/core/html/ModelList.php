@@ -8,55 +8,30 @@ use app\helpers\ClassHelper;
 
 class ModelList
 {
-    /** @var  DatabaseRecord */
-    protected $model;
+    /** @var array параметры, описывающие значения html элементов обрабатываемого шаблона */
+    protected $templateElements = [
+        // все что касается нового элемента
+        'new' => [
+            // контейнер с шаблоном для нового элемента
+            'template-container' => [
+                // CSS селектор
+                'selector' => '#model-list-new-element-template',
+            ],
+            // кнопка добавления
+            'add-button' => [
+                'selector' => '#model-list-new-add-button',
+            ],
+            // контейнер, в конец которого будет добавлен новый созданный элемент
+            'element-container' => [
+                'selector' => '#model-list-new-element-container',
+            ],
+        ],
+    ];
 
 
-    public function __construct($model)
+    public function __construct($templateElements = [])
     {
-        $this->model = $model;
-    }
-
-    public function start()
-    {
-        return '<form id="lm_form_' . Safe::htmlEncode($this->model->getId()) . '">'
-            . '<input type="hidden" id="lm_form_csrf_name_' . $id . '" value="' . Lm::inst()->csrf->getCsrfTokenName() . '" />'
-            . '<input type="hidden" id="lm_form_csrf_value_' . $id . '" value="' . Lm::inst()->csrf->getCsrfToken() . '" />';
-    }
-
-    public function end()
-    {
-        ++self::$id;
-        return '</form>';
-    }
-
-    public static function getCurrentId()
-    {
-        return self::$id;
-    }
-
-    public function partHtmlName($name = '')
-    {
-        if ($this->model) {
-            $nameHtml = ' name="' . ClassHelper::getClassNameNoNamespace($this->model) . '[' . Safe::htmlEncode($name) . ']' . '" ';
-        } else {
-            $nameHtml = $name ? ' name="' . Safe::htmlEncode($name) . '" ' : '';
-        }
-
-        return $nameHtml;
-    }
-
-    public function partHtmlParams($params = [])
-    {
-        $paramsHtml = '';
-
-        if ($params) {
-            foreach ($params as $pName => $pVal) {
-                $paramsHtml .= ' ' . $pName . '="' . Safe::htmlEncode($pVal) . '" ';
-            }
-        }
-
-        return $paramsHtml;
+        $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
     }
 
     public function textInput($name = '', $params = [])

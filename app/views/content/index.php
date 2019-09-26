@@ -1,9 +1,9 @@
 <?php
 
+use app\core\html\ModelList;
+
 /* @var $this app\core\View */
 /* @var $values array */
-
-use app\core\html\Form;
 
 $this->title = 'Список пользователей';
 
@@ -18,6 +18,8 @@ foreach ($values['cities'] as $city) {
         'value' => $city->id,
     ];
 }
+
+$cityList = new ModelList();
 
 ?>
 <main>
@@ -37,25 +39,28 @@ foreach ($values['cities'] as $city) {
                 //'readonly' => 'readonly'
             ];
             foreach ($users as $usr) {
-                $form = new Form();
-                echo $form->start()
+                echo $cityList->beginElement()
                     . '<div class="row item">'
-                    . '<input type="hidden" class="elem-id" value="' . $usr->id . '">'
-                    . '<input type="hidden" class="row-id" value="' . $form::getCurrentId() . '">'
-                    . '<div class="col">' . $form->textInput($usr, 'name', $rowParams) . '</div>'
-                    . '<div class="col">' . $form->textInput($usr, 'age', $rowParams) . '</div>'
-                    . '<div class="col">' . $form->selectInput($usr, 'city_id', $cities, $usr->city_id, $rowParams) . '</div>'
+                    //. '<input type="hidden" class="elem-id" value="' . $usr->id . '">'
+                    //. '<input type="hidden" class="row-id" value="' . $cityList::getCurrentId() . '">'
+                    . '<div class="col">' . $cityList->textInput($usr, 'name', $rowParams) . '</div>'
+                    . '<div class="col">' . $cityList->textInput($usr, 'age', $rowParams) . '</div>'
+                    . '<div class="col">' . $cityList->selectInput($usr, 'city_id', $cities, $usr->city_id, $rowParams) . '</div>'
                     . '<div class="col"><button>Удалить</button></div>'
                     . '</div>'
-                    . $form->end();
+                    . $cityList->endElement();
             }
         }
         ?>
+
+        <div class="row item">
+        </div>
+
     </div>
     <button id="btn-add-user">Добавить пользователя</button>
 </main>
 
-<input type="hidden" id="next-form-id" value="<?= Form::getCurrentId() ?>"/>
+<!--<input type="hidden" id="next-form-id" value="<?/*= Form::getCurrentId() */?>"/>-->
 
 <script>
     $('.clicked-elem').click(function (elem) {
