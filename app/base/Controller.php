@@ -27,6 +27,11 @@ abstract class Controller
         $this->view = new View;
     }
 
+    public function getView()
+    {
+        return $this->view;
+    }
+
     /**
      * Генерация содержимого документа и вызов генерации всего документа.
      *

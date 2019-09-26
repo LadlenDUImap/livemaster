@@ -16,8 +16,6 @@
     <link href="css/bootstrap-grid.css" rel="stylesheet" media="all" />
     <link href="css/main.css" rel="stylesheet" media="all" />
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
     <?= $this->css ?>
 
 </head>
@@ -27,6 +25,9 @@
     <?= $values->content ?>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
 <?= $this->js ?>
+
 </body>
 </html>

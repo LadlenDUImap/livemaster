@@ -16,6 +16,9 @@ class Lm extends Singleton
 {
     protected $config;
 
+    protected $controller;
+
+
     public function run($config)
     {
         $this->config = $config;
@@ -43,6 +46,16 @@ class Lm extends Singleton
     public function config()
     {
         return $this->config;
+    }
+
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    public function setController($controller)
+    {
+        $this->controller = $controller;
     }
 
     /**

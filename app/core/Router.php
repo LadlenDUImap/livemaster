@@ -49,6 +49,10 @@ class Router
             }
         }
 
-        echo (new $class)->$action();
+        $controller = new $class;
+
+        Lm::inst()->setController($controller);
+
+        echo $controller->$action();
     }
 }

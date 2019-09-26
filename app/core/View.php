@@ -13,7 +13,7 @@ class View
     /** @var string подключаемые CSS файлы. */
     public $css = '';
 
-    /** @var string подключаемые JS файлы. */
+    /** @var string подключаемый JS код. */
     public $js = '';
 
     /** @var \app\core\Container дополнительные (глобальные) значения. */
@@ -22,6 +22,11 @@ class View
     public function __construct()
     {
         $this->values = new Container;
+    }
+
+    public function addJsCode($code)
+    {
+        $this->js .= '<script>' . $code . '</script>';
     }
 
     /**
