@@ -76,7 +76,7 @@ class ModelList
 
         return $html;*/
 
-        return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params), $options[$model->$attribute]);
+        return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params), $options[$model->$attribute ?? 0]['name']);
     }
 
     protected function overlapElement($elementHtml, $overlapText)
