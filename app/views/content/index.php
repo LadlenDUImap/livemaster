@@ -34,8 +34,8 @@ $cityList = new ModelList();
         <?php
         if ($users) {
             $rowParams = [
-                'class' => 'clicked-elem',
-                'style' => 'width:100%;text-align:center;border:none;',
+                //'class' => 'clicked-elem',
+                'style' => 'width:100%;text-align:center',
                 //'readonly' => 'readonly'
             ];
             foreach ($users as $usr) {
@@ -45,7 +45,7 @@ $cityList = new ModelList();
                     //. '<input type="hidden" class="row-id" value="' . $cityList::getCurrentId() . '">'
                     . '<div class="col">' . $cityList->textInput($usr, 'name', $rowParams) . '</div>'
                     . '<div class="col">' . $cityList->textInput($usr, 'age', $rowParams) . '</div>'
-                    . '<div class="col">' . $cityList->selectInput($usr, 'city_id', $cities, $usr->city_id, $rowParams) . '</div>'
+                    . '<div class="col">' . $cityList->selectInput($usr, 'city_id', $cities, $rowParams) . '</div>'
                     . '<div class="col"><button>Удалить</button></div>'
                     . '</div>'
                     . $cityList->endElement();
@@ -63,13 +63,10 @@ $cityList = new ModelList();
 <!--<input type="hidden" id="next-form-id" value="<?/*= Form::getCurrentId() */?>"/>-->
 
 <script>
-    $('.clicked-elem').click(function (elem) {
+    /*$('.clicked-elem').click(function (elem) {
         var elemId = $(this).parents(':eq(1)').find(".elem-id");
         //alert("elemId: " + elemId.val());
-        /*if () {
-
-        }*/
-    });
+    });*/
     <?php /* ?>
     $(function () {
         var userRowPatternNew = <?= $userRowPattern->fillPatternWithValuesJs([

@@ -5,6 +5,7 @@ namespace app\core\html;
 use app\base\DatabaseRecord;
 use app\core\Lm;
 use app\helpers\ClassHelper;
+use app\helpers\HtmlHelper;
 
 class ModelList
 {
@@ -29,50 +30,63 @@ class ModelList
     ];
 
 
+    /** @var  Form */
+    private $currentForm;
+
+
     public function __construct($templateElements = [])
     {
         $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
+
+        //LM::inst()->getController()->getView()->addJsCode('alert(1)');
     }
 
-    public function textInput($name = '', $params = [])
+    public function beginElement()
     {
-        $nameHtml = $this->partHtmlName($name);
-        $paramsHtml = $this->partHtmlParams($params);
-
-        $valueHtml = '';
-        if ($this->model && $name) {
-            $valueHtml = ' value="' . Safe::htmlEncode($this->model->$name) . '" ';
-        }
-
-        return '<input type="text"' . $nameHtml . $valueHtml . $paramsHtml . ' />';
+        $this->currentForm = new Form();
+        return $this->currentForm->begin();
     }
 
-    public function selectInput($name = '', $options = [], $selectedValue = false, $params = [])
+    public function endElement()
     {
-        $nameHtml = $this->partHtmlName($name);
-        $paramsHtml = $this->partHtmlParams($params);
+        $endHtml = $this->currentForm->end();
+        unset($this->currentForm);
+        return $endHtml;
+    }
 
-        $selectedName = '';
+    public function textInput(DatabaseRecord $model, $attribute = '', $params = [])
+    {
+        //$params['readonly'] = 'readonly';
+        //$params['class'] = $params['class'] ?? '';
+        //$params['class'] .= ' ml-clicked-elem ml-readonly';
 
-        $html = '<div style="display:none;"><select' . $nameHtml . $paramsHtml . '>';
+        return $this->overlapElement($this->currentForm->textInput($model, $attribute, $params), $model->$attribute);
+    }
 
-        foreach ($options as $opt) {
-            $html .= '<option';
-            if (!empty($opt['value'])) {
-                if ($selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '') {
-                    $selectedName = $opt['name'];
-                }
-                $html .= ' value="' . Safe::htmlEncode($opt['value']) . '"' . $selected;
-            } else {
-                $selectedName = $opt['name'];
-            }
-            $html .= '>' . Safe::htmlEncode($opt['name']) . '</option>';
-        }
+    public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $selectedValue = false, $params = [])
+    {
+        /*$selectedName = '';
+        $paramsHtml = HtmlHelper::partHtmlParams([]);
 
-        $html .= '</select></div>';
+        $html = '<div style="display:none;">';
+        $html .= $this->currentForm->selectInput($model, $attribute, $options, $selectedValue, $params);
+        $html .= '</div>';
 
         $html = '<div' . $paramsHtml . '>' . Safe::htmlEncode($selectedName) . '</div>' . $html;
 
+        return $html;*/
+
+        return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params), $options[$model->$attribute]);
+    }
+
+    protected function overlapElement($elementHtml, $overlapText)
+    {
+        $html = '<div class="ml-overlap-edit-element">' . Safe::htmlEncode($overlapText) . '</div>'
+            . '<div  class="ml-hidden-edit-element" style="display:none;">'
+            . $elementHtml
+            . '</div>';
+
         return $html;
     }
+
 }

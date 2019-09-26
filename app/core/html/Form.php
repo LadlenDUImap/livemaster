@@ -5,6 +5,7 @@ namespace app\core\html;
 use app\base\DatabaseRecord;
 use app\core\Lm;
 use app\helpers\ClassHelper;
+use app\helpers\HtmlHelper;
 
 class Form
 {
@@ -42,23 +43,10 @@ class Form
         return $nameHtml;
     }
 
-    public function partHtmlParams($params = [])
-    {
-        $paramsHtml = '';
-
-        if ($params) {
-            foreach ($params as $pName => $pVal) {
-                $paramsHtml .= ' ' . $pName . '="' . Safe::htmlEncode($pVal) . '" ';
-            }
-        }
-
-        return $paramsHtml;
-    }
-
     public function textInput(DatabaseRecord $model, $attribute = '', $params = [])
     {
         $nameHtml = $this->partHtmlName($model, $attribute);
-        $paramsHtml = $this->partHtmlParams($params);
+        $paramsHtml = HtmlHelper::partHtmlParams($params);
 
         $valueHtml = '';
         if ($attribute) {
@@ -68,10 +56,10 @@ class Form
         return '<input type="text"' . $nameHtml . $valueHtml . $paramsHtml . ' />';
     }
 
-    public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $selectedValue = false, $params = [])
+    public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $params = [])
     {
         $nameHtml = $this->partHtmlName($model, $attribute);
-        $paramsHtml = $this->partHtmlParams($params);
+        $paramsHtml = HtmlHelper::partHtmlParams($params);
 
         //$selectedName = '';
 
@@ -83,7 +71,7 @@ class Form
                 /*if ($selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '') {
                     $selectedName = $opt['name'];
                 }*/
-                $selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '';
+                $selected = ($model->$attribute == $opt['value']) ? ' selected="selected" ' : '';
                 $html .= ' value="' . Safe::htmlEncode($opt['value']) . '"' . $selected;
             }/* else {
                 $selectedName = $opt['name'];
