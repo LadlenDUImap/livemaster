@@ -53,11 +53,11 @@ table {
     text-align: center;
 }
 
-.clicked-elem {
+.ml-overlap-edit-element {
     cursor: pointer;
 }
 
-.clicked-elem:hover {
+.ml-overlap-edit-element:hover {
     background-color: grey;
 }
 

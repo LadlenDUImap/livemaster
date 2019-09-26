@@ -38,7 +38,16 @@ class ModelList
     {
         $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
 
-        //LM::inst()->getController()->getView()->addJsCode('alert(1)');
+        LM::inst()->getController()->getView()->addJsCode(<<<JS
+$(".ml-overlap-edit-element").click(function(e) {
+    var elemOverlap = $(this);
+    var elemEdit = elemOverlap.next(".ml-hidden-edit-element");
+    elemOverlap.hide();
+    elemEdit.show();
+    elemEdit.find('> *').focus();
+});
+JS
+        );
     }
 
     public function beginElement()
