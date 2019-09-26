@@ -9,10 +9,10 @@ use app\helpers\ClassHelper;
 class Form
 {
     /** @var int порядковый идентификатор следующей (или уже создающейся) формы */
-    protected static $id = 0;
+    protected static $id = 1;
 
 
-    public function start($id = false)
+    public function begin($id = false)
     {
         $id = $id ?: self::$id;
         return '<form id="lm_form_' . $id . '">'
@@ -73,26 +73,27 @@ class Form
         $nameHtml = $this->partHtmlName($model, $attribute);
         $paramsHtml = $this->partHtmlParams($params);
 
-        $selectedName = '';
+        //$selectedName = '';
 
-        $html = '<div style="display:none;"><select' . $nameHtml . $paramsHtml . '>';
+        $html = '<select' . $nameHtml . $paramsHtml . '>';
 
         foreach ($options as $opt) {
             $html .= '<option';
             if (!empty($opt['value'])) {
-                if ($selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '') {
+                /*if ($selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '') {
                     $selectedName = $opt['name'];
-                }
+                }*/
+                $selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '';
                 $html .= ' value="' . Safe::htmlEncode($opt['value']) . '"' . $selected;
-            } else {
+            }/* else {
                 $selectedName = $opt['name'];
-            }
+            }*/
             $html .= '>' . Safe::htmlEncode($opt['name']) . '</option>';
         }
 
-        $html .= '</select></div>';
+        $html .= '</select>';
 
-        $html = '<div' . $paramsHtml . '>' . Safe::htmlEncode($selectedName) . '</div>' . $html;
+        //$html = '<div' . $paramsHtml . '>' . Safe::htmlEncode($selectedName) . '</div>' . $html;
 
         return $html;
     }
