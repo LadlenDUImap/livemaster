@@ -33,19 +33,39 @@ class ModelList
     /** @var  Form */
     private $currentForm;
 
+    private $firstInit;
+
 
     public function __construct($templateElements = [])
     {
         $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
 
+        if (!$this->firstInit) {
+            $this->registerJs();
+            $this->firstInit = true;
+        }
+    }
+
+    protected function registerJs()
+    {
         LM::inst()->getController()->getView()->addJsCode(<<<JS
-$(".ml-overlap-edit-element").click(function(e) {
-    var elemOverlap = $(this);
-    var elemEdit = elemOverlap.next(".ml-hidden-edit-element");
-    elemOverlap.hide();
-    elemEdit.show();
-    elemEdit.find('> *').focus();
-});
+(function() {
+    var lastModifiedElement;
+    
+    $(".ml-overlap-edit-element").click(function() {
+        if (lastModifiedElement) {
+            
+        }
+        
+        var elemOverlap = $(this);
+        var elemEditWrapper = elemOverlap.next(".ml-hidden-edit-element-wrapper");
+        elemOverlap.hide();
+        elemEditWrapper.show();
+        lastModifiedElement = elemEditWrapper.find('.ml-hidden-edit-element');
+        lastModifiedElement.focus();
+    });
+    
+})();
 JS
         );
     }
@@ -60,6 +80,7 @@ JS
     {
         $endHtml = $this->currentForm->end();
         unset($this->currentForm);
+        //TODO: не надо ли сделать null
         return $endHtml;
     }
 
@@ -68,6 +89,9 @@ JS
         //$params['readonly'] = 'readonly';
         //$params['class'] = $params['class'] ?? '';
         //$params['class'] .= ' ml-clicked-elem ml-readonly';
+
+        $params['class'] = $params['class'] ?? '';
+        $params['class'] = ' ml-hidden-edit-element';
 
         return $this->overlapElement($this->currentForm->textInput($model, $attribute, $params), $model->$attribute);
     }
@@ -85,13 +109,16 @@ JS
 
         return $html;*/
 
+        $params['class'] = $params['class'] ?? '';
+        $params['class'] = ' ml-hidden-edit-element';
+
         return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params), $options[$model->$attribute ?? 0]['name']);
     }
 
     protected function overlapElement($elementHtml, $overlapText)
     {
         $html = '<div class="ml-overlap-edit-element">' . Safe::htmlEncode($overlapText) . '</div>'
-            . '<div  class="ml-hidden-edit-element" style="display:none;">'
+            . '<div  class="ml-hidden-edit-element-wrapper" style="display:none;">'
             . $elementHtml
             . '</div>';
 
