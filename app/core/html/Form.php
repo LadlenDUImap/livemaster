@@ -8,19 +8,13 @@ use app\helpers\ClassHelper;
 
 class Form
 {
-    /** @var  DatabaseRecord */
-    //TODO: остановился. Убрать и вынести в параметры
-    protected $model;
+    /** @var int порядковый идентификатор следующей (или уже создающейся) формы */
+    protected static $id = 0;
 
 
-    public function __construct($model)
+    public function start($id = false)
     {
-        $this->model = $model;
-    }
-
-    public function start()
-    {
-        $id = Safe::htmlEncode($this->model->getId());
+        $id = $id ?: self::$id;
         return '<form id="lm_form_' . $id . '">'
             . '<input type="hidden" id="lm_form_csrf_name_' . $id . '" value="' . Lm::inst()->csrf->getCsrfTokenName() . '" />'
             . '<input type="hidden" id="lm_form_csrf_value_' . $id . '" value="' . Lm::inst()->csrf->getCsrfToken() . '" />';
@@ -28,15 +22,21 @@ class Form
 
     public function end()
     {
+        ++self::$id;
         return '</form>';
     }
 
-    public function partHtmlName($name = '')
+    public static function getCurrentId()
     {
-        if ($this->model) {
-            $nameHtml = ' name="' . ClassHelper::getClassNameNoNamespace($this->model) . '[' . Safe::htmlEncode($name) . ']' . '" ';
+        return self::$id;
+    }
+
+    public function partHtmlName(DatabaseRecord $model, $attribute = '')
+    {
+        if ($model) {
+            $nameHtml = ' name="' . ClassHelper::getClassNameNoNamespace($model) . '[' . Safe::htmlEncode($attribute) . ']' . '" ';
         } else {
-            $nameHtml = $name ? ' name="' . Safe::htmlEncode($name) . '" ' : '';
+            $nameHtml = $attribute ? ' name="' . Safe::htmlEncode($attribute) . '" ' : '';
         }
 
         return $nameHtml;
@@ -55,23 +55,22 @@ class Form
         return $paramsHtml;
     }
 
-    //TODO: не $name а attribute
-    public function textInput($name = '', $params = [])
+    public function textInput(DatabaseRecord $model, $attribute = '', $params = [])
     {
-        $nameHtml = $this->partHtmlName($name);
+        $nameHtml = $this->partHtmlName($model, $attribute);
         $paramsHtml = $this->partHtmlParams($params);
 
         $valueHtml = '';
-        if ($this->model && $name) {
-            $valueHtml = ' value="' . Safe::htmlEncode($this->model->$name) . '" ';
+        if ($attribute) {
+            $valueHtml = ' value="' . Safe::htmlEncode($model->$attribute) . '" ';
         }
 
         return '<input type="text"' . $nameHtml . $valueHtml . $paramsHtml . ' />';
     }
 
-    public function selectInput($name = '', $options = [], $selectedValue = false, $params = [])
+    public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $selectedValue = false, $params = [])
     {
-        $nameHtml = $this->partHtmlName($name);
+        $nameHtml = $this->partHtmlName($model, $attribute);
         $paramsHtml = $this->partHtmlParams($params);
 
         $selectedName = '';

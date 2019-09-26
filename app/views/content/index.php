@@ -37,14 +37,14 @@ foreach ($values['cities'] as $city) {
                 //'readonly' => 'readonly'
             ];
             foreach ($users as $usr) {
-                $form = new Form($usr);
+                $form = new Form();
                 echo $form->start()
                     . '<div class="row item">'
                     . '<input type="hidden" class="elem-id" value="' . $usr->id . '">'
                     . '<input type="hidden" class="row-id" value="' . $form::getCurrentId() . '">'
-                    . '<div class="col">' . $form->textInput('name', $rowParams) . '</div>'
-                    . '<div class="col">' . $form->textInput('age', $rowParams) . '</div>'
-                    . '<div class="col">' . $form->selectInput('city_id', $cities, $usr->city_id, $rowParams) . '</div>'
+                    . '<div class="col">' . $form->textInput($usr, 'name', $rowParams) . '</div>'
+                    . '<div class="col">' . $form->textInput($usr, 'age', $rowParams) . '</div>'
+                    . '<div class="col">' . $form->selectInput($usr, 'city_id', $cities, $usr->city_id, $rowParams) . '</div>'
                     . '<div class="col"><button>Удалить</button></div>'
                     . '</div>'
                     . $form->end();
