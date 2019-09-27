@@ -21,6 +21,11 @@ class Container implements \Iterator, \ArrayAccess, \Countable
         $this->objects = $objects;
     }
 
+    public function getObjects()
+    {
+        return $this->objects;
+    }
+
     public function __get($name)
     {
         //if (isset($this->objects[$name]))

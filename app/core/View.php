@@ -52,9 +52,11 @@ class View
             $values = new Container;
         }
 
+        $file = APP_DIR . 'views/content/' . $_file_ . '.php';
+
         ob_start();
         ob_implicit_flush(false);
-        require($_file_);
+        require($file);
         return ob_get_clean();
     }
 

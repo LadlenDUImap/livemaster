@@ -4,8 +4,6 @@ namespace app\core\html;
 
 use app\base\DatabaseRecord;
 use app\core\Lm;
-use app\helpers\ClassHelper;
-use app\helpers\HtmlHelper;
 
 class ModelList
 {
@@ -18,25 +16,36 @@ class ModelList
                 // CSS селектор
                 'selector' => '#model-list-new-element-template',
             ],
-            // кнопка добавления
-            'add-button' => [
-                'selector' => '#model-list-new-add-button',
-            ],
             // контейнер, в конец которого будет добавлен новый созданный элемент
             'element-container' => [
                 'selector' => '#model-list-new-element-container',
             ],
+            // кнопка добавления
+            'add-button' => [
+                'selector' => '.model-list-new-add-button',
+            ],
+            // кнопка удаления
+            'delete-button' => [
+                'selector' => '.model-list-delete-button',
+            ],
         ],
+    ];
+
+    protected $actions = [
+        'new' => 'new',
+        'delete' => 'delete',
+        'update' => 'update',
     ];
 
 
     /** @var  Form */
     private $currentForm;
 
-    private $firstInit;
+    /** @var bool признак первой инициализации класса */
+    private $firstInit = false;
 
 
-    public function __construct($templateElements = [])
+    public function __construct($actions = [], $templateElements = [])
     {
         $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
 
@@ -80,7 +89,11 @@ class ModelList
     });
     
     $(".ml-hidden-edit-element").blur(function() {
-        alert(3);
+        //alert(3);
+    });
+    
+    $("#model-list-new-add-button").click(function() {
+      
     });
     
 })();
@@ -103,21 +116,26 @@ JS
 
     public function textInput(DatabaseRecord $model, $attribute = '', $params = [])
     {
-        $params['class'] = $params['class'] ?? '';
-        $params['class'] = ' ml-hidden-edit-element';
-        $params['data-ml-id'] = $model->getId();
+        $params = $this->prepareParamsForElement($model, $params);
 
         return $this->overlapElement($this->currentForm->textInput($model, $attribute, $params), $model->$attribute);
     }
 
-    public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $selectedValue = false, $params = [])
+    public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $params = [])
     {
-        $params['class'] = $params['class'] ?? '';
-        $params['class'] = ' ml-hidden-edit-element';
-        $params['data-ml-id'] = $model->getId();
+        $params = $this->prepareParamsForElement($model, $params);
 
         return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params),
             $options[$model->$attribute ?? 0]['name']);
+    }
+
+    protected function prepareParamsForElement(DatabaseRecord $model, $params)
+    {
+        $params['class'] = $params['class'] ? : '';
+        $params['class'] .= ' ml-hidden-edit-element';
+        $params['data-ml-id'] = $model->getId();
+
+        return $params;
     }
 
     protected function overlapElement($elementHtml, $overlapText)

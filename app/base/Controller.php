@@ -35,14 +35,14 @@ abstract class Controller
     /**
      * Генерация содержимого документа и вызов генерации всего документа.
      *
-     * @param string $view Вид для генерации.
+     * @param string $viewName Вид для генерации.
      * @param array $params Параметры.
      * @return string Сгенерированный документ.
      */
-    protected function render(string $view, array $params = null)
+    protected function render(string $viewName, array $params = null)
     {
-        $file = APP_DIR . 'views/content/' . $view . '.php';
-        $content = $this->view->render($file, $params);
+        //$file = APP_DIR . 'views/content/' . $viewName . '.php';
+        $content = $this->view->render($viewName, $params);
         return $this->renderLayout($content);
     }
 
