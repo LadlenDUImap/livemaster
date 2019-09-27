@@ -20,7 +20,7 @@ abstract class Controller
     /**
      * Действие по умолчанию.
      */
-    abstract function actionIndex();
+    //abstract function actionIndex();
 
     public function __construct()
     {
