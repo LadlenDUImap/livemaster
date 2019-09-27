@@ -20,7 +20,11 @@ class ModelList
             ],
             // кнопка добавления
             'add-button' => [
-                'selector' => '#model-list-new-add-button',
+                'selector' => '.model-list-new-add-button',
+            ],
+            // кнопка удаления
+            'delete-button' => [
+                'selector' => '.model-list-delete-button',
             ],
             // контейнер, в конец которого будет добавлен новый созданный элемент
             'element-container' => [
@@ -29,14 +33,21 @@ class ModelList
         ],
     ];
 
+    protected $actions = [
+        'new' => 'new',
+        'delete' => 'delete',
+        'update' => 'update',
+    ];
+
 
     /** @var  Form */
     private $currentForm;
 
-    private $firstInit;
+    /** @var bool признак первой инициализации класса */
+    private $firstInit = false;
 
 
-    public function __construct($templateElements = [])
+    public function __construct($actions = [], $templateElements = [])
     {
         $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
 

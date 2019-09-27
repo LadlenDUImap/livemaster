@@ -8,7 +8,10 @@ class Controller extends \app\base\Controller
 {
     public function actionUpdate()
     {
-        die('123');
-        return $this->render('index', ['users' => User::getAll()]);
+        $result = [
+            'success' => true,
+        ];
+
+        return json_encode($result);
     }
 }
