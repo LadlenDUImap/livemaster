@@ -50,19 +50,29 @@ class ModelList
     {
         LM::inst()->getController()->getView()->addJsCode(<<<JS
 (function() {
-    var lastModifiedElement;
+    var lastModifiedInfo;
     
     $(".ml-overlap-edit-element").click(function() {
-        if (lastModifiedElement) {
-            
+        if (lastModifiedInfo) {
+            lastModifiedInfo['elem-edit-wrapper'].hide();
+            lastModifiedInfo['elem-overlap'].show();
+            lastModifiedInfo['elem-edit'].blur();
         }
         
         var elemOverlap = $(this);
         var elemEditWrapper = elemOverlap.next(".ml-hidden-edit-element-wrapper");
         elemOverlap.hide();
         elemEditWrapper.show();
-        lastModifiedElement = elemEditWrapper.find('.ml-hidden-edit-element');
-        lastModifiedElement.focus();
+        elemEdit = elemEditWrapper.find('.ml-hidden-edit-element');
+        elemEdit.focus();
+        
+        lastModifiedInfo = {'elem-overlap':elemOverlap, 'elem-edit-wrapper':elemEditWrapper, 'elem-edit':elemEdit};
+    });
+    
+    $(".ml-hidden-edit-element").change(function() {
+        var currElem = $(this);
+        var currentValue = (currElem.prop("tagName") == 'SELECT') ? $(this).text() : $(this).val();
+        currElem.parent(".ml-hidden-edit-element-wrapper").prev(".ml-overlap-edit-element").text(currentValue);
     });
     
 })();
@@ -80,7 +90,6 @@ JS
     {
         $endHtml = $this->currentForm->end();
         unset($this->currentForm);
-        //TODO: не надо ли сделать null
         return $endHtml;
     }
 
