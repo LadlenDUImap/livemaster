@@ -39,14 +39,16 @@ $cityList = new ModelList();
                 //'readonly' => 'readonly'
             ];
             foreach ($users as $usr) {
-                echo $cityList->beginElement()
+                echo $cityList->beginElement([
+                        \app\core\Url::to('/user/update'),
+                    ])
                     . '<div class="row item">'
                     //. '<input type="hidden" class="elem-id" value="' . $usr->id . '">'
-                    //. '<input type="hidden" class="row-id" value="' . $cityList::getCurrentId() . '">'
+                    //. '<input type="hidden" class="elem-id" value="' . $usr->getId() . '">'
                     . '<div class="col">' . $cityList->textInput($usr, 'name', $rowParams) . '</div>'
                     . '<div class="col">' . $cityList->textInput($usr, 'age', $rowParams) . '</div>'
                     . '<div class="col">' . $cityList->selectInput($usr, 'city_id', $cities, $rowParams) . '</div>'
-                    . '<div class="col"><button>Удалить</button></div>'
+                    . '<div class="col"><button class="ml-btn-action-remove">Удалить</button></div>'
                     . '</div>'
                     . $cityList->endElement();
             }

@@ -61,27 +61,18 @@ class Form
         $nameHtml = $this->partHtmlName($model, $attribute);
         $paramsHtml = HtmlHelper::partHtmlParams($params);
 
-        //$selectedName = '';
-
         $html = '<select' . $nameHtml . $paramsHtml . '>';
 
         foreach ($options as $opt) {
             $html .= '<option';
             if (!empty($opt['value'])) {
-                /*if ($selected = ($selectedValue == $opt['value']) ? ' selected="selected" ' : '') {
-                    $selectedName = $opt['name'];
-                }*/
                 $selected = ($model->$attribute == $opt['value']) ? ' selected="selected" ' : '';
                 $html .= ' value="' . Safe::htmlEncode($opt['value']) . '"' . $selected;
-            }/* else {
-                $selectedName = $opt['name'];
-            }*/
+            }
             $html .= '>' . Safe::htmlEncode($opt['name']) . '</option>';
         }
 
         $html .= '</select>';
-
-        //$html = '<div' . $paramsHtml . '>' . Safe::htmlEncode($selectedName) . '</div>' . $html;
 
         return $html;
     }

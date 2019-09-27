@@ -69,10 +69,18 @@ class ModelList
         lastModifiedInfo = {'elem-overlap':elemOverlap, 'elem-edit-wrapper':elemEditWrapper, 'elem-edit':elemEdit};
     });
     
+    function ajaxSave() {
+      
+    }
+    
     $(".ml-hidden-edit-element").change(function() {
         var currElem = $(this);
-        var currentValue = (currElem.prop("tagName") == 'SELECT') ? $(this).text() : $(this).val();
+        var currentValue = (currElem.prop("tagName") == 'SELECT') ? currElem.find("option:selected").text() : currElem.val();
         currElem.parent(".ml-hidden-edit-element-wrapper").prev(".ml-overlap-edit-element").text(currentValue);
+    });
+    
+    $(".ml-hidden-edit-element").blur(function() {
+        alert(3);
     });
     
 })();
@@ -95,33 +103,21 @@ JS
 
     public function textInput(DatabaseRecord $model, $attribute = '', $params = [])
     {
-        //$params['readonly'] = 'readonly';
-        //$params['class'] = $params['class'] ?? '';
-        //$params['class'] .= ' ml-clicked-elem ml-readonly';
-
         $params['class'] = $params['class'] ?? '';
         $params['class'] = ' ml-hidden-edit-element';
+        $params['data-ml-id'] = $model->getId();
 
         return $this->overlapElement($this->currentForm->textInput($model, $attribute, $params), $model->$attribute);
     }
 
     public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $selectedValue = false, $params = [])
     {
-        /*$selectedName = '';
-        $paramsHtml = HtmlHelper::partHtmlParams([]);
-
-        $html = '<div style="display:none;">';
-        $html .= $this->currentForm->selectInput($model, $attribute, $options, $selectedValue, $params);
-        $html .= '</div>';
-
-        $html = '<div' . $paramsHtml . '>' . Safe::htmlEncode($selectedName) . '</div>' . $html;
-
-        return $html;*/
-
         $params['class'] = $params['class'] ?? '';
         $params['class'] = ' ml-hidden-edit-element';
+        $params['data-ml-id'] = $model->getId();
 
-        return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params), $options[$model->$attribute ?? 0]['name']);
+        return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params),
+            $options[$model->$attribute ?? 0]['name']);
     }
 
     protected function overlapElement($elementHtml, $overlapText)
