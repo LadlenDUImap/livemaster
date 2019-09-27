@@ -14,33 +14,24 @@ class Router
      */
     public function run()
     {
-        $route = $_GET['r'] ?? false;
-
-        $contr = $this->getControllerPathFromUrlPath($route);
-        $action = $this->getActionPartFromUrlPath($route);
+        $gotRoute = $_GET['r'] ?? false;
 
         $class = '\\app\\controllers\\Controller';
         $action = 'action404';
 
-        $path = '/app/controllers';
+        $path = '/app/controllers/' . strtolower($this->getControllerPathFromUrlPath($gotRoute));
+        $path = rtrim($path, '/') . '/Controller';
 
-        if (!empty($_GET['r']))
-        {
-            $route = strtolower(trim($_GET['r'], '/\\'));
-            $path .= '/' . $route;
-        }
+        $file = realpath(APP_DIR . '..' . $path . '.php');
 
-        $path .= '/Controller';
-
-        $file = APP_DIR . '..' . $path . '.php';
-        if (file_exists($file))
+        // Защита от взлома через относительные пути
+        if ($file && strpos($file, APP_DIR . 'controllers/') === 0)
         {
             require($file);
             $classTest = str_replace('/', '\\', $path);
             if (class_exists($classTest, false))
             {
-                $action = !empty($_GET['action']) ? $_GET['action'] : 'index';
-                $action = 'action' . ucfirst(strtolower($action));
+                $action = $this->makePhpActionNameFromUrlPart($this->getActionPartFromUrlPath($gotRoute));
                 if (is_callable([$classTest, $action]))
                 {
                     $class = $classTest;
@@ -90,9 +81,9 @@ class Router
         return $controllerPath;
     }
 
-    /*protected function makePhpActionNameFromUrlPart($urlActionPart)
+    protected function makePhpActionNameFromUrlPart($urlActionPart)
     {
-        strtolower($urlActionPart);
-        return;
-    }*/
+        $action = 'action' . implode('', array_map('ucfirst', explode('-', strtolower($urlActionPart))));
+        return $action;
+    }
 }
