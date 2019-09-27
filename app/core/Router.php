@@ -3,8 +3,7 @@
 namespace app\core;
 
 /**
- * Router вызывает метод контроллера анализируя путь URL, который указывается в параметре $_GET['route']
- * - это путь к контроллеру, и параметр $_GET['action'] - это название дейтсвия.
+ * Router вызывает метод контроллера анализируя путь URL, который указывается в параметре $_GET['r']
  *
  * @package core
  */
@@ -15,14 +14,19 @@ class Router
      */
     public function run()
     {
+        $route = $_GET['r'] ?? false;
+
+        $contr = $this->getControllerPathFromUrlPath($route);
+        $action = $this->getActionPartFromUrlPath($route);
+
         $class = '\\app\\controllers\\Controller';
         $action = 'action404';
 
         $path = '/app/controllers';
 
-        if (!empty($_GET['route']))
+        if (!empty($_GET['r']))
         {
-            $route = strtolower(trim($_GET['route'], '/\\'));
+            $route = strtolower(trim($_GET['r'], '/\\'));
             $path .= '/' . $route;
         }
 
@@ -55,4 +59,40 @@ class Router
 
         echo $controller->$action();
     }
+
+    protected function getActionPartFromUrlPath($urlPath)
+    {
+        $action = 'index';
+
+        if ($urlPath) {
+            $parts = explode('/', $urlPath);
+            if ($partsCount = count($parts)) {
+                if ($parts[$partsCount - 1]) {
+                    // что-то есть в конце - значит это действие, не по-умолчанию
+                    $action = $parts[$partsCount - 1];
+                }
+            }
+        }
+
+        return $action;
+    }
+
+    protected function getControllerPathFromUrlPath($urlPath)
+    {
+        $controllerPath = '';
+
+        if ($urlPath) {
+            if ($lastSlashPos = strrpos($urlPath, '/')) {
+                $controllerPath = substr($urlPath, 0, $lastSlashPos);
+            }
+        }
+
+        return $controllerPath;
+    }
+
+    /*protected function makePhpActionNameFromUrlPart($urlActionPart)
+    {
+        strtolower($urlActionPart);
+        return;
+    }*/
 }
