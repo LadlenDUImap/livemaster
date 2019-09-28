@@ -1,9 +1,10 @@
 <?php
 
+use app\core\Url;
 use app\core\html\ModelList;
 
 /* @var $this app\core\View */
-/* @var $values app\core\Container */
+/* @var $values array */
 
 $users = $values['users'];
 $cities[] = [
@@ -19,49 +20,54 @@ foreach ($values['cities'] as $city) {
 
 $cityList = new ModelList([
     'action' => [
-        'new' => \app\core\Url::to('/user/new'),
-        'delete' => \app\core\Url::to('/user/delete'),
-        'update' => \app\core\Url::to('/user/update'),
+        'new' => Url::to('/user/new'),
+        'delete' => Url::to('/user/delete'),
+        'update' => Url::to('/user/update'),
     ],
 ]);
 
 ?>
-<div id="model-list-new-element-template" style="display: none">
-</div>
+<div id="model-list-new-element-template" style="display: none"><?php
+    //$this->render(__DIR__ . '/_user-row.php', ['cityList' => $cityList, 'user' => new \app\models\db\User(), 'cities' => $cities])
+    $rowParams = [
+        'style' => 'width:100%;text-align:center',
+    ];
+    $user = new \app\models\db\User();
+    $form = new \app\core\html\Form();
+    echo $form->begin()
+        . '<div class="row item">'
+        . '<div class="col">' . $form->textInput($user, 'name', $rowParams) . '</div>'
+        . '<div class="col">' . $form->textInput($user, 'age', $rowParams) . '</div>'
+        . '<div class="col">' . $form->selectInput($user, 'city_id', $cities, $rowParams) . '</div>'
+        . '<div class="col">'
+        . '<button class="model-list-new-save-button">Сохранить</button><button class="model-list-new-save-cancel-button">Отменить</button>'
+        . '</div>'
+        . '</div>'
+        . $form->end();
+    ?></div>
 
-    <h3 class="header">Список пользователей</h3>
-    <div class="container">
+<h3 class="header">Список пользователей</h3>
+<div class="container">
 
-        <div class="row head">
-            <div class="col">Имя</div>
-            <div class="col">Возраст</div>
-            <div class="col">Город</div>
-            <div class="col">&nbsp;</div>
-        </div>
-
-        <div class="body">
-            <?php
-            if ($users) {
-                $rowParams = [
-                    'style' => 'width:100%;text-align:center',
-                ];
-                foreach ($users as $user) {
-                    echo $this->render(__DIR__ . '/_user-row.php', new \app\core\Container(compact('cityList', 'user', 'cities')));
-                    /*echo $cityList->beginElement()
-                        . '<div class="row item">'
-                        . '<div class="col">' . $cityList->textInput($usr, 'name', $rowParams) . '</div>'
-                        . '<div class="col">' . $cityList->textInput($usr, 'age', $rowParams) . '</div>'
-                        . '<div class="col">' . $cityList->selectInput($usr, 'city_id', $cities, $rowParams) . '</div>'
-                        . '<div class="col"><button class="model-list-delete-button">Удалить</button></div>'
-                        . '</div>'
-                        . $cityList->endElement();*/
-                }
-            } else {
-                echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет пользователей</div></div>';
-            }
-            ?>
-        </div>
-
+    <div class="row head">
+        <div class="col">Имя</div>
+        <div class="col">Возраст</div>
+        <div class="col">Город</div>
+        <div class="col">&nbsp;</div>
     </div>
 
-    <button id="btn-add-user" class="model-list-new-add-button">Добавить пользователя</button>
+    <div class="body" id="model-list-new-element-container">
+        <?php
+        if ($users) {
+            foreach ($users as $user) {
+                echo $this->render(__DIR__ . '/_user-row.php', compact('cityList', 'user', 'cities'));
+            }
+        } else {
+            echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет пользователей</div></div>';
+        }
+        ?>
+    </div>
+
+</div>
+
+<button id="btn-add-user" class="model-list-new-add-button">Добавить пользователя</button>

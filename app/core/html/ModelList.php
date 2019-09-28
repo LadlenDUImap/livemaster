@@ -11,7 +11,7 @@ class ModelList
     protected $templateElements = [
         // все что касается нового элемента
         'new' => [
-            // контейнер с шаблоном для нового элемента
+            // контейнер с шаблоном с новым элементом
             'template-container' => [
                 // CSS селектор
                 'selector' => '#model-list-new-element-template',
@@ -20,15 +20,24 @@ class ModelList
             'element-container' => [
                 'selector' => '#model-list-new-element-container',
             ],
-            // кнопка добавления
+            // кнопка добавления (для начала процесса добавления)
             'add-button' => [
                 'selector' => '.model-list-new-add-button',
             ],
-            // кнопка удаления
-            'delete-button' => [
-                'selector' => '.model-list-delete-button',
+            // кнопка сохранения нового элемента после заполнения
+            'save-button' => [
+                'selector' => '.model-list-new-save-button',
+            ],
+            // кнопка сохранения нового элемента после заполнения
+            'save-cancel-button' => [
+                'selector' => '.model-list-new-save-cancel-button',
             ],
         ],
+        // кнопка удаления
+        'delete-button' => [
+            'selector' => '.model-list-delete-button',
+        ],
+
     ];
 
     protected $actions = [
@@ -57,9 +66,13 @@ class ModelList
 
     protected function registerJs()
     {
+        $templateElements = json_encode($this->templateElements);
+
         LM::inst()->getController()->getView()->addJsCode(<<<JS
 (function() {
     var lastModifiedInfo;
+    
+    var templateElements = $templateElements;
     
     $(".ml-overlap-edit-element").click(function() {
         if (lastModifiedInfo) {
@@ -92,8 +105,9 @@ class ModelList
         //alert(3);
     });
     
-    $("#model-list-new-add-button").click(function() {
-      
+    $(templateElements['new']['add-button']['selector']).click(function() {
+        var html = $(templateElements['new']['template-container']['selector']).html();
+        $(templateElements['new']['element-container']['selector']).append(html);
     });
     
 })();

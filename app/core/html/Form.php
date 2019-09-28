@@ -16,9 +16,9 @@ class Form
     public function begin($id = false)
     {
         $id = $id ?: self::$id;
-        return '<form id="lm_form_' . $id . '">'
-            . '<input type="hidden" id="lm_form_csrf_name_' . $id . '" value="' . Lm::inst()->csrf->getCsrfTokenName() . '" />'
-            . '<input type="hidden" id="lm_form_csrf_value_' . $id . '" value="' . Lm::inst()->csrf->getCsrfToken() . '" />';
+        return '<form class="lm_form_' . $id . '">'
+            . '<input type="hidden" class="lm_form_csrf_name_' . $id . '" value="' . Lm::inst()->csrf->getCsrfTokenName() . '" />'
+            . '<input type="hidden" class="lm_form_csrf_value_' . $id . '" value="' . Lm::inst()->csrf->getCsrfToken() . '" />';
     }
 
     public function end()
