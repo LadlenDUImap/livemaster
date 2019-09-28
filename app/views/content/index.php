@@ -68,5 +68,4 @@ $cityList = new ModelList([
     </div>
 
     <button id="btn-add-user" class="model-list-new-add-button">Добавить пользователя</button>
-
 </main>
