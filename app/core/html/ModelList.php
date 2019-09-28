@@ -25,9 +25,10 @@ class ModelList
                 'selector' => '.ml-new-add-button',
             ],
             // кнопка сохранения нового элемента после заполнения
-            'save-button' => [
+            // закомментировал т. к. будет использоваться событие submit формы
+            /*'save-button' => [
                 'selector' => '.ml-new-save-button',
-            ],
+            ],*/
             // кнопка сохранения нового элемента после заполнения
             'save-cancel-button' => [
                 'selector' => '.ml-new-save-cancel-button',
@@ -68,13 +69,14 @@ class ModelList
     {
         $templateElements = json_encode($this->templateElements);
 
+        $actions = json_encode($this->actions);
+
         LM::inst()->getController()->getView()->addJsCode(<<<JS
 (function() {
     var lastModifiedInfo;
     
-    var newElementProcessing = false;
-    
     var templateElements = $templateElements;
+    var actions = $actions;
     
     $(".ml-overlap-edit-element").click(function() {
         if (lastModifiedInfo) {
@@ -107,27 +109,39 @@ class ModelList
         //alert(3);
     });
     
+    
+    templateElements['new']['element-container']['elem'] = $(templateElements['new']['element-container']['selector']);
+    
     $(templateElements['new']['add-button']['selector']).click(function() {
-        if (!newElementProcessing) {
-            newElementProcessing = true;
+        var elemContainer = templateElements['new']['element-container']['elem'];
+        if (elemContainer.data('newElementProcessing') != 'in-process') {
+            elemContainer.data('newElementProcessing', 'in-process');
             var html = $(templateElements['new']['template-container']['selector']).html();
-            $(templateElements['new']['element-container']['selector']).append('<div class="ml-new-element-wrapper">' + html + '</div>');
+            elemContainer.append('<div class="ml-new-element-wrapper">' + html + '</div>');
             addNewElementProcessStart();
         } else {
             alert('Новый элемент уже в процессе создания.');
         }
     });
     
-    $(templateElements['new']['save-button']['selector']).click(function() {
-        
-    });
-    
     function addNewElementProcessStart() {
         $(templateElements['new']['save-cancel-button']['selector']).unbind().click(function() {
             $(this).closest(".ml-new-element-wrapper").remove();
-            newElementProcessing = false;
+            templateElements['new']['element-container']['elem'].data('newElementProcessing', 'no-process');
             return false;
-        });      
+        });
+        
+        $(".ml-new-element-wrapper form").unbind().submit(function() {
+            var data = $(this).serialize();
+            //$.post(actions['new'], data, function() {
+            $.post('/sdfdsf/', data, function() {
+                alert('555');
+            }).fail(function(jqXHR, textStatus, error) {
+                alert("Ошибка на серере. Код: " + jqXHR + "; Сообщение: " + error);
+            });
+            
+            return false;
+        });
     }
     
     
