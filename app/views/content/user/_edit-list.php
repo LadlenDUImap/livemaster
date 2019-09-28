@@ -27,7 +27,7 @@ $cityList = new ModelList([
 ]);
 
 ?>
-<div id="model-list-new-element-template" style="display: none"><?php
+<div id="ml-new-element-template" style="display: none"><?php
     //$this->render(__DIR__ . '/_user-row.php', ['cityList' => $cityList, 'user' => new \app\models\db\User(), 'cities' => $cities])
     $rowParams = [
         'style' => 'width:100%;text-align:center',
@@ -40,7 +40,7 @@ $cityList = new ModelList([
         . '<div class="col">' . $form->textInput($user, 'age', $rowParams) . '</div>'
         . '<div class="col">' . $form->selectInput($user, 'city_id', $cities, $rowParams) . '</div>'
         . '<div class="col">'
-        . '<button class="model-list-new-save-button">Сохранить</button><button class="model-list-new-save-cancel-button">Отменить</button>'
+        . '<button class="ml-new-save-button">Сохранить</button><button class="ml-new-save-cancel-button">Отменить</button>'
         . '</div>'
         . '</div>'
         . $form->end();
@@ -56,7 +56,7 @@ $cityList = new ModelList([
         <div class="col">&nbsp;</div>
     </div>
 
-    <div class="body" id="model-list-new-element-container">
+    <div class="body" id="ml-new-element-container">
         <?php
         if ($users) {
             foreach ($users as $user) {
@@ -70,4 +70,4 @@ $cityList = new ModelList([
 
 </div>
 
-<button id="btn-add-user" class="model-list-new-add-button">Добавить пользователя</button>
+<button id="btn-add-user" class="ml-new-add-button">Добавить пользователя</button>

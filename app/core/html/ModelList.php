@@ -14,28 +14,28 @@ class ModelList
             // контейнер с шаблоном с новым элементом
             'template-container' => [
                 // CSS селектор
-                'selector' => '#model-list-new-element-template',
+                'selector' => '#ml-new-element-template',
             ],
             // контейнер, в конец которого будет добавлен новый созданный элемент
             'element-container' => [
-                'selector' => '#model-list-new-element-container',
+                'selector' => '#ml-new-element-container',
             ],
             // кнопка добавления (для начала процесса добавления)
             'add-button' => [
-                'selector' => '.model-list-new-add-button',
+                'selector' => '.ml-new-add-button',
             ],
             // кнопка сохранения нового элемента после заполнения
             'save-button' => [
-                'selector' => '.model-list-new-save-button',
+                'selector' => '.ml-new-save-button',
             ],
             // кнопка сохранения нового элемента после заполнения
             'save-cancel-button' => [
-                'selector' => '.model-list-new-save-cancel-button',
+                'selector' => '.ml-new-save-cancel-button',
             ],
         ],
         // кнопка удаления
         'delete-button' => [
-            'selector' => '.model-list-delete-button',
+            'selector' => '.ml-delete-button',
         ],
 
     ];
@@ -72,6 +72,8 @@ class ModelList
 (function() {
     var lastModifiedInfo;
     
+    var newElementProcessing = false;
+    
     var templateElements = $templateElements;
     
     $(".ml-overlap-edit-element").click(function() {
@@ -106,9 +108,24 @@ class ModelList
     });
     
     $(templateElements['new']['add-button']['selector']).click(function() {
-        var html = $(templateElements['new']['template-container']['selector']).html();
-        $(templateElements['new']['element-container']['selector']).append(html);
+        if (!newElementProcessing) {
+            newElementProcessing = true;
+            var html = $(templateElements['new']['template-container']['selector']).html();
+            $(templateElements['new']['element-container']['selector']).append('<div class="ml-new-element-wrapper">' + html + '</div>');
+            addNewElementProcessStart();
+        } else {
+            alert('Новый элемент уже в процессе создания.');
+        }
     });
+    
+    function addNewElementProcessStart() {
+        $(templateElements['new']['save-cancel-button']['selector']).unbind().click(function() {
+            $(this).closest(".ml-new-element-wrapper").remove();
+            newElementProcessing = false;
+            return false;
+        });      
+    }
+    
     
 })();
 JS

@@ -12,6 +12,6 @@ echo $values['cityList']->beginElement()
     . '<div class="col">' . $values['cityList']->textInput($values['user'], 'name', $rowParams) . '</div>'
     . '<div class="col">' . $values['cityList']->textInput($values['user'], 'age', $rowParams) . '</div>'
     . '<div class="col">' . $values['cityList']->selectInput($values['user'], 'city_id', $values['cities'], $rowParams) . '</div>'
-    . '<div class="col"><button class="model-list-delete-button">Удалить</button></div>'
+    . '<div class="col"><button class="ml-delete-button">Удалить</button></div>'
     . '</div>'
     . $values['cityList']->endElement();
