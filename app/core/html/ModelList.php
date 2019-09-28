@@ -131,7 +131,7 @@ JS
 
     protected function prepareParamsForElement(DatabaseRecord $model, $params)
     {
-        $params['class'] = $params['class'] ? : '';
+        $params['class'] = $params['class'] ?? '';
         $params['class'] .= ' ml-hidden-edit-element';
         $params['data-ml-id'] = $model->getId();
 

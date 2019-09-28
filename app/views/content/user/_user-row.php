@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this app\core\View */
-/* @var $values app\core\Container */
+/* @var $values array */
 
 $rowParams = [
     'style' => 'width:100%;text-align:center',

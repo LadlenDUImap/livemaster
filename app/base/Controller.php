@@ -41,8 +41,8 @@ abstract class Controller
      */
     protected function render(string $viewName, array $params = null)
     {
-        //$file = APP_DIR . 'views/content/' . $viewName . '.php';
-        $content = $this->view->render($viewName, $params);
+        $file = APP_DIR . 'views/content/' . $viewName . '.php';
+        $content = $this->view->render($file, $params);
         return $this->renderLayout($content);
     }
 
