@@ -51,16 +51,16 @@ class ModelList
     private $currentForm;
 
     /** @var bool признак первой инициализации класса */
-    private $firstInit = false;
+    private static $firstInit = true;
 
 
     public function __construct($actions = [], $templateElements = [])
     {
         $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
 
-        if (!$this->firstInit) {
+        if (self::$firstInit) {
             $this->registerJs();
-            $this->firstInit = true;
+            self::$firstInit = false;
         }
     }
 
@@ -116,6 +116,10 @@ class ModelList
         } else {
             alert('Новый элемент уже в процессе создания.');
         }
+    });
+    
+    $(templateElements['new']['save-button']['selector']).click(function() {
+        
     });
     
     function addNewElementProcessStart() {
