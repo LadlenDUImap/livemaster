@@ -2,6 +2,7 @@
 
 namespace app\controllers\user;
 
+use app\core\Web;
 use app\helpers\ClassHelper;
 use app\models\db\User;
 
@@ -18,18 +19,24 @@ class Controller extends \app\base\Controller
 
     public function actionCreate()
     {
+        $state = 'error';
+        $data = [];
+
         $model = new User;
 
         $attributes = $_POST[ClassHelper::getClassNameNoNamespace($model)];
 
-        $model->verifyProperties($attributes);
-        $model->loadProperties($attributes);
+        $data['corrected-attributes'] = $model->correctPropertyBulk($attributes);
+        $compoundAttributes = array_replace_recursive($attributes, $data['corrected-attributes']);
 
+        if (!$errors = $model->validatePropertyBulk($compoundAttributes)) {
+            $state = 'success';
+            $model->loadProperties($compoundAttributes);
+            $model->save();
+        } else {
+            $data['error-messages'] = $errors;
+        }
 
-        $result = [
-            'success' => true,
-        ];
-
-        return json_encode($result);
+        Web::sendJsonResponse($state, $data);
     }
 }

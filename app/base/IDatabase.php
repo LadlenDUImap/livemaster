@@ -80,8 +80,11 @@ interface IDatabase
      */
     //public function getTextColumnMaximumLength($table, $columns);
 
-    public function select(string $tableName, array $condition = [], array $toSelect = ['*']): array;
+    public function select(string $tableName, array $condition = [], array $toSelect = ['*']): ?array;
 
     //public function query($query, $params);
 
+    public function insert(string $tableName, array $values): bool;
+
+    public function update(string $tableName, array $values, array $condition): bool;
 }

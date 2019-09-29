@@ -3,6 +3,7 @@
 namespace app\core\db;
 
 use app\base\IDatabase;
+use app\core\Lm;
 
 class Pdo extends \app\base\Component implements IDatabase
 {
@@ -39,31 +40,50 @@ class Pdo extends \app\base\Component implements IDatabase
         return implode(', ', $resultElements);
     }
 
-    public function select(string $tableName, array $condition = [], array $toSelect = ['*']): array
+    public function select(string $tableName, array $condition = [], array $toSelect = ['*']): ?array
     {
         $result = [];
 
-        $toSelect = array_unique($toSelect);
+        try {
+            $toSelect = array_unique($toSelect);
 
-        array_map(function ($vl) {
-            $vl = trim($vl);
-            return ($vl == '*') ? $vl : "`$vl`";
-        }, $toSelect);
+            array_map(function ($vl) {
+                $vl = trim($vl);
+                return ($vl == '*') ? $vl : "`$vl`";
+            }, $toSelect);
 
-        $query = 'SELECT ' . implode(', ', $toSelect) . ' FROM `' . $tableName . '`';
-        if ($whereString = $this->makeWhere($condition)) {
-            $query .= ' WHERE ' . $whereString;
-        }
+            $query = 'SELECT ' . implode(', ', $toSelect) . ' FROM `' . $tableName . '`';
+            if ($whereString = $this->makeWhere($condition)) {
+                $query .= ' WHERE ' . $whereString;
+            }
 
-        $STH = $this->DBH->prepare($query);
-        $STH->setFetchMode(\PDO::FETCH_ASSOC);
-        $STH->execute($condition);
-
-        while ($row = $STH->fetch()) {
-            $result[] = $row;
+            if ($STH = $this->DBH->prepare($query)) {
+                $STH->setFetchMode(\PDO::FETCH_ASSOC);
+                if ($STH->execute($condition)) {
+                    while ($row = $STH->fetch()) {
+                        $result[] = $row;
+                    }
+                } else {
+                    throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
+                }
+            } else {
+                throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
+            }
+        } catch (\Exception $e) {
+            Lm::inst()->log->set($e);
         }
 
         return $result;
+    }
+
+    public function insert(string $tableName, array $values): bool
+    {
+        return true;
+    }
+
+    public function update(string $tableName, array $values, array $condition): bool
+    {
+        return true;
     }
 
     /*public function query($query, $params)
