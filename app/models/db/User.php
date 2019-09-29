@@ -18,10 +18,10 @@ class User extends DatabaseRecord
         return $this->id;
     }
 
-    public function setId($id)
+    /*public function setId($id)
     {
         $this->id = $id;
-    }
+    }*/
 
     /**
      * @return mixed
@@ -71,30 +71,63 @@ class User extends DatabaseRecord
         $this->city_id = $city_id;
     }
 
-    public function verifyName()
+    public function validate(string $propName, $value)
     {
-        $this->name = trim($this->name);
-        $nameLength = mb_strlen($this->name, 'UTF-8');
+        $errMsg = false;
 
-        if (!$nameLength) {
-            throw new \Exception('Имя пользователя должно быть заполнено');
-        }
-        if ($nameLength > 30) {
-            throw new \Exception('Имя пользователя НЕ должно быть больше 30 символов');
+        switch ($propName) {
+            case 'name': {
+                $errMsg = $this->validateName($value);
+                break;
+            }
+            case 'age': {
+                $errMsg = $this->validateAge($value);
+                break;
+            }
+            default: {
+                break;
+            }
         }
 
-        return true;
+        return $errMsg;
     }
 
-    public function verifyAge()
+    public function validateBulk(array $properties)
     {
-        $this->age = trim($this->age);
-        if (!preg_match('^\d+$', $this->age)) {
-            throw new \Exception('Возраст пользователя должен быть неотрицательным целым числом');
+        $errorMessages = [];
+
+        foreach ($properties as $prop) {
+            if ($errMsg = $this->validate($prop['name'], $prop['value'])) {
+                $errorMessages[] = $errMsg;
+            }
         }
-        if ($this->age > 120) {
-            throw new \Exception('Дубы и черепахи не могут быть пользователями');
+
+        return $errorMessages;
+    }
+
+    public function validateName($value)
+    {
+        $nameLength = mb_strlen($value, 'UTF-8');
+
+        if (!$nameLength) {
+            return 'Имя пользователя должно быть заполнено';
         }
-        return true;
+        if ($nameLength > 30) {
+            return 'Имя пользователя НЕ должно быть больше 30 символов';
+        }
+
+        return false;
+    }
+
+    public function validateAge($value)
+    {
+        if (!preg_match('^\d+$', $value)) {
+            return 'Возраст пользователя должен быть неотрицательным целым числом';
+        }
+        if ((int)$value > 200) {
+            return 'Дубы и черепахи не могут быть пользователями';
+        }
+
+        return false;
     }
 }

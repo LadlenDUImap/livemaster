@@ -31,6 +31,26 @@ abstract class DatabaseRecord implements IProperties
         }
     }
 
+    /**
+     * Проверка одного значения на соответствие правилам.
+     *
+     * @param string $name название
+     * @param mixed $value значение
+     * @return mixed
+     */
+    public abstract function validate(string $name, $value);
+
+    /**
+     * @param array $properties
+     *      $properties = [
+     *          'name'      => (string)
+     *          'value'     => mixed
+     *      ]
+     * @return mixed
+     */
+    public abstract function validateBulk(array $properties);
+
+
     public function getId() {
         throw new \Exception('ID не реализован для записи');
     }
@@ -56,6 +76,13 @@ abstract class DatabaseRecord implements IProperties
         }
         //$this->_isNew = false;
         return $this;
+    }
+
+    public function validateProperties(array $properties)
+    {
+        foreach ($properties as $name => $value) {
+            $verifyFunctionName = [];
+        }
     }
 
     public static function getAll()

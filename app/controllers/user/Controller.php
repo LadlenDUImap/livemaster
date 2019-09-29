@@ -2,6 +2,7 @@
 
 namespace app\controllers\user;
 
+use app\helpers\ClassHelper;
 use app\models\db\User;
 
 class Controller extends \app\base\Controller
@@ -19,7 +20,11 @@ class Controller extends \app\base\Controller
     {
         $model = new User;
 
-        $model->load();
+        $attributes = $_POST[ClassHelper::getClassNameNoNamespace($model)];
+
+        $model->verifyProperties($attributes);
+        $model->loadProperties($attributes);
+
 
         $result = [
             'success' => true,
