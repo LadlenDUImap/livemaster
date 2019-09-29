@@ -48,7 +48,7 @@ class Router
 
         Lm::inst()->setController($controller);
 
-        echo $controller->$action();
+        Web::sendHtmlResponse($controller->$action());
     }
 
     protected function getActionPartFromUrlPath($urlPath)
