@@ -39,6 +39,7 @@ abstract class DatabaseRecord implements IProperties
     {
         if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {
             $this->loadProperties($rows);
+            $this->_isNew = false;
         }
         return $rows;
     }
@@ -53,7 +54,7 @@ abstract class DatabaseRecord implements IProperties
         foreach ($properties as $name => $value) {
             $this->$name = $value;
         }
-        $this->_isNew = false;
+        //$this->_isNew = false;
         return $this;
     }
 
@@ -66,6 +67,7 @@ abstract class DatabaseRecord implements IProperties
                 $className = get_called_class();
                 $newItem = new $className;
                 $newItem->loadProperties($vals);
+                $newItem->_isNew = false;
                 $items[] = $newItem;
             }
         }
