@@ -11,7 +11,7 @@ use app\core\Lm;
  *
  * @package app\base
  */
-abstract class DatabaseRecord implements IProperties
+abstract class DatabaseRecord
 {
     private $_isNew = true;
 
@@ -69,7 +69,10 @@ abstract class DatabaseRecord implements IProperties
      * @param mixed $value значение
      * @return string|false строка с описанием ошибки или false если значение правильно
      */
-    public abstract function validateProperty(string $propName, $value);
+    public function validateProperty(string $propName, $value)
+    {
+        return false;
+    }
 
     /**
      * array[<название поля>] string
@@ -114,7 +117,6 @@ abstract class DatabaseRecord implements IProperties
         foreach ($properties as $name => $value) {
             $this->$name = $value;
         }
-        //$this->_isNew = false;
         return $this;
     }
 
@@ -135,30 +137,12 @@ abstract class DatabaseRecord implements IProperties
         return $items;
     }
 
-    public static function traverseProperties($includeId = false)
+    public function save()
     {
-        $reflect = new \ReflectionClass(get_called_class());
-        $props = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
-        foreach ($props as $pr) {
-            if ($pr->name[0] !== '_') {
-                if (!$includeId && $pr->name == self::$_idName) {
-                    continue;
-                }
-                $ret = [
-                    'name' => $pr->name,
-                    //'value' => self::{$pr->name},
-                ];
-                yield $ret;
-            }
+        if ($this->_isNew) {
+            Lm::inst()->db->insert(static::$_tableName);
+        } else {
+            Lm::inst()->db->update(static::$_tableName);
         }
     }
-
-    /*public function actionVerifyData($field)
-    {
-        $fname = 'verify' . ucfirst($field);
-        if (!is_callable([$this, $fname])) {
-            throw new \Exception('Нет такого поля: ' . $field);
-        }
-        return $this->$fname;
-    }*/
 }
