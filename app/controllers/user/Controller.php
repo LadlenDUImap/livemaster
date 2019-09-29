@@ -14,4 +14,17 @@ class Controller extends \app\base\Controller
 
         return json_encode($result);
     }
+
+    public function actionCreate()
+    {
+        $model = new User;
+
+        $model->load();
+
+        $result = [
+            'success' => true,
+        ];
+
+        return json_encode($result);
+    }
 }

@@ -42,7 +42,7 @@ class ModelList
     ];
 
     protected $actions = [
-        'new' => 'new',
+        'create' => 'create',
         'delete' => 'delete',
         'update' => 'update',
     ];
@@ -57,6 +57,8 @@ class ModelList
 
     public function __construct($actions = [], $templateElements = [])
     {
+        $this->actions = $actions;
+
         $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
 
         if (self::$firstInit) {
@@ -133,11 +135,10 @@ class ModelList
         
         $(".ml-new-element-wrapper form").unbind().submit(function() {
             var data = $(this).serialize();
-            //$.post(actions['new'], data, function() {
-            $.post('/sdfdsf/', data, function() {
-                alert('555');
+            $.post(actions['create'], data, function(data) {
+                alert(data);
             }).fail(function(jqXHR, textStatus, error) {
-                alert("Ошибка на серере. Код: " + jqXHR + "; Сообщение: " + error);
+                alert("Ошибка на серере " + jqXHR.status + ": " + error);
             });
             
             return false;

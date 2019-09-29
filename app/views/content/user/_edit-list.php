@@ -19,11 +19,9 @@ foreach ($values['cities'] as $city) {
 }
 
 $cityList = new ModelList([
-    'action' => [
-        'new' => Url::to('/user/new'),
-        'delete' => Url::to('/user/delete'),
-        'update' => Url::to('/user/update'),
-    ],
+    'create' => Url::to('/user/create'),
+    'delete' => Url::to('/user/delete'),
+    'update' => Url::to('/user/update'),
 ]);
 
 ?>
