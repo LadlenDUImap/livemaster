@@ -32,26 +32,66 @@ abstract class DatabaseRecord implements IProperties
     }
 
     /**
-     * Проверка одного значения на соответствие правилам.
+     * Коррекция значения, например, удаление не нужных пробелов по краям строки.
      *
-     * @param string $name название
-     * @param mixed $value значение
-     * @return mixed
+     * @param string $propName
+     * @param mixed $value
+     * @return mixed|false скорректированное значение, false если значение не нуждается в коррекции
      */
-    public abstract function validate(string $name, $value);
+    public function correctProperty(string $propName, $value)
+    {
+        return false;
+    }
 
     /**
-     * @param array $properties
-     *      $properties = [
-     *          'name'      => (string)
-     *          'value'     => mixed
-     *      ]
-     * @return mixed
+     * array[<название поля>] string
+     *
+     * @param array $properties (См. вверху)
+     * @return array скорректированные значения (только те что изменились)
      */
-    public abstract function validateBulk(array $properties);
+    public function correctPropertyBulk(array $properties)
+    {
+        $correcteProperties = [];
 
+        foreach ($properties as $name => $value) {
+            if (($correctedValue = $this->correctProperty($name, $value)) !== false) {
+                $correcteProperties[$name] = $correctedValue;
+            }
+        }
 
-    public function getId() {
+        return $correcteProperties;
+    }
+
+    /**
+     * Проверка одного значения на соответствие правилам.
+     *
+     * @param string $propName название
+     * @param mixed $value значение
+     * @return string|false строка с описанием ошибки или false если значение правильно
+     */
+    public abstract function validateProperty(string $propName, $value);
+
+    /**
+     * array[<название поля>] string
+     *
+     * @param array $properties (См. вверху)
+     * @return array список ошибок или пустой массив если ошибок не найдено
+     */
+    public function validatePropertyBulk(array $properties)
+    {
+        $errorMessages = [];
+
+        foreach ($properties as $name => $value) {
+            if ($errMsg = $this->validateProperty($name, $value)) {
+                $errorMessages[$name] = $errMsg;
+            }
+        }
+
+        return $errorMessages;
+    }
+
+    public function getId()
+    {
         throw new \Exception('ID не реализован для записи');
     }
 
@@ -76,13 +116,6 @@ abstract class DatabaseRecord implements IProperties
         }
         //$this->_isNew = false;
         return $this;
-    }
-
-    public function validateProperties(array $properties)
-    {
-        foreach ($properties as $name => $value) {
-            $verifyFunctionName = [];
-        }
     }
 
     public static function getAll()

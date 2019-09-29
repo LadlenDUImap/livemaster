@@ -71,7 +71,18 @@ class User extends DatabaseRecord
         $this->city_id = $city_id;
     }
 
-    public function validate(string $propName, $value)
+    public function correctProperty(string $propName, $value)
+    {
+        $valueMod = trim($value);
+
+        if ($propName == 'name') {
+            $valueMod = preg_replace('/\s+/', ' ', $valueMod);
+        }
+
+        return ($valueMod === $value) ? false : $valueMod;
+    }
+
+    public function validateProperty(string $propName, $value)
     {
         $errMsg = false;
 
@@ -84,25 +95,17 @@ class User extends DatabaseRecord
                 $errMsg = $this->validateAge($value);
                 break;
             }
+            case 'city_id': {
+                // здесь можно проверить есть ли такой город,
+                // но в этом мало практической необходимости
+                break;
+            }
             default: {
                 break;
             }
         }
 
         return $errMsg;
-    }
-
-    public function validateBulk(array $properties)
-    {
-        $errorMessages = [];
-
-        foreach ($properties as $prop) {
-            if ($errMsg = $this->validate($prop['name'], $prop['value'])) {
-                $errorMessages[] = $errMsg;
-            }
-        }
-
-        return $errorMessages;
     }
 
     public function validateName($value)
