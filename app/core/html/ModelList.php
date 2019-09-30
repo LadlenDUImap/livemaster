@@ -8,7 +8,7 @@ use app\core\Lm;
 class ModelList
 {
     /** @var array параметры, описывающие значения html элементов обрабатываемого шаблона */
-    protected $templateElements = [
+    protected $_templateElements = [
         // все что касается нового элемента
         'new' => [
             // контейнер с шаблоном с новым элементом
@@ -41,7 +41,7 @@ class ModelList
 
     ];
 
-    protected $actions = [
+    protected $_actions = [
         'create' => 'create',
         'delete' => 'delete',
         'update' => 'update',
@@ -49,29 +49,29 @@ class ModelList
 
 
     /** @var  Form */
-    private $currentForm;
+    private $_currentForm;
 
     /** @var bool признак первой инициализации класса */
-    private static $firstInit = true;
+    private static $_firstInit = true;
 
 
     public function __construct($actions = [], $templateElements = [])
     {
-        $this->actions = $actions;
+        $this->_actions = $actions;
 
-        $this->templateElements = array_replace_recursive($this->templateElements, $templateElements);
+        $this->_templateElements = array_replace_recursive($this->_templateElements, $templateElements);
 
-        if (self::$firstInit) {
+        if (self::$_firstInit) {
             $this->registerJs();
-            self::$firstInit = false;
+            self::$_firstInit = false;
         }
     }
 
     protected function registerJs()
     {
-        $templateElements = json_encode($this->templateElements);
+        $templateElements = json_encode($this->_templateElements);
 
-        $actions = json_encode($this->actions);
+        $actions = json_encode($this->_actions);
 
         LM::inst()->getController()->getView()->addJsCode(<<<JS
 (function() {
@@ -136,7 +136,7 @@ class ModelList
         $(".ml-new-element-wrapper form").unbind().submit(function() {
             var data = $(this).serialize();
             $.post(actions['create'], data, function(data) {
-                alert(data);
+                alert(data.status);
             }).fail(function(jqXHR, textStatus, error) {
                 alert("Ошибка на серере " + jqXHR.status + ": " + error);
             });
@@ -153,14 +153,14 @@ JS
 
     public function beginElement()
     {
-        $this->currentForm = new Form();
-        return $this->currentForm->begin();
+        $this->_currentForm = new Form();
+        return $this->_currentForm->begin();
     }
 
     public function endElement()
     {
-        $endHtml = $this->currentForm->end();
-        unset($this->currentForm);
+        $endHtml = $this->_currentForm->end();
+        unset($this->_currentForm);
         return $endHtml;
     }
 
@@ -168,14 +168,14 @@ JS
     {
         $params = $this->prepareParamsForElement($model, $params);
 
-        return $this->overlapElement($this->currentForm->textInput($model, $attribute, $params), $model->$attribute);
+        return $this->overlapElement($this->_currentForm->textInput($model, $attribute, $params), $model->$attribute);
     }
 
     public function selectInput(DatabaseRecord $model, $attribute = '', $options = [], $params = [])
     {
         $params = $this->prepareParamsForElement($model, $params);
 
-        return $this->overlapElement($this->currentForm->selectInput($model, $attribute, $options, $params),
+        return $this->overlapElement($this->_currentForm->selectInput($model, $attribute, $options, $params),
             $options[$model->$attribute ?? 0]['name']);
     }
 
