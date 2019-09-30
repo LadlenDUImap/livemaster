@@ -64,7 +64,7 @@ class Form
 
         foreach ($options as $opt) {
             $html .= '<option';
-            if (!empty($opt['value'])) {
+            if (isset($opt['value'])) {
                 $selected = ($model->$attribute == $opt['value']) ? ' selected="selected" ' : '';
                 $html .= ' value="' . Safe::htmlEncode($opt['value']) . '"' . $selected;
             }
