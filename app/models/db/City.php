@@ -6,42 +6,42 @@ use app\base\DatabaseRecord;
 
 class City extends DatabaseRecord
 {
-    public $id;
-    public $name;
-
     protected static $_tableName = 'cities';
 
-    public function getId()
+    protected $_attributes = ['id' => null, 'name' => null];
+
+
+    public function correctProperty(string $propName, $value)
     {
-        return $this->id;
+        $valueMod = trim($value);
+
+        if ($propName == 'name') {
+            $valueMod = preg_replace('/\s+/', ' ', $valueMod);
+        }
+
+        return ($valueMod === $value) ? false : $valueMod;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function validateProperty(string $propName, $value)
     {
-        return $this->name;
+        $errMsg = false;
+
+        if ($propName == 'name') {
+            $errMsg = $this->validateName($value);
+        }
+
+        return $errMsg;
     }
 
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
+    public function validateName($value)
     {
-        $this->name = $name;
-    }
-
-    public function verifyName()
-    {
-        $this->name = trim($this->name);
-        $nameLength = mb_strlen($this->name, 'UTF-8');
+        $nameLength = mb_strlen($value, 'UTF-8');
 
         if (!$nameLength) {
-            throw new \Exception('Имя пользователя должно быть заполнено');
+            throw new \Exception('Название города должно быть заполнено');
         }
         if ($nameLength > 30) {
-            throw new \Exception('Имя пользователя НЕ должно быть больше 30 символов');
+            throw new \Exception('Название города НЕ должно быть больше 30 символов');
         }
 
         return true;
