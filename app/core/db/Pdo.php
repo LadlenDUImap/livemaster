@@ -29,34 +29,53 @@ class Pdo extends \app\base\Component implements IDatabase
         $this->DBH->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
-    protected function makeWhere($condition)
+    /**
+     * Защита от потенциального взлома - подготовка названия таблицы/колонки.
+     *
+     * @param string $name
+     */
+    protected function makeNameSafe(string $name)
+    {
+        return preg_replace('/[^A-Za-z0-9_]+/', '', $name);
+    }
+
+    /**
+     * Создать цепь шаблонов типа "`a` = :a", соединенных $glue. Для части PDO запроса.
+     *
+     * @param array $condition
+     * @param string $glue
+     * @return string
+     */
+    protected function makeEqualQueryTerm(array $condition, string $glue)
     {
         $resultElements = [];
 
         foreach ($condition as $name => $value) {
+            $name = $this->makeNameSafe($name);
             $resultElements[] = "`$name` = :$name";
         }
 
-        return implode(', ', $resultElements);
+        return implode(" $glue ", $resultElements);
     }
 
     public function select(string $tableName, array $condition = [], array $toSelect = ['*']): ?array
     {
         $result = false;
 
+        $tableName = $this->makeNameSafe($tableName);
+
+        $toSelect = array_unique($toSelect);
+        array_map(function ($vl) {
+            $vl = $this->makeNameSafe($vl);
+            return ($vl === '*') ? $vl : "`$vl`";
+        }, $toSelect);
+
+        $query = 'SELECT ' . implode(', ', $toSelect) . ' FROM `' . $tableName . '`';
+        if ($whereString = $this->makeEqualQueryTerm($condition, 'AND')) {
+            $query .= ' WHERE ' . $whereString;
+        }
+
         try {
-            $toSelect = array_unique($toSelect);
-
-            array_map(function ($vl) {
-                $vl = trim($vl);
-                return ($vl == '*') ? $vl : "`$vl`";
-            }, $toSelect);
-
-            $query = 'SELECT ' . implode(', ', $toSelect) . ' FROM `' . $tableName . '`';
-            if ($whereString = $this->makeWhere($condition)) {
-                $query .= ' WHERE ' . $whereString;
-            }
-
             if ($STH = $this->DBH->prepare($query)) {
                 $STH->setFetchMode(\PDO::FETCH_ASSOC);
                 if ($STH->execute($condition)) {
@@ -81,22 +100,19 @@ class Pdo extends \app\base\Component implements IDatabase
     {
         $result = false;
 
-        try {
-            $query = 'INSERT INTO `' . $tableName . '`'
-                . ' SET ';
+        $tableName = $this->makeNameSafe($tableName);
 
+        $query = 'INSERT INTO `' . $tableName . '`'
+            . ' SET ' . $this->makeEqualQueryTerm($values, ',');
+
+        try {
             if ($STH = $this->DBH->prepare($query)) {
                 $STH->setFetchMode(\PDO::FETCH_ASSOC);
-                if ($STH->execute($condition)) {
-                    $result = [];
-                    while ($row = $STH->fetch()) {
-                        $result[] = $row;
-                    }
-                } else {
-                    throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
+                if (!$result = $STH->execute($values)) {
+                    throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
                 }
             } else {
-                throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
+                throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
             }
         } catch (\Exception $e) {
             Lm::inst()->log->set($e);
@@ -109,10 +125,4 @@ class Pdo extends \app\base\Component implements IDatabase
     {
         return true;
     }
-
-    /*public function query($query, $params)
-    {
-        $STH = $this->DBH->prepare($query);
-        $STH->execute($params);
-    }*/
 }
