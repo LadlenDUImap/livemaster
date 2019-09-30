@@ -9,15 +9,6 @@ namespace app\core;
  */
 class Web
 {
-    /**
-     * Проверка является ли запрос AJAX запросом.
-     *
-     * @return bool
-     */
-    public static function ifAjax()
-    {
-        return !empty($_REQUEST['ajax']);
-    }
 
     /**
      * Начинает сессию если ещё не начата.
