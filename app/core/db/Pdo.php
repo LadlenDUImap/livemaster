@@ -42,7 +42,7 @@ class Pdo extends \app\base\Component implements IDatabase
 
     public function select(string $tableName, array $condition = [], array $toSelect = ['*']): ?array
     {
-        $result = [];
+        $result = false;
 
         try {
             $toSelect = array_unique($toSelect);
@@ -60,6 +60,7 @@ class Pdo extends \app\base\Component implements IDatabase
             if ($STH = $this->DBH->prepare($query)) {
                 $STH->setFetchMode(\PDO::FETCH_ASSOC);
                 if ($STH->execute($condition)) {
+                    $result = [];
                     while ($row = $STH->fetch()) {
                         $result[] = $row;
                     }
@@ -78,7 +79,30 @@ class Pdo extends \app\base\Component implements IDatabase
 
     public function insert(string $tableName, array $values): bool
     {
-        return true;
+        $result = false;
+
+        try {
+            $query = 'INSERT INTO `' . $tableName . '`'
+                . ' SET ';
+
+            if ($STH = $this->DBH->prepare($query)) {
+                $STH->setFetchMode(\PDO::FETCH_ASSOC);
+                if ($STH->execute($condition)) {
+                    $result = [];
+                    while ($row = $STH->fetch()) {
+                        $result[] = $row;
+                    }
+                } else {
+                    throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
+                }
+            } else {
+                throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
+            }
+        } catch (\Exception $e) {
+            Lm::inst()->log->set($e);
+        }
+
+        return $result;
     }
 
     public function update(string $tableName, array $values, array $condition): bool

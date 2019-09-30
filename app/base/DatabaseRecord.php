@@ -21,6 +21,9 @@ abstract class DatabaseRecord
     /** @var string имя первичного ключа */
     protected static $_idName = 'id';
 
+    /** @var array атрибуты таблицы БД array[название => значение] */
+    protected $_attributes = [];
+
 
     public function __construct($id = false)
     {
@@ -30,6 +33,37 @@ abstract class DatabaseRecord
             }
         }
     }
+
+    public function getAttributes()
+    {
+        return $this->_attributes;
+    }
+
+    public function setAttributes($attributes)
+    {
+        foreach ($attributes as $name => $value) {
+            $this->setAttr($name, $value);
+        }
+    }
+
+    public function getAttr($name)
+    {
+        if (!key_exists($name, $this->_attributes)) {
+            throw new \Exception("Не существует значение `$name`");
+        }
+
+        return $this->_attributes[$name];
+    }
+
+    public function setAttr($name, $value)
+    {
+        if (!key_exists($name, $this->_attributes)) {
+            throw new \Exception("Не существует значение `$name`");
+        }
+
+        $this->_attributes[$name] = $value;
+    }
+
 
     /**
      * Коррекция значения, например, удаление не нужных пробелов по краям строки.
