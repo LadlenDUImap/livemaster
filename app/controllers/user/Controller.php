@@ -31,7 +31,7 @@ class Controller extends \app\base\Controller
 
         if (!$errors = $model->validatePropertyBulk($compoundAttributes)) {
             $state = 'success';
-            $model->loadProperties($compoundAttributes);
+            $model->setAttributes($compoundAttributes);
             $model->save();
         } else {
             $data['error-messages'] = $errors;

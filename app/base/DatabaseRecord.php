@@ -135,7 +135,7 @@ abstract class DatabaseRecord
     public function load($condition)
     {
         if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {
-            $this->loadProperties($rows);
+            $this->setAttributes($rows);
             $this->_isNew = false;
         }
         return $rows;
@@ -146,14 +146,6 @@ abstract class DatabaseRecord
         return $this->_isNew;
     }
 
-    public function loadProperties(array $properties)
-    {
-        foreach ($properties as $name => $value) {
-            $this->$name = $value;
-        }
-        return $this;
-    }
-
     public static function getAll()
     {
         $items = [];
@@ -162,7 +154,7 @@ abstract class DatabaseRecord
             foreach ($rows as $vals) {
                 $className = get_called_class();
                 $newItem = new $className;
-                $newItem->loadProperties($vals);
+                $newItem->setAttributes($vals);
                 $newItem->_isNew = false;
                 $items[] = $newItem;
             }
@@ -174,9 +166,10 @@ abstract class DatabaseRecord
     public function save()
     {
         if ($this->_isNew) {
-            Lm::inst()->db->insert(static::$_tableName);
+            Lm::inst()->db->insert(static::$_tableName, $this->_attributes);
         } else {
-            Lm::inst()->db->update(static::$_tableName);
+            Lm::inst()->db->update(static::$_tableName, $this->_attributes,
+                [self::$_idName => $this->_attributes[self::$_idName]]);
         }
     }
 }
