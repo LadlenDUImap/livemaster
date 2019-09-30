@@ -11,11 +11,6 @@ class User extends DatabaseRecord
     protected $_attributes = ['id' => null, 'name' => null, 'age' => null, 'city_id' => null];
 
 
-    public function getId()
-    {
-        return $this->_attributes['id'];
-    }
-
     public function correctProperty(string $propName, $value)
     {
         $valueMod = trim($value);

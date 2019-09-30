@@ -17,29 +17,6 @@ class Controller extends \app\base\Controller
         return json_encode($result);
     }
 
-    public function actionCreateOld()
-    {
-        $state = 'error';
-        $data = [];
-
-        $model = new User;
-
-        $attributes = $_POST[ClassHelper::getClassNameNoNamespace($model)];
-
-        $data['corrected-attributes'] = $model->correctPropertyBulk($attributes);
-        $compoundAttributes = array_replace_recursive($attributes, $data['corrected-attributes']);
-
-        if (!$errors = $model->validatePropertyBulk($compoundAttributes)) {
-            $state = 'success';
-            $model->setAttributes($compoundAttributes);
-            $model->save();
-        } else {
-            $data['error-messages'] = $errors;
-        }
-
-        Web::sendJsonResponse($state, $data);
-    }
-
     public function actionCreate()
     {
         $state = 'error';
