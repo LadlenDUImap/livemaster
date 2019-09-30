@@ -29,10 +29,15 @@ abstract class DatabaseRecord
     public function __construct($id = false)
     {
         if ($id) {
-            if (!$this->load([self::$_idName => $id])) {
+            if (!$this->load([static::$_idName => $id])) {
                 throw new \Exception('Неправильный ID: ' . $id);
             }
         }
+    }
+
+    public function __get($name)
+    {
+        return $this->getAttr($name);
     }
 
     protected function setErrors(?array $errors)
@@ -168,7 +173,8 @@ abstract class DatabaseRecord
 
     public function getId()
     {
-        throw new \Exception('ID не реализован для записи');
+        //throw new \Exception('ID не реализован для записи');
+        return $this->getAttr(static::$_idName);
     }
 
     public function load($condition)
@@ -208,7 +214,7 @@ abstract class DatabaseRecord
             Lm::inst()->db->insert(static::$_tableName, $this->_attributes);
         } else {
             Lm::inst()->db->update(static::$_tableName, $this->_attributes,
-                [self::$_idName => $this->_attributes[self::$_idName]]);
+                [static::$_idName => $this->_attributes[static::$_idName]]);
         }
 
         return false;
