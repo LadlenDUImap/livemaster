@@ -17,7 +17,7 @@ class Controller extends \app\base\Controller
         return json_encode($result);
     }
 
-    public function actionCreate()
+    public function actionCreateOld()
     {
         $state = 'error';
         $data = [];
@@ -35,6 +35,23 @@ class Controller extends \app\base\Controller
             $model->save();
         } else {
             $data['error-messages'] = $errors;
+        }
+
+        Web::sendJsonResponse($state, $data);
+    }
+
+    public function actionCreate()
+    {
+        $state = 'error';
+        $data = [];
+
+        $model = new User;
+
+        $attributes = $_POST[ClassHelper::getClassNameNoNamespace($model)];
+        if ($model->loadAttributes($attributes) && $model->save()) {
+            $state = 'success';
+        } else {
+            $data['error-messages'] = $model->getErrors();
         }
 
         Web::sendJsonResponse($state, $data);

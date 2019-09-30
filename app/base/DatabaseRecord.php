@@ -24,6 +24,7 @@ abstract class DatabaseRecord
     /** @var array атрибуты таблицы БД array[название => значение] */
     protected $_attributes = [];
 
+    protected $_errors = [];
 
     public function __construct($id = false)
     {
@@ -34,16 +35,54 @@ abstract class DatabaseRecord
         }
     }
 
+    protected function setErrors(?array $errors)
+    {
+        $this->_errors = $errors ?: [];
+    }
+
+    public function getErrors(): array
+    {
+        return $this->_errors;
+    }
+
     public function getAttributes()
     {
         return $this->_attributes;
     }
 
-    public function setAttributes($attributes)
+    protected function setAttributes(array $attributes)
     {
         foreach ($attributes as $name => $value) {
             $this->setAttr($name, $value);
         }
+    }
+
+    /**
+     * Установка атрибутов с коррекцией и проверкой (используется при установке из внешнего источника).
+     * Если проверка не проходит, то значения атрибутов не устанавливаются.
+     * Устанавливаются скорректированные атрибуты если проверка прошла успешно.
+     *
+     * @param array $attributes
+     * @param bool $correct
+     * @param bool $validate
+     */
+    public function loadAttributes(array $attributes, $correct = true, $validate = true)
+    {
+        $result = false;
+
+        $this->setErrors(null);
+
+        $correctedAttributes = $this->correctPropertyBulk($attributes);
+        $compoundAttributes = array_replace_recursive($attributes, $correctedAttributes);
+
+        if (!$errors = $this->validatePropertyBulk($compoundAttributes)) {
+            $this->setAttributes($compoundAttributes);
+            $result = true;
+        } else {
+            $this->setErrors($errors);
+        }
+
+        return $result;
     }
 
     public function getAttr($name)
@@ -171,5 +210,7 @@ abstract class DatabaseRecord
             Lm::inst()->db->update(static::$_tableName, $this->_attributes,
                 [self::$_idName => $this->_attributes[self::$_idName]]);
         }
+
+        return false;
     }
 }
