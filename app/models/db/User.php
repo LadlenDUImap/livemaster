@@ -48,7 +48,7 @@ class User extends DatabaseRecord
         return $errMsg;
     }
 
-    public function validateName($value)
+    protected function validateName(string $value)
     {
         $nameLength = mb_strlen($value, 'UTF-8');
 
@@ -62,9 +62,12 @@ class User extends DatabaseRecord
         return false;
     }
 
-    public function validateAge($value)
+    protected function validateAge(string $value)
     {
-        if (!preg_match('^\d+$', $value)) {
+        if (!$value) {
+            return 'Возраст пользователя должен быть заполнен';
+        }
+        if (!preg_match('/^\d+$/', $value)) {
             return 'Возраст пользователя должен быть неотрицательным целым числом';
         }
         if ((int)$value > 200) {

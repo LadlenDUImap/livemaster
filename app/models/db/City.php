@@ -33,7 +33,7 @@ class City extends DatabaseRecord
         return $errMsg;
     }
 
-    public function validateName($value)
+    public function validateName(string $value)
     {
         $nameLength = mb_strlen($value, 'UTF-8');
 
