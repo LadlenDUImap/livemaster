@@ -24,7 +24,11 @@ abstract class DatabaseRecord
     /** @var array атрибуты таблицы БД array[название => значение] */
     protected $_attributes = [];
 
+
+    protected $_correctedAttributes = [];
+
     protected $_errors = [];
+
 
     public function __construct($id = false)
     {
@@ -38,6 +42,16 @@ abstract class DatabaseRecord
     public function __get($name)
     {
         return $this->getAttr($name);
+    }
+
+    protected function setCorrectedAttributes(?array $correctedAttributes)
+    {
+        $this->_correctedAttributes = $correctedAttributes ?: [];
+    }
+
+    public function getCorrectedAttributes(): array
+    {
+        return $this->_correctedAttributes;
     }
 
     protected function setErrors(?array $errors)
@@ -78,6 +92,7 @@ abstract class DatabaseRecord
         $this->setErrors(null);
 
         $correctedAttributes = $this->correctPropertyBulk($attributes);
+        $this->setCorrectedAttributes($correctedAttributes);
         $compoundAttributes = array_replace_recursive($attributes, $correctedAttributes);
 
         if (!$errors = $this->validatePropertyBulk($compoundAttributes)) {

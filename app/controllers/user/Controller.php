@@ -2,8 +2,10 @@
 
 namespace app\controllers\user;
 
+use app\core\html\Form;
 use app\core\Web;
 use app\helpers\ClassHelper;
+use app\helpers\HtmlHelper;
 use app\models\db\User;
 
 class Controller extends \app\base\Controller
@@ -24,12 +26,14 @@ class Controller extends \app\base\Controller
 
         $model = new User;
 
-        $attributes = $_POST[ClassHelper::getClassNameNoNamespace($model)];
+        $attributes = Form::extractModelAttributesFromHtmlAttributes($model, $_POST);
         if ($model->loadAttributes($attributes) && $model->save()) {
             $state = 'success';
         } else {
-            $data['error-messages'] = $model->getErrors();
+            $data['error-messages'] = HtmlHelper::keys2HtmlModelName($model, $model->getErrors());
         }
+
+        $data['corrected-attributes'] = HtmlHelper::keys2HtmlModelName($model, $model->getCorrectedAttributes());
 
         Web::sendJsonResponse($state, $data);
     }

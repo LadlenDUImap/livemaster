@@ -31,10 +31,20 @@ class Form
         return self::$id;
     }
 
-    public function partHtmlName(DatabaseRecord $model, $attribute = '')
+    public static function extractModelAttributesFromHtmlAttributes(DatabaseRecord $model, array $attributes): array
+    {
+        return $attributes[(new \ReflectionClass($model))->getShortName()];
+    }
+
+    public static function makeHtmlModelName(DatabaseRecord $model, string $attribute): string
+    {
+        return (new \ReflectionClass($model))->getShortName() . '[' . Safe::htmlEncode($attribute) . ']';
+    }
+
+    public function partHtmlName(DatabaseRecord $model, $attribute = ''): string
     {
         if ($model) {
-            $nameHtml = ' name="' . ClassHelper::getClassNameNoNamespace($model) . '[' . Safe::htmlEncode($attribute) . ']' . '" ';
+            $nameHtml = ' name="' . self::makeHtmlModelName($model, $attribute) . '" ';
         } else {
             $nameHtml = $attribute ? ' name="' . Safe::htmlEncode($attribute) . '" ' : '';
         }

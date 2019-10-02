@@ -135,10 +135,15 @@ class ModelList
         $(".ml-new-element-wrapper form").unbind().submit(function() {
             var data = $(this).serialize();
             $.post(actions['create'], data, function(data) {
-                if (data.state == 'success') {
-                   alert('Пользователь успешно добавлен'); 
-                } else if (data.state == 'error') {
-                    alert(Utils.assocArrayJoin(data.data['error-messages'], '\\n'));
+                if (data) {
+                    if (data.state == 'success') {
+                       alert('Пользователь успешно добавлен'); 
+                    } else if (data.state == 'error') {
+                        alert(Utils.assocArrayJoin(data.data['error-messages'], '\\n'));
+                    }
+                    if (data.data && data.data['corrected-attributes']) {
+                        
+                    }
                 }
             }).fail(function(jqXHR, textStatus, error) {
                 alert("Ошибка на серере " + jqXHR.status + ": " + error);
