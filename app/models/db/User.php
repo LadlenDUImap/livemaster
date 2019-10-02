@@ -53,10 +53,10 @@ class User extends DatabaseRecord
         $nameLength = mb_strlen($value, 'UTF-8');
 
         if (!$nameLength) {
-            return 'Имя пользователя должно быть заполнено';
+            return 'Имя пользователя должно быть заполнено.';
         }
         if ($nameLength > 30) {
-            return 'Имя пользователя НЕ должно быть больше 30 символов';
+            return 'Имя пользователя НЕ должно быть больше 30 символов.';
         }
 
         return false;
@@ -65,13 +65,13 @@ class User extends DatabaseRecord
     protected function validateAge(string $value)
     {
         if (!$value) {
-            return 'Возраст пользователя должен быть заполнен';
+            return 'Возраст пользователя должен быть заполнен.';
         }
         if (!preg_match('/^\d+$/', $value)) {
-            return 'Возраст пользователя должен быть неотрицательным целым числом';
+            return 'Возраст пользователя должен быть неотрицательным целым числом.';
         }
         if ((int)$value > 200) {
-            return 'Дубы и черепахи не могут быть пользователями';
+            return 'Дубы и черепахи не могут быть пользователями (допускается 0 - 200 лет).';
         }
 
         return false;
