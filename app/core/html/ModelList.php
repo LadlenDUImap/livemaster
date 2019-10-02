@@ -81,19 +81,19 @@ class ModelList
     
     $(".ml-overlap-edit-element").click(function() {
         if (lastModifiedInfo) {
-            lastModifiedInfo['elem-edit-wrapper'].hide();
-            lastModifiedInfo['elem-overlap'].show();
-            lastModifiedInfo['elem-edit'].blur();
+            lastModifiedInfo["elem-edit-wrapper"].hide();
+            lastModifiedInfo["elem-overlap"].show();
+            lastModifiedInfo["elem-edit"].blur();
         }
         
         var elemOverlap = $(this);
         var elemEditWrapper = elemOverlap.next(".ml-hidden-edit-element-wrapper");
         elemOverlap.hide();
         elemEditWrapper.show();
-        elemEdit = elemEditWrapper.find('.ml-hidden-edit-element');
+        elemEdit = elemEditWrapper.find(".ml-hidden-edit-element");
         elemEdit.focus();
         
-        lastModifiedInfo = {'elem-overlap':elemOverlap, 'elem-edit-wrapper':elemEditWrapper, 'elem-edit':elemEdit};
+        lastModifiedInfo = {"elem-overlap":elemOverlap, "elem-edit-wrapper":elemEditWrapper, "elem-edit":elemEdit};
     });
     
     function ajaxSave() {
@@ -111,38 +111,41 @@ class ModelList
     });
     
     
-    templateElements['new']['element-container']['elem'] = $(templateElements['new']['element-container']['selector']);
+    templateElements["new"]["element-container"]["elem"] = $(templateElements["new"]["element-container"]["selector"]);
     
-    $(templateElements['new']['add-button']['selector']).click(function() {
-        var elemContainer = templateElements['new']['element-container']['elem'];
-        if (elemContainer.data('newElementProcessing') != 'in-process') {
-            elemContainer.data('newElementProcessing', 'in-process');
-            var html = $(templateElements['new']['template-container']['selector']).html();
+    $(templateElements["new"]["add-button"]["selector"]).click(function() {
+        var elemContainer = templateElements["new"]["element-container"]["elem"];
+        if (elemContainer.data("newElementProcessing") != "in-process") {
+            elemContainer.data("newElementProcessing", "in-process");
+            var html = $(templateElements["new"]["template-container"]["selector"]).html();
             elemContainer.append('<div class="ml-new-element-wrapper">' + html + '</div>');
             addNewElementProcessStart();
         } else {
-            alert('Новый элемент уже в процессе создания.');
+            alert("Новый элемент уже в процессе создания.");
         }
     });
     
     function addNewElementProcessStart() {
-        $(templateElements['new']['save-cancel-button']['selector']).unbind().click(function() {
+        $(templateElements["new"]["save-cancel-button"]["selector"]).unbind().click(function() {
             $(this).closest(".ml-new-element-wrapper").remove();
-            templateElements['new']['element-container']['elem'].data('newElementProcessing', 'no-process');
+            templateElements["new"]["element-container"]["elem"].data("newElementProcessing", "no-process");
             return false;
         });
         
         $(".ml-new-element-wrapper form").unbind().submit(function() {
-            var data = $(this).serialize();
-            $.post(actions['create'], data, function(data) {
+            var formElem = $(this);
+            var data = formElem.serialize();
+            $.post(actions["create"], data, function(data) {
                 if (data) {
-                    if (data.state == 'success') {
-                       alert('Пользователь успешно добавлен'); 
-                    } else if (data.state == 'error') {
-                        alert(Utils.assocArrayJoin(data.data['error-messages'], '\\n'));
+                    if (data.state == "success") {
+                       alert('Пользователь успешно добавлен.'); 
+                    } else if (data.state == "error") {
+                        alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
                     }
-                    if (data.data && data.data['corrected-attributes']) {
-                        
+                    if (data.data && data.data["corrected-attributes"]) {
+                        $.each(data.data["corrected-attributes"], function(id, val) {
+                            formElem.find('[name="' + id + '"]').val(val);
+                        });
                     }
                 }
             }).fail(function(jqXHR, textStatus, error) {
