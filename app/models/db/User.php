@@ -3,6 +3,7 @@
 namespace app\models\db;
 
 use app\base\DatabaseRecord;
+use app\core\Lm;
 
 class User extends DatabaseRecord
 {
@@ -64,7 +65,7 @@ class User extends DatabaseRecord
 
     protected function validateAge(string $value)
     {
-        if (!$value) {
+        if (!strlen($value)) {
             return 'Возраст пользователя должен быть заполнен.';
         }
         if (!preg_match('/^\d+$/', $value)) {
@@ -75,5 +76,16 @@ class User extends DatabaseRecord
         }
 
         return false;
+    }
+
+    public function validatePropertyBulk(array $properties)
+    {
+        if (!$errorMessages = parent::validatePropertyBulk($properties)) {
+            if ($rows = Lm::inst()->db->select(static::$_tableName, $properties)) {
+                $errorMessages[] = 'Такой пользователь уже есть.';
+            }
+        }
+
+        return $errorMessages;
     }
 }

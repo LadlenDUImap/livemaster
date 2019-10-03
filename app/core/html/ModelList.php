@@ -138,7 +138,8 @@ class ModelList
             $.post(actions["create"], data, function(data) {
                 if (data) {
                     if (data.state == "success") {
-                       alert('Пользователь успешно добавлен.'); 
+                       alert('Пользователь успешно добавлен.');
+                       location.reload(true);
                     } else if (data.state == "error") {
                         alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
                     }
