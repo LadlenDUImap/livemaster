@@ -148,6 +148,11 @@ abstract class DatabaseRecord
         }
 
         $this->$name = $value;
+
+        // Установка идентификатора автоматически обозначает что это уже существующая запись в БД.
+        if ($name === static::$_idName) {
+            $this->_isNew = false;
+        }
     }
 
 
@@ -223,7 +228,6 @@ abstract class DatabaseRecord
     {
         if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {
             $this->setProperties($rows);
-            $this->_isNew = false;
         }
         return $rows;
     }
@@ -242,7 +246,6 @@ abstract class DatabaseRecord
                 $className = get_called_class();
                 $newItem = new $className;
                 $newItem->setProperties($vals);
-                $newItem->_isNew = false;
                 $items[] = $newItem;
             }
         }
@@ -256,9 +259,11 @@ abstract class DatabaseRecord
 
         if ($this->_isNew) {
             $result = Lm::inst()->db->insert(static::$_tableName, $this->getProperties());
+            //TODO: остановился. Здесь установить ID !!!!!!!
+            $this->_isNew = false;
         } else {
             $result = Lm::inst()->db->update(static::$_tableName, $this->getProperties(),
-                [static::$_idName => $this->_attributes[static::$_idName]]);
+                [static::$_idName => $this->getId()]);
         }
 
         return $result;
