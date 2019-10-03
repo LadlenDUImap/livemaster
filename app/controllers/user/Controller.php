@@ -27,7 +27,7 @@ class Controller extends \app\base\Controller
         $model = new User;
 
         $attributes = Form::extractModelAttributesFromHtmlAttributes($model, $_POST);
-        if ($model->loadAttributes($attributes) && $model->save()) {
+        if ($model->loadProperties($attributes) && $model->save()) {
             $state = 'success';
         } else {
             $data['error-messages'] = HtmlHelper::keys2HtmlModelName($model, $model->getErrors());

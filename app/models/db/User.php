@@ -8,7 +8,7 @@ class User extends DatabaseRecord
 {
     protected static $_tableName = 'users';
 
-    protected $_attributes = ['id' => null, 'name' => null, 'age' => null, 'city_id' => null];
+    protected $_attributes = ['id', 'name', 'age', 'city_id'];
 
 
     public function correctProperty(string $propName, $value)

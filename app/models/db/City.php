@@ -8,7 +8,7 @@ class City extends DatabaseRecord
 {
     protected static $_tableName = 'cities';
 
-    protected $_attributes = ['id' => null, 'name' => null];
+    protected $_attributes = ['id', 'name'];
 
 
     public function correctProperty(string $propName, $value)

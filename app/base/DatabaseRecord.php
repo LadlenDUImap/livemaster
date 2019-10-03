@@ -15,19 +15,21 @@ abstract class DatabaseRecord
 {
     private $_isNew = true;
 
+
     /** @var string название таблицы, должно быть переопределено в производном классе */
     protected static $_tableName;
 
     /** @var string имя первичного ключа */
     protected static $_idName = 'id';
 
-    /** @var array атрибуты таблицы БД array[название => значение] */
+
+    /** @var array названия атрибутов таблицы БД array[название] */
     protected $_attributes = [];
 
 
-    protected $_correctedAttributes = [];
+    private $_correctedAttributes = [];
 
-    protected $_errors = [];
+    private $_errors = [];
 
 
     public function __construct($id = false)
@@ -41,7 +43,11 @@ abstract class DatabaseRecord
 
     public function __get($name)
     {
-        return $this->getAttr($name);
+        if (!in_array($name, $this->_attributes)) {
+            throw new \Exception("Не существует поле `$name`");
+        }
+
+        return null;
     }
 
     protected function setCorrectedAttributes(?array $correctedAttributes)
@@ -64,63 +70,84 @@ abstract class DatabaseRecord
         return $this->_errors;
     }
 
-    public function getAttributes()
+    //$this->_attributes - это только те атрибуты, которые можно устанавливать
+    /*public function getAttributes()
     {
         return $this->_attributes;
+    }*/
+
+    /**
+     * @return array [<название> => <значение>]
+     */
+    public function getProperties()
+    {
+        $properties = [];
+
+        foreach ((new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC) as $prop) {
+            if (!$prop->isStatic()) {
+                $properties[$prop->getName()] = $this->{$prop->getName()};
+            }
+        }
+
+        return $properties;
     }
 
-    protected function setAttributes(array $attributes)
+    protected function setProperties(array $properties)
     {
-        foreach ($attributes as $name => $value) {
-            $this->setAttr($name, $value);
+        foreach ($properties as $name => $value) {
+            $this->setProp($name, $value);
         }
     }
 
     /**
-     * Установка атрибутов с коррекцией и проверкой (используется при установке из внешнего источника).
+     * Установка значений атрибутов с коррекцией и проверкой (используется при установке из внешнего источника).
      * Если проверка не проходит, то значения атрибутов не устанавливаются.
      * Устанавливаются скорректированные атрибуты если проверка прошла успешно.
      *
-     * @param array $attributes
+     * @param array $properties
      * @param bool $correct
      * @param bool $validate
      */
-    public function loadAttributes(array $attributes, $correct = true, $validate = true)
+    public function loadProperties(array $properties, $correct = true, $validate = true)
     {
         $result = false;
 
         $this->setErrors(null);
 
-        $correctedAttributes = $this->correctPropertyBulk($attributes);
-        $this->setCorrectedAttributes($correctedAttributes);
-        $compoundAttributes = array_replace_recursive($attributes, $correctedAttributes);
+        $correctedProperties = $correct ? $this->correctPropertyBulk($properties) : $properties;
+        $this->setCorrectedAttributes($correctedProperties);
+        $compoundAttributes = array_replace_recursive($properties, $correctedProperties);
 
-        if (!$errors = $this->validatePropertyBulk($compoundAttributes)) {
-            $this->setAttributes($compoundAttributes);
-            $result = true;
+        if ($validate) {
+            if (!$errors = $this->validatePropertyBulk($compoundAttributes)) {
+                $this->setProperties($compoundAttributes);
+                $result = true;
+            } else {
+                $this->setErrors($errors);
+            }
         } else {
-            $this->setErrors($errors);
+            $result = true;
         }
 
         return $result;
     }
 
-    public function getAttr($name)
+    /*public function getAttr($name)
     {
         if (!key_exists($name, $this->_attributes)) {
             throw new \Exception("Не существует значение `$name`");
         }
 
         return $this->_attributes[$name];
-    }
+    }*/
 
-    public function setAttr($name, $value)
+    public function setProp($name, $value)
     {
-        if (!key_exists($name, $this->_attributes)) {
-            throw new \Exception("Не существует значение `$name`");
+        if (!in_array($name, $this->_attributes)) {
+            throw new \Exception("Не существует поле `$name`");
         }
 
-        $this->_attributes[$name] = $value;
+        $this->$name = $value;
     }
 
 
@@ -189,13 +216,13 @@ abstract class DatabaseRecord
     public function getId()
     {
         //throw new \Exception('ID не реализован для записи');
-        return $this->getAttr(static::$_idName);
+        return $this->{static::$_idName};
     }
 
     public function load($condition)
     {
         if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {
-            $this->setAttributes($rows);
+            $this->setProperties($rows);
             $this->_isNew = false;
         }
         return $rows;
@@ -214,7 +241,7 @@ abstract class DatabaseRecord
             foreach ($rows as $vals) {
                 $className = get_called_class();
                 $newItem = new $className;
-                $newItem->setAttributes($vals);
+                $newItem->setProperties($vals);
                 $newItem->_isNew = false;
                 $items[] = $newItem;
             }
@@ -225,10 +252,12 @@ abstract class DatabaseRecord
 
     public function save()
     {
+        $result = false;
+
         if ($this->_isNew) {
-            Lm::inst()->db->insert(static::$_tableName, $this->_attributes);
+            $result = Lm::inst()->db->insert(static::$_tableName, $this->getProperties());
         } else {
-            Lm::inst()->db->update(static::$_tableName, $this->_attributes,
+            $result = Lm::inst()->db->update(static::$_tableName, $this->getProperties(),
                 [static::$_idName => $this->_attributes[static::$_idName]]);
         }
 
