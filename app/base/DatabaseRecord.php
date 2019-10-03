@@ -261,6 +261,6 @@ abstract class DatabaseRecord
                 [static::$_idName => $this->_attributes[static::$_idName]]);
         }
 
-        return false;
+        return $result;
     }
 }
