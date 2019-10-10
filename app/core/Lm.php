@@ -34,10 +34,10 @@ class Lm extends Singleton
             (new Router)->run();
         } catch (\Exception $e) {
             if (LM_DEBUG) {
-                $displayMsg = Lm::inst()->log->set($e);
+                $displayMsg = Lm::inst()->log->set($e, 'error');
             } else {
                 $msg = sprintf(_('Ошибка на сервере, код %s. Пожалуйста сообщите администрации.'), $e->getCode());
-                $displayMsg = Lm::inst()->log->set($msg);
+                $displayMsg = Lm::inst()->log->set($msg, 'error');
             }
             echo $displayMsg;
         }

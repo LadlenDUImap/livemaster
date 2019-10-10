@@ -48,7 +48,7 @@ interface IDatabase
      *
      * @return mixed
      */
-    //public function lastInsertId();
+    public function lastInsertId();
 
     /**
      * Старт транзакции.

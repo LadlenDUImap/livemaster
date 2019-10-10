@@ -90,7 +90,7 @@ class Pdo extends \app\base\Component implements IDatabase
                 throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
             }
         } catch (\Exception $e) {
-            Lm::inst()->log->set($e);
+            Lm::inst()->log->set($e, 'error');
         }
 
         return $result;
@@ -105,6 +105,10 @@ class Pdo extends \app\base\Component implements IDatabase
         $query = 'INSERT INTO `' . $tableName . '`'
             . ' SET ' . $this->makeEqualQueryTerm($values, ',');
 
+        if (LM_DEBUG) {
+            Lm::inst()->log->set('Вставка SQL: ' . $query);
+        }
+
         try {
             if ($STH = $this->DBH->prepare($query)) {
                 $STH->setFetchMode(\PDO::FETCH_ASSOC);
@@ -115,7 +119,7 @@ class Pdo extends \app\base\Component implements IDatabase
                 throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
             }
         } catch (\Exception $e) {
-            Lm::inst()->log->set($e);
+            Lm::inst()->log->set($e, 'error');
         }
 
         return $result;
@@ -123,6 +127,38 @@ class Pdo extends \app\base\Component implements IDatabase
 
     public function update(string $tableName, array $values, array $condition): bool
     {
-        return true;
+        $result = false;
+
+        $tableName = $this->makeNameSafe($tableName);
+
+        $query = 'UPDATE `' . $tableName . '`'
+            . ' SET ' . $this->makeEqualQueryTerm($values, ',');
+
+        if ($condition) {
+            $query .= ' WHERE ' . $this->makeEqualQueryTerm($values, ' AND ');
+        }
+
+        if (LM_DEBUG) {
+            Lm::inst()->log->set('Обновление SQL: ' . $query);
+        }
+
+        try {
+            if ($STH = $this->DBH->prepare($query)) {
+                if (!$result = $STH->execute($values)) {
+                    throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
+                }
+            } else {
+                throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
+            }
+        } catch (\Exception $e) {
+            Lm::inst()->log->set($e, 'error');
+        }
+
+        return $result;
+    }
+
+    public function lastInsertId()
+    {
+        return $this->DBH->lastInsertId();
     }
 }

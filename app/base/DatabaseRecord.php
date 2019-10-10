@@ -41,6 +41,11 @@ abstract class DatabaseRecord
         }
     }
 
+    public static function getDb(): IDatabase
+    {
+        return Lm::inst()->db;
+    }
+
     public function __get($name)
     {
         if (!in_array($name, $this->_attributes)) {
@@ -226,7 +231,7 @@ abstract class DatabaseRecord
 
     public function load($condition)
     {
-        if ($rows = Lm::inst()->db->select(static::$_tableName, $condition)) {
+        if ($rows = static::getDb()->select(static::$_tableName, $condition)) {
             $this->setProperties($rows);
         }
         return $rows;
@@ -241,7 +246,7 @@ abstract class DatabaseRecord
     {
         $items = [];
 
-        if ($rows = Lm::inst()->db->select(static::$_tableName)) {
+        if ($rows = static::getDb()->select(static::$_tableName)) {
             foreach ($rows as $vals) {
                 $className = get_called_class();
                 $newItem = new $className;
@@ -257,12 +262,15 @@ abstract class DatabaseRecord
     {
         $result = false;
 
+        $db = static::getDb();
+
         if ($this->_isNew) {
-            $result = Lm::inst()->db->insert(static::$_tableName, $this->getProperties());
+            $result = $db->insert(static::$_tableName, $this->getProperties());
             //TODO: остановился. Здесь установить ID !!!!!!!
+            $this->{static::$_idName} = $db->lastInsertId();
             $this->_isNew = false;
         } else {
-            $result = Lm::inst()->db->update(static::$_tableName, $this->getProperties(),
+            $result = $db->update(static::$_tableName, $this->getProperties(),
                 [static::$_idName => $this->getId()]);
         }
 
