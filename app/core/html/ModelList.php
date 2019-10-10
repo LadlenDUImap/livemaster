@@ -150,7 +150,7 @@ class ModelList
                     }
                 }
             }).fail(function(jqXHR, textStatus, error) {
-                alert("Ошибка на серере " + jqXHR.status + ": " + error);
+                alert("Ошибка на сервере " + jqXHR.status + ": " + error);
             });
             
             return false;
