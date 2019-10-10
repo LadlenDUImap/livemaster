@@ -41,11 +41,6 @@ abstract class DatabaseRecord
         }
     }
 
-    public static function getDb(): IDatabase
-    {
-        return Lm::inst()->db;
-    }
-
     public function __get($name)
     {
         if (!in_array($name, $this->_attributes)) {
@@ -58,6 +53,16 @@ abstract class DatabaseRecord
     public function __set($name, $value)
     {
         $this->setProp($name, $value);
+    }
+
+    public static function getDb(): IDatabase
+    {
+        return Lm::inst()->db;
+    }
+
+    public static function tableName()
+    {
+        return static::$_tableName;
     }
 
     protected function setCorrectedAttributes(?array $correctedAttributes)
@@ -241,7 +246,7 @@ abstract class DatabaseRecord
 
     public function load($condition)
     {
-        if ($rows = static::getDb()->select(static::$_tableName, $condition)) {
+        if ($rows = static::getDb()->select(static::tableName(), $condition)) {
             $this->setProperties($rows);
         }
         return $rows;
@@ -256,7 +261,7 @@ abstract class DatabaseRecord
     {
         $items = [];
 
-        if ($rows = static::getDb()->select(static::$_tableName)) {
+        if ($rows = static::getDb()->select(static::tableName())) {
             foreach ($rows as $vals) {
                 $className = get_called_class();
                 $newItem = new $className;
@@ -275,11 +280,22 @@ abstract class DatabaseRecord
         $db = static::getDb();
 
         if ($this->isNew()) {
-            $result = $db->insert(static::$_tableName, $this->getProperties());
+            $result = $db->insert(static::tableName(), $this->getProperties());
             $this->setId($db->lastInsertId());
         } else {
-            $result = $db->update(static::$_tableName, $this->getProperties(),
+            $result = $db->update(static::tableName(), $this->getProperties(),
                 [static::$_idName => $this->getId()]);
+        }
+
+        return $result;
+    }
+
+    public function delete()
+    {
+        $result = false;
+
+        if (!$this->isNew()) {
+            $result = static::getDb()->delete(static::tableName(), [static::$_idName => $this->getId()]);
         }
 
         return $result;
