@@ -4,7 +4,6 @@ namespace app\controllers\user;
 
 use app\core\html\Form;
 use app\core\Web;
-use app\helpers\ClassHelper;
 use app\helpers\HtmlHelper;
 use app\models\db\User;
 
