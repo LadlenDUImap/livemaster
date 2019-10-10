@@ -46,14 +46,19 @@ abstract class DatabaseRecord
         return Lm::inst()->db;
     }
 
-    /*public function __get($name)
+    public function __get($name)
     {
         if (!in_array($name, $this->_attributes)) {
             throw new \Exception("Не существует поле `$name`");
         }
 
         return null;
-    }*/
+    }
+
+    public function __set($name, $value)
+    {
+        $this->setProp($name, $value);
+    }
 
     protected function setCorrectedAttributes(?array $correctedAttributes)
     {
