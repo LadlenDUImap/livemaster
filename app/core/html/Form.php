@@ -10,26 +10,27 @@ use app\helpers\HtmlHelper;
 class Form
 {
     /** @var int порядковый идентификатор следующей (или уже создающейся) формы */
-    protected static $id = 1;
+    //protected static $id = 1;
 
 
-    public function begin($id = false)
+    public function begin($id)
     {
-        $id = $id ?: self::$id;
+        //$id = $id ?? self::$id;
         return '<form class="lm_form_' . $id . '">'
+            . '<input type="hidden" name="lm_form_id" value="' . Safe::htmlEncode($id) . '" />'
             . '<input type="hidden" name="' . Lm::inst()->csrf->getCsrfTokenName() . '" value="' . Safe::htmlEncode(Lm::inst()->csrf->getCsrfToken()) . '" />';
     }
 
     public function end()
     {
-        ++self::$id;
+        //++self::$id;
         return '</form>';
     }
 
-    public static function getCurrentId()
+    /*public static function getCurrentId()
     {
         return self::$id;
-    }
+    }*/
 
     public static function extractModelAttributesFromHtmlAttributes(DatabaseRecord $model, array $attributes): array
     {
