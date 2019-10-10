@@ -8,7 +8,7 @@ $config = [
         'db' => $db,
         'log' => [
             'class' => 'app\core\Log',
-            'log_file_prefix' => APP_DIR . 'runtime/php-livemaster-info.log',
+            'log_file_prefix' => APP_DIR . 'runtime/log/php-livemaster',
         ],
         'csrf' => [
             'class' => 'app\core\Csrf',
