@@ -247,7 +247,7 @@ abstract class DatabaseRecord
     public function load($condition)
     {
         if ($rows = static::getDb()->select(static::tableName(), $condition)) {
-            $this->setProperties($rows);
+            $this->setProperties($rows[0]);
         }
         return $rows;
     }
@@ -295,7 +295,8 @@ abstract class DatabaseRecord
         $result = false;
 
         if (!$this->isNew()) {
-            $result = static::getDb()->delete(static::tableName(), [static::$_idName => $this->getId()]);
+            //$result = static::getDb()->delete(static::tableName(), [static::$_idName => $this->getId()]);
+            $result = static::getDb()->delete(static::tableName(), [static::$_idName => 88888]);
         }
 
         return $result;

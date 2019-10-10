@@ -167,18 +167,21 @@ class ModelList
     function deleteElement(formElem) {
         formElem.css({"background-color":"red","color":"white"});
         if (confirm("Действительно хотите удалить выделенный элемент?")) {
-            var id = formElem.find("lm_form_id").val();
-            $.post(actions["delete"], {id:id}, function(data) {
+            var id = formElem.find("[name='lm_form_id']").val();
+            $.post(actions["delete"] + '?' + $.param({id:id}), function(data) {
                 if (data) {
                     if (data.state == "success") {
-                       alert('Элемент успешно добавлен.');
-                       location.reload(true);
+                       alert("Элемент успешно удалён.");
+                       //location.reload(true);
+                       formElem.remove();
                     } else if (data.state == "error") {
                         alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
                     }
                 }
             }).fail(function(jqXHR, textStatus, error) {
                 alert("Ошибка на сервере " + jqXHR.status + ": " + error);
+            }).always(function() {
+                formElem.css({"background-color":"white","color":"black"});              
             });
         } else {
             formElem.css({"background-color":"white","color":"black"});

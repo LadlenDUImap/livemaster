@@ -41,8 +41,7 @@ class Controller extends \app\base\Controller
     public function actionDelete()
     {
         $state = 'error';
-
-        $_GET['id'] = 999999999;
+        $data = [];
 
         try {
             $user = new User($_GET['id']);
@@ -50,9 +49,12 @@ class Controller extends \app\base\Controller
                 $state = 'success';
             }
         } catch (\Exception $e) {
-            $data['error-messages'] = 'Не получилось удалить пользователя.';
+            $data['error-messages'] = [
+                'Не получилось удалить пользователя.',
+                $e->getMessage(),
+            ];
         }
 
-        Web::sendJsonResponse($state);
+        Web::sendJsonResponse($state, $data);
     }
 }
