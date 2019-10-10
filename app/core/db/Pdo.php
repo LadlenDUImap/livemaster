@@ -109,9 +109,10 @@ class Pdo extends \app\base\Component implements IDatabase
             Lm::inst()->log->set('Вставка SQL: ' . $query);
         }
 
+        //TODO: остановился - переместить вместе с update в отдельную функцию
         try {
             if ($STH = $this->DBH->prepare($query)) {
-                $STH->setFetchMode(\PDO::FETCH_ASSOC);
+                //$STH->setFetchMode(\PDO::FETCH_ASSOC);
                 if (!$result = $STH->execute($values)) {
                     throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
                 }
