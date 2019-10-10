@@ -7,7 +7,7 @@ $rowParams = [
     'style' => 'width:100%;text-align:center',
 ];
 
-echo $values['cityList']->beginElement()
+echo $values['cityList']->beginElement($values['user']->getId())
     . '<div class="row item">'
     . '<div class="col">' . $values['cityList']->textInput($values['user'], 'name', $rowParams) . '</div>'
     . '<div class="col">' . $values['cityList']->textInput($values['user'], 'age', $rowParams) . '</div>'

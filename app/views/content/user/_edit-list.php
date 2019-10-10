@@ -32,7 +32,7 @@ $cityList = new ModelList([
     ];
     $user = new \app\models\db\User();
     $form = new \app\core\html\Form();
-    echo $form->begin()
+    echo $form->begin(0)
         . '<div class="row item">'
         . '<div class="col">' . $form->textInput($user, 'name', $rowParams) . '</div>'
         . '<div class="col">' . $form->textInput($user, 'age', $rowParams) . '</div>'

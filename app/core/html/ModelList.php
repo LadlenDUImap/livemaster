@@ -79,6 +79,7 @@ class ModelList
     var templateElements = $templateElements;
     var actions = $actions;
     
+    //TODO: привязывать к ml-hidden-edit-element-wrapper событие onblur и enter
     $(".ml-overlap-edit-element").click(function() {
         if (lastModifiedInfo) {
             lastModifiedInfo["elem-edit-wrapper"].hide();
@@ -125,6 +126,12 @@ class ModelList
         }
     });
     
+    $(templateElements["delete-button"]["selector"]).click(function() {
+        var formElem = $(this).closest('form');
+        deleteElement(formElem);
+        return false;
+    });
+    
     function addNewElementProcessStart() {
         $(templateElements["new"]["save-cancel-button"]["selector"]).unbind().click(function() {
             $(this).closest(".ml-new-element-wrapper").remove();
@@ -157,16 +164,23 @@ class ModelList
         });
     }
     
-    
+    function deleteElement(formElem) {
+        formElem.css({'background-color':'red','color':'white'});
+        if (confirm("Действительно хотите удалить выделенный элемент?")) {
+            
+        } else {
+            formElem.css({'background-color':'white','color':'black'});
+        }
+    }
 })();
 JS
         );
     }
 
-    public function beginElement()
+    public function beginElement($id)
     {
         $this->_currentForm = new Form();
-        return $this->_currentForm->begin();
+        return $this->_currentForm->begin($id);
     }
 
     public function endElement()
