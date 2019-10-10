@@ -44,8 +44,8 @@ class Pdo extends \app\base\Component implements IDatabase
      *
      * @param array $condition
      * @param string $glue
-     * @param array|null $executeImputParameters если указан, то прибавляет к себе $condition со скорректированными
-     * для подстановки названиями. Используется в запросах где есть параметры с одинаковыми названиями но разными значениями.
+     * @param array|null $executeImputParameters прибавляет к себе $condition со скорректированными для подстановки названиями.
+     *     Используется в запросах где есть параметры с одинаковыми названиями но разными значениями.
      * @return string
      */
     protected function makeEqualQueryTerm(array $condition, string $glue, array &$executeImputParameters = []): string
@@ -110,7 +110,6 @@ class Pdo extends \app\base\Component implements IDatabase
 
         try {
             if ($STH = $this->DBH->prepare($query)) {
-                //$STH->setFetchMode(\PDO::FETCH_ASSOC);
                 if (!$result = $STH->execute($values)) {
                     throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
                 }
