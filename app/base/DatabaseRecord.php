@@ -46,14 +46,14 @@ abstract class DatabaseRecord
         return Lm::inst()->db;
     }
 
-    public function __get($name)
+    /*public function __get($name)
     {
         if (!in_array($name, $this->_attributes)) {
             throw new \Exception("Не существует поле `$name`");
         }
 
         return null;
-    }
+    }*/
 
     protected function setCorrectedAttributes(?array $correctedAttributes)
     {
@@ -229,6 +229,11 @@ abstract class DatabaseRecord
         return $this->{static::$_idName};
     }
 
+    public function setId($value)
+    {
+        $this->setProp(static::$_idName, $value);
+    }
+
     public function load($condition)
     {
         if ($rows = static::getDb()->select(static::$_tableName, $condition)) {
@@ -237,7 +242,7 @@ abstract class DatabaseRecord
         return $rows;
     }
 
-    public function getIsNew()
+    public function isNew()
     {
         return $this->_isNew;
     }
@@ -264,11 +269,9 @@ abstract class DatabaseRecord
 
         $db = static::getDb();
 
-        if ($this->_isNew) {
+        if ($this->isNew()) {
             $result = $db->insert(static::$_tableName, $this->getProperties());
-            //TODO: остановился. Здесь установить ID !!!!!!!
-            $this->{static::$_idName} = $db->lastInsertId();
-            $this->_isNew = false;
+            $this->setId($db->lastInsertId());
         } else {
             $result = $db->update(static::$_tableName, $this->getProperties(),
                 [static::$_idName => $this->getId()]);
