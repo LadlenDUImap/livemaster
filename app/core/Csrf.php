@@ -11,6 +11,11 @@ use app\base\Component;
  */
 class Csrf extends Component
 {
+    public $token_name;
+
+    public $token_salt;
+
+
     /** @var array методы при которых нужна проверка на CSRF */
     protected $requestMethodsToCheck = ['POST', 'PUT', 'DELETE'];
 
@@ -19,7 +24,8 @@ class Csrf extends Component
 
     public function getCsrfTokenName()
     {
-        return Lm::inst()->csrf->token_name;
+        return $this->token_name;
+        //return Lm::inst()->csrf->token_name;
     }
 
     /**
@@ -31,8 +37,8 @@ class Csrf extends Component
     {
         if (!$csrfToken = $this->loadCsrfToken())
         {
-            $salt = Lm::inst()->csrf->token_salt;       //'uIlmkI873d';
-            $csrfToken = $salt . ':' .  md5(openssl_random_pseudo_bytes(15));
+            //$salt = Lm::inst()->csrf->token_salt;       //'uIlmkI873d';
+            $csrfToken = $this->token_salt . ':' .  md5(openssl_random_pseudo_bytes(15));
             $this->storeCsrfToken($csrfToken);
         }
 
