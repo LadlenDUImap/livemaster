@@ -6,14 +6,16 @@ use app\base\Component;
 
 class Log extends Component
 {
-    public function set(string $message)
+    public $log_file_prefix;
+
+    public function set(string $message, $type = 'info')
     {
-        $errorStr = '';
+        $str = '';
 
         if (is_string($message)) {
-            $errorStr .= $message;
+            $str .= $message;
         } elseif ($message instanceof \Exception) {
-            $errorStr .= sprintf(
+            $str .= sprintf(
                 "Произошла ошибка.\nCode: %s.\nMessage: %s.\nFile: %s.\nLine: %s.\nTrace: %s\n",
                 $message->getCode(),
                 $message->getMessage(),
@@ -22,16 +24,22 @@ class Log extends Component
                 $message->getTraceAsString()
             );
         } else {
-            $errorStr .= 'Неизвестная ошибка в функции логирования.';
+            $str .= 'Неизвестная ошибка в функции логирования.';
         }
 
-        $msg = date(DATE_RFC822) . ":\n" . $errorStr . "\n-------------------------------------------\n\n";
-        error_log($msg);
+        $msg = date(DATE_RFC822) . ":\n" . $str . "\n-------------------------------------------\n\n";
 
-        if (LM_DEBUG) {
-            echo $errorStr;
+        if ($type == 'error') {
+            error_log($msg);
+            if (LM_DEBUG) {
+                echo $str;
+            }
+        } else {
+            if ($this->log_file_prefix) {
+                file_put_contents($this->log_file_prefix . "_$type.log", $msg, FILE_APPEND);
+            }
         }
 
-        return $errorStr;
+        return $str;
     }
 }
