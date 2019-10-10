@@ -295,8 +295,7 @@ abstract class DatabaseRecord
         $result = false;
 
         if (!$this->isNew()) {
-            //$result = static::getDb()->delete(static::tableName(), [static::$_idName => $this->getId()]);
-            $result = static::getDb()->delete(static::tableName(), [static::$_idName => 88888]);
+            $result = static::getDb()->delete(static::tableName(), [static::$_idName => $this->getId()]);
         }
 
         return $result;
