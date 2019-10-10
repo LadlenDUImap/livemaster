@@ -44,15 +44,19 @@ class Pdo extends \app\base\Component implements IDatabase
      *
      * @param array $condition
      * @param string $glue
+     * @param array|null $executeImputParameters если указан, то прибавляет к себе $condition со скорректированными
+     * для подстановки названиями. Используется в запросах где есть параметры с одинаковыми названиями но разными значениями.
      * @return string
      */
-    protected function makeEqualQueryTerm(array $condition, string $glue)
+    protected function makeEqualQueryTerm(array $condition, string $glue, array &$executeImputParameters = []): string
     {
         $resultElements = [];
 
         foreach ($condition as $name => $value) {
             $name = $this->makeNameSafe($name);
-            $resultElements[] = "`$name` = :$name";
+            $nameSf = isset($executeImputParameters[$name]) ? "{$name}_sf" : $name;
+            $executeImputParameters[$nameSf] = $value;
+            $resultElements[] = "`$name` = :$nameSf";
         }
 
         return implode(" $glue ", $resultElements);
@@ -96,20 +100,14 @@ class Pdo extends \app\base\Component implements IDatabase
         return $result;
     }
 
-    public function insert(string $tableName, array $values): bool
+    protected function execute($query, $values)
     {
         $result = false;
 
-        $tableName = $this->makeNameSafe($tableName);
-
-        $query = 'INSERT INTO `' . $tableName . '`'
-            . ' SET ' . $this->makeEqualQueryTerm($values, ',');
-
         if (LM_DEBUG) {
-            Lm::inst()->log->set('Вставка SQL: ' . $query);
+            Lm::inst()->log->set('Команда SQL: ' . $query);
         }
 
-        //TODO: остановился - переместить вместе с update в отдельную функцию
         try {
             if ($STH = $this->DBH->prepare($query)) {
                 //$STH->setFetchMode(\PDO::FETCH_ASSOC);
@@ -126,34 +124,32 @@ class Pdo extends \app\base\Component implements IDatabase
         return $result;
     }
 
+    public function insert(string $tableName, array $values): bool
+    {
+        $tableName = $this->makeNameSafe($tableName);
+
+        $query = 'INSERT INTO `' . $tableName . '`'
+            . ' SET ' . $this->makeEqualQueryTerm($values, ',');
+
+        $result = $this->execute($query, $values);
+
+        return $result;
+    }
+
     public function update(string $tableName, array $values, array $condition): bool
     {
-        $result = false;
-
         $tableName = $this->makeNameSafe($tableName);
+
+        $executeImputParameters = $values;
 
         $query = 'UPDATE `' . $tableName . '`'
             . ' SET ' . $this->makeEqualQueryTerm($values, ',');
 
         if ($condition) {
-            $query .= ' WHERE ' . $this->makeEqualQueryTerm($values, ' AND ');
+            $query .= ' WHERE ' . $this->makeEqualQueryTerm($condition, 'AND', $executeImputParameters);
         }
 
-        if (LM_DEBUG) {
-            Lm::inst()->log->set('Обновление SQL: ' . $query);
-        }
-
-        try {
-            if ($STH = $this->DBH->prepare($query)) {
-                if (!$result = $STH->execute($values)) {
-                    throw new \Exception('Не удалось выполнить запрос PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
-                }
-            } else {
-                throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
-            }
-        } catch (\Exception $e) {
-            Lm::inst()->log->set($e, 'error');
-        }
+        $result = $this->execute($query, array_merge($values, $executeImputParameters));
 
         return $result;
     }
@@ -161,5 +157,20 @@ class Pdo extends \app\base\Component implements IDatabase
     public function lastInsertId()
     {
         return $this->DBH->lastInsertId();
+    }
+
+    public function delete(string $tableName, array $condition): bool
+    {
+        $tableName = $this->makeNameSafe($tableName);
+
+        $query = 'DELETE FROM `' . $tableName . '`';
+
+        if ($condition) {
+            $query .= ' WHERE ' . $this->makeEqualQueryTerm($condition, 'AND');
+        }
+
+        $result = $this->execute($query, $condition);
+
+        return $result;
     }
 }

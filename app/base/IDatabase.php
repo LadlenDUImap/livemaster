@@ -87,4 +87,6 @@ interface IDatabase
     public function insert(string $tableName, array $values): bool;
 
     public function update(string $tableName, array $values, array $condition): bool;
+
+    public function delete(string $tableName, array $condition): bool;
 }
