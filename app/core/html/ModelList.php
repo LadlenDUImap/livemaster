@@ -81,11 +81,11 @@ class ModelList
     
     //TODO: привязывать к ml-hidden-edit-element-wrapper событие onblur и enter
     $(".ml-overlap-edit-element").click(function() {
-        if (lastModifiedInfo) {
+        /*if (lastModifiedInfo) {
             lastModifiedInfo["elem-edit-wrapper"].hide();
             lastModifiedInfo["elem-overlap"].show();
             lastModifiedInfo["elem-edit"].blur();
-        }
+        }*/
         
         var elemOverlap = $(this);
         var elemEditWrapper = elemOverlap.next(".ml-hidden-edit-element-wrapper");
@@ -108,7 +108,11 @@ class ModelList
     });
     
     $(".ml-hidden-edit-element").blur(function() {
-        //alert(3);
+        if (lastModifiedInfo) {
+            lastModifiedInfo["elem-edit-wrapper"].hide();
+            lastModifiedInfo["elem-overlap"].show();
+            lastModifiedInfo["elem-edit"].blur();
+        }
     });
     
     
@@ -167,12 +171,13 @@ class ModelList
     function deleteElement(formElem) {
         formElem.css({"background-color":"red","color":"white"});
         if (confirm("Действительно хотите удалить выделенный элемент?")) {
-            var id = formElem.find("[name='lm_form_id']").val();
-            $.post(actions["delete"] + '?' + $.param({id:id}), function(data) {
+            //var id = formElem.find("[name='lm_form_id']").val();
+            var data = formElem.serialize();
+            //$.post(actions["delete"] + '?' + $.param({id:id}), function(data) {
+            $.post(actions["delete"], data, function(data) {
                 if (data) {
                     if (data.state == "success") {
                        alert("Элемент успешно удалён.");
-                       //location.reload(true);
                        formElem.remove();
                     } else if (data.state == "error") {
                         alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));

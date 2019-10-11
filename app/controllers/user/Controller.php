@@ -44,7 +44,7 @@ class Controller extends \app\base\Controller
         $data = [];
 
         try {
-            $user = new User($_GET['id']);
+            $user = new User($_POST['lm_form_id']);
             if ($user->delete()) {
                 $state = 'success';
             }
