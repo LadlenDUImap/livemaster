@@ -29,6 +29,10 @@ class User extends DatabaseRecord
             $valueMod = preg_replace('/\s+/', ' ', $valueMod);
         } elseif ($propName == 'age') {
             $valueMod = ltrim($valueMod, '0');
+        } elseif ($propName == 'city_id') {
+            if (empty($value)) {
+                $value = null;
+            }
         }
 
         return ($valueMod === $value) ? false : $valueMod;
