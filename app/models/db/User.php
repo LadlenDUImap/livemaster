@@ -12,13 +12,13 @@ class User extends DatabaseRecord
     protected $_attributes = ['id', 'name', 'age', 'city_id'];
 
 
-    public function __set($name, $value)
+    public function setProp($name, $value)
     {
         if ($name === 'city_id' && empty($value)) {
             $value = null;
         }
 
-        parent::__set($name, $value);
+        parent::setProp($name, $value);
     }
 
     public function correctProperty(string $propName, $value)

@@ -81,14 +81,7 @@ class ModelList
     
     var jQueryElements = {".ml-hidden-edit-element":$(".ml-hidden-edit-element")};
     
-    //TODO: привязывать к ml-hidden-edit-element-wrapper событие onblur и enter
     $(".ml-overlap-edit-element").click(function() {
-        /*if (lastModifiedInfo) {
-            lastModifiedInfo["elem-edit-wrapper"].hide();
-            lastModifiedInfo["elem-overlap"].show();
-            lastModifiedInfo["elem-edit"].blur();
-        }*/
-        
         var elemOverlap = $(this);
         var elemEditWrapper = elemOverlap.next(".ml-hidden-edit-element-wrapper");
         elemOverlap.hide();
@@ -98,8 +91,6 @@ class ModelList
         
         lastModifiedInfo = {"elem-overlap":elemOverlap, "elem-edit-wrapper":elemEditWrapper, "elem-edit":elemEdit};
     });
-    
-    
     
     jQueryElements[".ml-hidden-edit-element"].change(function() {
         var currElem = $(this);
@@ -114,14 +105,6 @@ class ModelList
             return false;
         }
     });
-    
-    function updateElement(elem) {
-        if (lastModifiedInfo) {
-            lastModifiedInfo["elem-edit-wrapper"].hide();
-            lastModifiedInfo["elem-overlap"].show();
-            //lastModifiedInfo["elem-edit"].blur();
-        }
-    }
     
     jQueryElements[".ml-hidden-edit-element"].blur(function() {
         updateElement($(this));
@@ -176,6 +159,37 @@ class ModelList
             });
             
             return false;
+        });
+    }
+    
+    function updateElement(elem) {
+        /*if (lastModifiedInfo) {
+            lastModifiedInfo["elem-edit-wrapper"].hide();
+            lastModifiedInfo["elem-overlap"].show();
+            //lastModifiedInfo["elem-edit"].blur();
+        }*/
+        var formElem = elem.closest('form');
+        var data = formElem.serialize();
+        $.post(actions["update"], data, function(data) {
+            if (data) {
+                if (data.state == "success") {
+                   if (lastModifiedInfo) {
+                        lastModifiedInfo["elem-edit-wrapper"].hide();
+                        lastModifiedInfo["elem-overlap"].show();
+                        //lastModifiedInfo["elem-edit"].blur();
+                    }
+                } else if (data.state == "error") {
+                    alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
+                    elem.focus();
+                }
+                if (data.data && data.data["corrected-attributes"]) {
+                    $.each(data.data["corrected-attributes"], function(id, val) {
+                        formElem.find('[name="' + id + '"]').val(val);
+                    });
+                }
+            }
+        }).fail(function(jqXHR, textStatus, error) {
+            alert("Ошибка на сервере " + jqXHR.status + ": " + error);
         });
     }
     
