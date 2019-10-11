@@ -43,23 +43,33 @@ class Pdo extends \app\base\Component implements IDatabase
      * Создать цепь шаблонов типа "`a` = :a", соединенных $glue. Для части PDO запроса.
      *
      * @param array $condition
-     * @param string $glue
+     * @param string $type [set|where]
      * @param array|null $executeImputParameters прибавляет к себе $condition со скорректированными для подстановки названиями.
      *     Используется в запросах где есть параметры с одинаковыми названиями но разными значениями.
      * @return string
      */
-    protected function makeEqualQueryTerm(array $condition, string $glue, array &$executeImputParameters = []): string
+    protected function makeEqualQueryTerm(array $condition, string $type = 'set', array &$executeImputParameters = []): string
     {
         $resultElements = [];
+
+        assert(in_array($type, ['set', 'where']));
+
+        if ($type == 'set') {
+            $glue = ', ';
+        } else {
+            // $type == 'where'
+            $glue = ' AND ';
+        }
 
         foreach ($condition as $name => $value) {
             $name = $this->makeNameSafe($name);
             $nameSf = isset($executeImputParameters[$name]) ? "{$name}_sf" : $name;
             $executeImputParameters[$nameSf] = $value;
+            
             $resultElements[] = "`$name` = :$nameSf";
         }
 
-        return implode(" $glue ", $resultElements);
+        return implode($glue, $resultElements);
     }
 
     public function select(string $tableName, array $condition = [], array $toSelect = ['*']): ?array
