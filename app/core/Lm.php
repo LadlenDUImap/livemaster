@@ -26,10 +26,9 @@ class Lm extends Singleton
         DiConfiguration::set($this, $config['components']);
 
         try {
-            /*if (!Csrf::inst()->validateCsrfToken()) {
-                //TODO: похоже неправильное поведение (см. validateCsrfToken())
-                Web::redirect('?wrong_csrf_token=1');
-            }*/
+            if (!Lm::inst()->csrf->validateCsrfToken()) {
+                Web::refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
+            }
 
             (new Router)->run();
         } catch (\Exception $e) {

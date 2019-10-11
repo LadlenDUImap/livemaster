@@ -9,6 +9,52 @@ namespace app\core;
  */
 class Web
 {
+    /**
+     * Проверка является ли запрос AJAX запросом.
+     *
+     * @return bool
+     */
+    public static function ifAjax()
+    {
+        return !empty($_REQUEST['ajax']);
+    }
+
+    /**
+     * Ничего не производя, вывести сообщение на текущей странице (например про не совпадающий CSRF токен).
+     *
+     * @param string $message
+     * @param string $state
+     */
+    public static function refreshWithMessage(string $message, string $state)
+    {
+        if (self::ifAjax()) {
+            self::sendJsonResponse($state, ['message' => $message]);
+        } else {
+            //TODO: реализовать
+        }
+    }
+
+    /**
+     * Перенаправление на другую страницу этого же сайта.
+     *
+     * @param string $path [[путь][параметры][якорь]] после названия хоста (порта)
+     */
+    /*public static function redirect($path = '')
+    {
+        $host = $_SERVER['HTTP_HOST'];
+        $path = ltrim($path, '/');
+        header("Location: //$host/$path");
+        exit;
+    }*/
+
+    /**
+     * Обновление текущей страницы.
+     */
+    /*public static function refresh()
+    {
+        header('Location: //' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        exit;
+    }*/
 
     /**
      * Начинает сессию если ещё не начата.

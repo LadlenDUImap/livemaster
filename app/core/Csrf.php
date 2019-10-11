@@ -62,7 +62,7 @@ class Csrf extends Component
      *
      * @return bool
      */
-    /*public function validateCsrfToken()
+    public function validateCsrfToken()
     {
         $ret = false;
 
@@ -73,18 +73,18 @@ class Csrf extends Component
             $method = strtoupper($_SERVER['REQUEST_METHOD']);
             if (in_array($method, $this->requestMethodsToCheck))
             {
-                if (!$this->loadCsrfToken())
+                $csrfToken = $this->loadCsrfToken();
+
+                if (!$csrfToken)
                 {
-                    // Возможно закончилась сессия на сервере.
-                    //TODO: что с этим делать???
-                    //\core\Web::redirect('?session_expired=1');
-                    Web::redirect('?action=sessionExpired');
+                    //$ret = true;
+                    throw new \Exception('Проблемы с сессией');
                 }
 
                 $method = '_' . $method;
                 global ${$method};
-                $ret = ((isset(${$method}[$tokenName]) && ${$method}[$tokenName] == $this->loadCsrfToken())
-                    || (isset($_COOKIE[$tokenName]) && $_COOKIE[$tokenName] == $this->loadCsrfToken()));
+                $ret = ((isset(${$method}[$tokenName]) && ${$method}[$tokenName] == $csrfToken)
+                    || (isset($_COOKIE[$tokenName]) && $_COOKIE[$tokenName] == $csrfToken));
             }
             elseif (in_array($method, $this->requestMethodsAllowed))
             {
@@ -93,5 +93,5 @@ class Csrf extends Component
         }
 
         return $ret;
-    }*/
+    }
 }
