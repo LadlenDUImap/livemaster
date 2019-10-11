@@ -65,8 +65,8 @@ class Pdo extends \app\base\Component implements IDatabase
             $name = $this->makeNameSafe($name);
             $nameSf = isset($executeImputParameters[$name]) ? "{$name}_sf" : $name;
             $executeImputParameters[$nameSf] = $value;
-            
-            $resultElements[] = "`$name` = :$nameSf";
+            $sign = ($type == 'where' && $value === null) ? 'IS' : '=';
+            $resultElements[] = "`$name` $sign :$nameSf";
         }
 
         return implode($glue, $resultElements);
@@ -85,7 +85,7 @@ class Pdo extends \app\base\Component implements IDatabase
         }, $toSelect);
 
         $query = 'SELECT ' . implode(', ', $toSelect) . ' FROM `' . $tableName . '`';
-        if ($whereString = $this->makeEqualQueryTerm($condition, 'AND')) {
+        if ($whereString = $this->makeEqualQueryTerm($condition, 'where')) {
             $query .= ' WHERE ' . $whereString;
         }
 
@@ -138,7 +138,7 @@ class Pdo extends \app\base\Component implements IDatabase
         $tableName = $this->makeNameSafe($tableName);
 
         $query = 'INSERT INTO `' . $tableName . '`'
-            . ' SET ' . $this->makeEqualQueryTerm($values, ',');
+            . ' SET ' . $this->makeEqualQueryTerm($values, 'set');
 
         $result = $this->execute($query, $values);
 
@@ -152,10 +152,10 @@ class Pdo extends \app\base\Component implements IDatabase
         $executeImputParameters = $values;
 
         $query = 'UPDATE `' . $tableName . '`'
-            . ' SET ' . $this->makeEqualQueryTerm($values, ',');
+            . ' SET ' . $this->makeEqualQueryTerm($values, 'set');
 
         if ($condition) {
-            $query .= ' WHERE ' . $this->makeEqualQueryTerm($condition, 'AND', $executeImputParameters);
+            $query .= ' WHERE ' . $this->makeEqualQueryTerm($condition, 'where', $executeImputParameters);
         }
 
         $result = $this->execute($query, array_merge($values, $executeImputParameters));
@@ -175,7 +175,7 @@ class Pdo extends \app\base\Component implements IDatabase
         $query = 'DELETE FROM `' . $tableName . '`';
 
         if ($condition) {
-            $query .= ' WHERE ' . $this->makeEqualQueryTerm($condition, 'AND');
+            $query .= ' WHERE ' . $this->makeEqualQueryTerm($condition, 'where');
         }
 
         $result = $this->execute($query, $condition);
