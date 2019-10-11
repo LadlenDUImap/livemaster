@@ -82,6 +82,10 @@ class ModelList
     var jQueryElements = {".ml-hidden-edit-element":$(".ml-hidden-edit-element")};
     
     $(".ml-overlap-edit-element").click(function() {
+        if (lastModifiedInfo) {
+            return false;
+        }
+        
         var elemOverlap = $(this);
         var elemEditWrapper = elemOverlap.next(".ml-hidden-edit-element-wrapper");
         elemOverlap.hide();
@@ -177,6 +181,7 @@ class ModelList
                         lastModifiedInfo["elem-edit-wrapper"].hide();
                         lastModifiedInfo["elem-overlap"].show();
                         //lastModifiedInfo["elem-edit"].blur();
+                        lastModifiedInfo = false;
                     }
                 } else if (data.state == "error") {
                     alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));

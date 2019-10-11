@@ -27,6 +27,8 @@ class User extends DatabaseRecord
 
         if ($propName == 'name') {
             $valueMod = preg_replace('/\s+/', ' ', $valueMod);
+        } elseif ($propName == 'age') {
+            $valueMod = ltrim($valueMod, '0');
         }
 
         return ($valueMod === $value) ? false : $valueMod;
@@ -78,7 +80,7 @@ class User extends DatabaseRecord
             return 'Возраст пользователя должен быть заполнен.';
         }
         if (!preg_match('/^\d+$/', $value)) {
-            return 'Возраст пользователя должен быть неотрицательным целым числом.';
+            return 'Возраст пользователя должен состоять только из цифр.';
         }
         if ((int)$value > 200) {
             return 'Дубы и черепахи не могут быть пользователями (допускается 0 - 200 лет).';
