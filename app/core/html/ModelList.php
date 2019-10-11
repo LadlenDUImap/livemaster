@@ -93,7 +93,7 @@ class ModelList
         elemEdit = elemEditWrapper.find(".ml-hidden-edit-element");
         elemEdit.focus();
         
-        lastModifiedInfo = {"elem-overlap":elemOverlap, "elem-edit-wrapper":elemEditWrapper, "elem-edit":elemEdit};
+        lastModifiedInfo = {"elem-overlap":elemOverlap, "elem-edit-wrapper":elemEditWrapper, "elem-edit":elemEdit, "elem-edit-old-value":elemEdit.val()};
     });
     
     jQueryElements[".ml-hidden-edit-element"].change(function() {
@@ -166,23 +166,35 @@ class ModelList
         });
     }
     
-    function updateElement(elem) {
-        /*if (lastModifiedInfo) {
-            lastModifiedInfo["elem-edit-wrapper"].hide();
-            lastModifiedInfo["elem-overlap"].show();
-            //lastModifiedInfo["elem-edit"].blur();
-        }*/
-        var formElem = elem.closest('form');
-        var data = formElem.serialize();
-        $.post(actions["update"], data, function(data) {
-            if (data) {
-                if (data.state == "success") {
-                   if (lastModifiedInfo) {
+    function resetLastModified() {
+        if (lastModifiedInfo) {
                         lastModifiedInfo["elem-edit-wrapper"].hide();
                         lastModifiedInfo["elem-overlap"].show();
                         //lastModifiedInfo["elem-edit"].blur();
                         lastModifiedInfo = false;
                     }
+    }
+    
+    function updateElement(elem) {
+        if (lastModifiedInfo) {
+            if (lastModifiedInfo["elem-edit-old-value"] == elem.val()) {
+                resetLastModified();
+                return false;
+            }
+        }
+        
+        var formElem = elem.closest('form');
+        var data = formElem.serialize();
+        $.post(actions["update"], data, function(data) {
+            if (data) {
+                if (data.state == "success") {
+                   /*if (lastModifiedInfo) {
+                        lastModifiedInfo["elem-edit-wrapper"].hide();
+                        lastModifiedInfo["elem-overlap"].show();
+                        //lastModifiedInfo["elem-edit"].blur();
+                        lastModifiedInfo = false;
+                    }*/
+                   resetLastModified();
                 } else if (data.state == "error") {
                     alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
                     elem.focus();
