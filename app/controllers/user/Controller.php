@@ -3,7 +3,6 @@
 namespace app\controllers\user;
 
 use app\core\html\Form;
-use app\core\Lm;
 use app\core\Web;
 use app\helpers\HtmlHelper;
 use app\models\db\User;
@@ -12,11 +11,21 @@ class Controller extends \app\base\Controller
 {
     public function actionUpdate()
     {
-        $result = [
-            'success' => true,
-        ];
+        $state = 'error';
+        $data = [];
 
-        return json_encode($result);
+        $model = new User($_POST['lm_form_id']);
+
+        $attributes = Form::extractModelAttributesFromHtmlAttributes($model, $_POST);
+        if ($model->loadProperties($attributes) && $model->save()) {
+            $state = 'success';
+        } else {
+            $data['error-messages'] = HtmlHelper::keys2HtmlModelName($model, $model->getErrors());
+        }
+
+        $data['corrected-attributes'] = HtmlHelper::keys2HtmlModelName($model, $model->getCorrectedAttributes());
+
+        Web::sendJsonResponse($state, $data);
     }
 
     public function actionCreate()

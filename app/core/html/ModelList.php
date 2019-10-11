@@ -79,6 +79,8 @@ class ModelList
     var templateElements = $templateElements;
     var actions = $actions;
     
+    var jQueryElements = {".ml-hidden-edit-element":$(".ml-hidden-edit-element")};
+    
     //TODO: привязывать к ml-hidden-edit-element-wrapper событие onblur и enter
     $(".ml-overlap-edit-element").click(function() {
         /*if (lastModifiedInfo) {
@@ -97,24 +99,33 @@ class ModelList
         lastModifiedInfo = {"elem-overlap":elemOverlap, "elem-edit-wrapper":elemEditWrapper, "elem-edit":elemEdit};
     });
     
-    function ajaxSave() {
-      
-    }
     
-    $(".ml-hidden-edit-element").change(function() {
+    
+    jQueryElements[".ml-hidden-edit-element"].change(function() {
         var currElem = $(this);
         var currentValue = (currElem.prop("tagName") == 'SELECT') ? currElem.find("option:selected").text() : currElem.val();
         currElem.parent(".ml-hidden-edit-element-wrapper").prev(".ml-overlap-edit-element").text(currentValue);
     });
     
-    $(".ml-hidden-edit-element").blur(function() {
-        if (lastModifiedInfo) {
-            lastModifiedInfo["elem-edit-wrapper"].hide();
-            lastModifiedInfo["elem-overlap"].show();
-            lastModifiedInfo["elem-edit"].blur();
+    jQueryElements[".ml-hidden-edit-element"].keypress(function(event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            $(this).blur();
+            return false;
         }
     });
     
+    function updateElement(elem) {
+        if (lastModifiedInfo) {
+            lastModifiedInfo["elem-edit-wrapper"].hide();
+            lastModifiedInfo["elem-overlap"].show();
+            //lastModifiedInfo["elem-edit"].blur();
+        }
+    }
+    
+    jQueryElements[".ml-hidden-edit-element"].blur(function() {
+        updateElement($(this));
+    });
     
     templateElements["new"]["element-container"]["elem"] = $(templateElements["new"]["element-container"]["selector"]);
     
