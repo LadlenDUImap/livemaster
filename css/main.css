@@ -34,6 +34,19 @@ table {
 }
 
 .col {
+    position: relative;
+    width: 100%;
+}
+
+.col {
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.col {
     text-align: center;
     padding: 5px;
 }
@@ -59,6 +72,15 @@ table {
 
 .ml-overlap-edit-element:hover {
     background-color: grey;
+}
+
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
 }
 
 /*@media only screen and (max-width: 320px) {*/
