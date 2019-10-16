@@ -168,11 +168,11 @@ class ModelList
     
     function resetLastModified() {
         if (lastModifiedInfo) {
-                        lastModifiedInfo["elem-edit-wrapper"].hide();
-                        lastModifiedInfo["elem-overlap"].show();
-                        //lastModifiedInfo["elem-edit"].blur();
-                        lastModifiedInfo = false;
-                    }
+            lastModifiedInfo["elem-edit-wrapper"].hide();
+            lastModifiedInfo["elem-overlap"].show();
+            //lastModifiedInfo["elem-edit"].blur();
+            lastModifiedInfo = false;
+        }
     }
     
     function updateElement(elem) {

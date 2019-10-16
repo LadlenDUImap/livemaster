@@ -54,7 +54,7 @@ class Csrf extends Component
     protected function loadCsrfToken()
     {
         Web::startSession();
-        return (isset($_SESSION['csrf']['token'])) ? $_SESSION['csrf']['token'] : null;
+        return (!empty($_SESSION['csrf']['token'])) ? $_SESSION['csrf']['token'] : null;
     }
 
     /**
@@ -75,20 +75,20 @@ class Csrf extends Component
             {
                 $csrfToken = $this->loadCsrfToken();
 
-                if (!$csrfToken)
-                {
-                    //$ret = true;
-                    throw new \Exception('Проблемы с сессией');
+                if ($csrfToken) {
+                    $method = '_' . $method;
+                    global ${$method};
+                    $ret = ((isset(${$method}[$tokenName]) && ${$method}[$tokenName] == $csrfToken)
+                        || (isset($_COOKIE[$tokenName]) && $_COOKIE[$tokenName] == $csrfToken));
+                } else {
+                    //throw new \Exception('Проблемы с сессией');
                 }
-
-                $method = '_' . $method;
-                global ${$method};
-                $ret = ((isset(${$method}[$tokenName]) && ${$method}[$tokenName] == $csrfToken)
-                    || (isset($_COOKIE[$tokenName]) && $_COOKIE[$tokenName] == $csrfToken));
             }
             elseif (in_array($method, $this->requestMethodsAllowed))
             {
                 $ret = true;
+            } else {
+                Lm::inst()->log->set('Неизвестный метод: ' . $method, 'error');
             }
         }
 

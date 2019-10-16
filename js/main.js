@@ -20,13 +20,20 @@ $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
     var optionsSuccess = options.success;
     options.success = function (data, textStatus, jqXHR) {
         if (data) {
+            if (!data.state) {
+                alert('Ошибка! Не задан статус ответа. Попробуйте пожалуйста позже.');
+                return;
+            }
             if (data.state == "no-job-show-message") {
                 alert(data.data.message);
                 return;
             }
-        }
-        if (optionsSuccess) {
-            return optionsSuccess(data, textStatus, jqXHR);
+
+            if (optionsSuccess) {
+                return optionsSuccess(data, textStatus, jqXHR);
+            }
+        } else {
+            alert('Ошибка! Нет данных с сервера. Попробуйте пожалуйста позже.');
         }
     }
 });
