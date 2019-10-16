@@ -97,9 +97,7 @@ class ModelList
     });
     
     jQueryElements[".ml-hidden-edit-element"].change(function() {
-        var currElem = $(this);
-        var currentValue = (currElem.prop("tagName") == 'SELECT') ? currElem.find("option:selected").text() : currElem.val();
-        currElem.parent(".ml-hidden-edit-element-wrapper").prev(".ml-overlap-edit-element").text(currentValue);
+        elementChanged($(this));
     });
     
     jQueryElements[".ml-hidden-edit-element"].keypress(function(event) {
@@ -121,7 +119,7 @@ class ModelList
         if (elemContainer.data("newElementProcessing") != "in-process") {
             elemContainer.data("newElementProcessing", "in-process");
             var html = $(templateElements["new"]["template-container"]["selector"]).html();
-            elemContainer.append('<div class="ml-new-element-wrapper">' + html + '</div>');
+            elemContainer.append('<div class="ml-new-element-wrapper">' + html + '<\/div>');
             addNewElementProcessStart();
         } else {
             alert("Новый элемент уже в процессе создания.");
@@ -143,8 +141,7 @@ class ModelList
         
         $(".ml-new-element-wrapper form").unbind().submit(function() {
             var formElem = $(this);
-            var data = formElem.serialize();
-            $.post(actions["create"], data, function(data) {
+            $.post(actions["create"], formElem.serialize(), function(data) {
                 if (data) {
                     if (data.state == "success") {
                        alert('Элемент успешно добавлен.');
@@ -152,11 +149,7 @@ class ModelList
                     } else if (data.state == "error") {
                         alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
                     }
-                    if (data.data && data.data["corrected-attributes"]) {
-                        $.each(data.data["corrected-attributes"], function(id, val) {
-                            formElem.find('[name="' + id + '"]').val(val);
-                        });
-                    }
+                    correctAttributes(formElem, data);
                 }
             }).fail(function(jqXHR, textStatus, error) {
                 alert("Ошибка на сервере " + jqXHR.status + ": " + error);
@@ -164,6 +157,16 @@ class ModelList
             
             return false;
         });
+    }
+    
+    function correctAttributes(formElem, data) {
+      if (data && data.data && data.data["corrected-attributes"]) {
+            $.each(data.data["corrected-attributes"], function(id, val) {
+                var correctElem = formElem.find('[name="' + id + '"]');
+                correctElem.val(val);
+                elementChanged(correctElem);
+            });
+        }
     }
     
     function resetLastModified() {
@@ -184,8 +187,7 @@ class ModelList
         }
         
         var formElem = elem.closest('form');
-        var data = formElem.serialize();
-        $.post(actions["update"], data, function(data) {
+        $.post(actions["update"], formElem.serialize(), function(data) {
             if (data) {
                 if (data.state == "success") {
                    /*if (lastModifiedInfo) {
@@ -199,11 +201,7 @@ class ModelList
                     alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
                     elem.focus();
                 }
-                if (data.data && data.data["corrected-attributes"]) {
-                    $.each(data.data["corrected-attributes"], function(id, val) {
-                        formElem.find('[name="' + id + '"]').val(val);
-                    });
-                }
+                correctAttributes(formElem, data);
             }
         }).fail(function(jqXHR, textStatus, error) {
             alert("Ошибка на сервере " + jqXHR.status + ": " + error);
@@ -234,6 +232,13 @@ class ModelList
             formElem.css({"background-color":"white","color":"black"});
         }
     }
+    
+    function elementChanged(currElem) {
+        //var currElem = $(this);
+        var currentValue = (currElem.prop("tagName") == 'SELECT') ? currElem.find("option:selected").text() : currElem.val();
+        currElem.parent(".ml-hidden-edit-element-wrapper").prev(".ml-overlap-edit-element").text(currentValue);      
+    }
+
 })();
 JS
         );
