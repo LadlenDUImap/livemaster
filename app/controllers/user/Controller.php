@@ -14,7 +14,9 @@ class Controller extends \app\base\Controller
         $state = 'error';
         $data = [];
 
-        $model = new User($_POST['lm_form_id']);
+        //$model = new User($_POST['lm_form_id']);
+        $model = new User();
+        $model->setId($_POST['lm_form_id']);
 
         $attributes = Form::extractModelAttributesFromHtmlAttributes($model, $_POST);
         if ($model->loadProperties($attributes) && $model->save()) {

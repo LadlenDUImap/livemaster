@@ -27,6 +27,10 @@ abstract class DatabaseRecord
     protected $_attributes = [];
 
 
+    /** @var array установленные атрибуты */
+    protected $_setAttributes = [];
+
+
     private $_correctedAttributes = [];
 
     private $_errors = [];
@@ -47,7 +51,7 @@ abstract class DatabaseRecord
             throw new \Exception("Не существует поле `$name`");
         }
 
-        return null;
+        return $this->_setAttributes[$name] ?? null;
     }
 
     public function __set($name, $value)
@@ -96,7 +100,8 @@ abstract class DatabaseRecord
      */
     public function getProperties()
     {
-        $properties = [];
+        return $this->_setAttributes;
+        /*$properties = [];
 
         foreach ((new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC) as $prop) {
             if (!$prop->isStatic()) {
@@ -104,7 +109,7 @@ abstract class DatabaseRecord
             }
         }
 
-        return $properties;
+        return $properties;*/
     }
 
     protected function setProperties(array $properties)
@@ -129,6 +134,8 @@ abstract class DatabaseRecord
 
         $this->setErrors(null);
 
+        $properties = $this->prepareProperties($properties);
+
         $correctedProperties = $correct ? $this->correctPropertyBulk($properties) : $properties;
         $this->setCorrectedAttributes($correctedProperties);
         $compoundAttributes = array_replace_recursive($properties, $correctedProperties);
@@ -147,6 +154,17 @@ abstract class DatabaseRecord
         return $result;
     }
 
+    /**
+     * Начальная подготовка значений к операциям, в БД, к примеру.
+     *
+     * @param array $properties
+     * @return array
+     */
+    protected function prepareProperties(array $properties): array
+    {
+        return $properties;
+    }
+
     /*public function getAttr($name)
     {
         if (!key_exists($name, $this->_attributes)) {
@@ -162,7 +180,7 @@ abstract class DatabaseRecord
             throw new \Exception("Не существует поле `$name`");
         }
 
-        $this->$name = $value;
+        $this->_setAttributes[$name] = $value;
 
         // Установка идентификатора автоматически обозначает что это уже существующая запись в БД.
         if ($name === static::$_idName) {
@@ -191,15 +209,15 @@ abstract class DatabaseRecord
      */
     public function correctPropertyBulk(array $properties)
     {
-        $correcteProperties = [];
+        $correctedProperties = [];
 
         foreach ($properties as $name => $value) {
             if (($correctedValue = $this->correctProperty($name, $value)) !== false) {
-                $correcteProperties[$name] = $correctedValue;
+                $correctedProperties[$name] = $correctedValue;
             }
         }
 
-        return $correcteProperties;
+        return $correctedProperties;
     }
 
     /**

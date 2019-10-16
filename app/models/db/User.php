@@ -12,18 +12,27 @@ class User extends DatabaseRecord
     protected $_attributes = ['id', 'name', 'age', 'city_id'];
 
 
-    public function setProp($name, $value)
+    /*public function setProp($name, $value)
     {
         if ($name === 'city_id' && empty($value)) {
             $value = null;
         }
 
         parent::setProp($name, $value);
+    }*/
+
+    protected function prepareProperties(array $properties): array
+    {
+        if (isset($properties['city_id']) && empty($properties['city_id'])) {
+            $properties['city_id'] = null;
+        }
+
+        return $properties;
     }
 
     public function correctProperty(string $propName, $value)
     {
-        $valueMod = trim($value);
+        $valueMod = is_string($value) ? trim($value) : $value;
 
         if ($propName == 'name') {
             $valueMod = preg_replace('/\s+/', ' ', $valueMod);
@@ -34,11 +43,11 @@ class User extends DatabaseRecord
                     $valueMod = 0;
                 }
             }
-        } elseif ($propName == 'city_id') {
+        }/* elseif ($propName == 'city_id') {
             if (empty($value)) {
                 $value = null;
             }
-        }
+        }*/
 
         return ($valueMod === $value) ? false : $valueMod;
     }

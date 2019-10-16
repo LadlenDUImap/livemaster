@@ -90,6 +90,9 @@ class Pdo extends \app\base\Component implements IDatabase
         }
 
         try {
+            if (LM_DEBUG) {
+                Lm::inst()->log->set('Команда SQL: ' . $query);
+            }
             if ($STH = $this->DBH->prepare($query)) {
                 $STH->setFetchMode(\PDO::FETCH_ASSOC);
                 if ($STH->execute($condition)) {
