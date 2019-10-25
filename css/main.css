@@ -52,7 +52,7 @@ table {
 }
 
 #btn-add-user {
-    margin-top: 1em;
+    margin-top: 1.5em;
     padding: .5em 2em;
     float: right;
     cursor: pointer;
@@ -79,8 +79,8 @@ table {
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
+    /*margin-right: -15px;
+    margin-left: -15px;*/
 }
 
 /*@media only screen and (max-width: 320px) {*/
