@@ -26,7 +26,7 @@ $cityList = new ModelList([
 
 ?>
 <div id="ml-new-element-template" style="display: none"><?php
-    //$this->render(__DIR__ . '/_user-row.php', ['cityList' => $cityList, 'user' => new \app\models\db\User(), 'cities' => $cities])
+
     $rowParams = [
         'style' => 'width:100%;text-align:center',
     ];
@@ -45,7 +45,6 @@ $cityList = new ModelList([
     ?></div>
 
 <h3 class="header">Список пользователей</h3>
-<div class="container">
 
     <div class="row head">
         <div class="col">Имя</div>
@@ -65,7 +64,5 @@ $cityList = new ModelList([
         }
         ?>
     </div>
-
-</div>
 
 <button id="btn-add-user" class="ml-new-add-button">Добавить пользователя</button>

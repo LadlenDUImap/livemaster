@@ -247,6 +247,7 @@ JS
     public function beginElement($id)
     {
         $this->_currentForm = new Form();
+
         return $this->_currentForm->begin($id);
     }
 
@@ -254,6 +255,7 @@ JS
     {
         $endHtml = $this->_currentForm->end();
         unset($this->_currentForm);
+
         return $endHtml;
     }
 
