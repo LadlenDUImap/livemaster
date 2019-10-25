@@ -28,10 +28,9 @@ class Container implements \Iterator, \ArrayAccess, \Countable
 
     public function __get($name)
     {
-        //if (isset($this->objects[$name]))
         if (array_key_exists($name, $this->objects))
         {
-            return $this->objects[$name];
+            return \app\core\html\Safe::htmlEncode($this->objects[$name]);
         }
         // Пустой контейнер - необходим чтобы не было ошибки когда объект ссылается на другой объект/значение.
         return new Container;
@@ -61,30 +60,15 @@ class Container implements \Iterator, \ArrayAccess, \Countable
         }
     }
 
-    /**
-     * Рекурсивная конвертация всех классов типа app\core\Container в объекте $obj
-     * в объект производного от app\core\Container класса, который вызывает эту функцию.
-     *
-     * @param mixed $obj Присваемое значение.
-     * @return mixed Объект дочернего класса вместо app\core\Container или оригинальное значение.
-     */
-    /*public function convertAllContainersToChild($obj)
+    public function raw($name)
     {
-        if (is_object($obj) && get_class($obj) == 'app\core\Container')
+        if (array_key_exists($name, $this->objects))
         {
-            foreach ($obj->objects as $key => $val)
-            {
-                $new = new static;
-                $this->objects[$key] = $new->convertAllContainersToChild($val);
-            }
-
-            return new static($this->objects);
+            return $this->objects[$name];
         }
-        else
-        {
-            return $obj;
-        }
-    }*/
+        // Пустой контейнер - необходим чтобы не было ошибки когда объект ссылается на другой объект/значение.
+        return new Container;
+    }
 
     /**
      * На конце цепочки объектов выводим пустую строку если получилось так что объект не задан.
@@ -93,7 +77,7 @@ class Container implements \Iterator, \ArrayAccess, \Countable
      */
     public function __toString()
     {
-        return self::ReturnIfNotExists;
+        return static::ReturnIfNotExists;
     }
 
     /**
