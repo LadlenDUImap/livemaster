@@ -6,8 +6,8 @@ if (version_compare(phpversion(), '7.1', '<') == true) {
 
 define('LM_DEBUG', true);
 
-define('WEB_DIR', __DIR__ . '/');
-define('APP_DIR', realpath(__DIR__ . '/app') . '/');
+#define('WEB_DIR', __DIR__ . '/../');
+define('APP_DIR', realpath(__DIR__ . '/../app') . '/');
 
 ini_set('log_errors', 1);
 ini_set('error_log', APP_DIR . 'runtime/log/php-livemaster-error.log');

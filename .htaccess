@@ -1,9 +1,13 @@
 Options -Indexes
+Options +FollowSymLinks -MultiViews
 
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?r=$1 [L,QSA]
+RewriteEngine on
+#RewriteRule ^.*$ htaccess_tester.php
+#RewriteBase /subdir/sec_subdir/
 
-# Deny accessing dot files
-RewriteRule (^\.|/\.) - [F]
+#RewriteRule (.*)web/(.*)$ /subdir/sec_subdir/web/$2 [R=301]
+RewriteCond %{REQUEST_URI} !/web
+RewriteRule ^(.*)$ web/$1 [L,NC]
+
+#RewriteRule ^subdir/sec_subdir/(.*) subdir/sec_subdir/web/$1 [NC,L]
+#RewriteRule ^/subdir/sec_subdir/(.*)?$ /subdir/sec_subdir/web/$1 [NC]
