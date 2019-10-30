@@ -5,6 +5,7 @@
 
 $rowParams = [
     'style' => 'width:100%;text-align:center',
+    'maxlength' => 30,
 ];
 
 echo $values['cityList']->beginElement($values['user']->getId())
