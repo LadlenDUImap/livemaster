@@ -33,18 +33,18 @@ $cityList = new ModelList([
     $user = new \app\models\db\User();
     $form = new \app\core\html\Form();
     echo $form->begin(0)
-        . '<div class="row item">'
+        . '<section class="row item">'
         . '<div class="col">' . $form->textInput($user, 'name', $rowParams) . '</div>'
         . '<div class="col">' . $form->textInput($user, 'age', $rowParams) . '</div>'
         . '<div class="col">' . $form->selectInput($user, 'city_id', $cities, $rowParams) . '</div>'
         . '<div class="col">'
         . '<button class="ml-new-save-button">Сохранить</button><button class="ml-new-save-cancel-button">Отменить</button>'
         . '</div>'
-        . '</div>'
+        . '</section>'
         . $form->end();
     ?></div>
 
-<h3 class="header">Список пользователей</h3>
+<header><h3 class="header">Список пользователей</h3></header>
 
     <div class="row head">
         <div class="col">Имя</div>

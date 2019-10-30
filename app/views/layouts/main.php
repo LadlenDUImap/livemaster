@@ -13,7 +13,7 @@ use app\core\Url;
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title><?= \app\core\html\Safe::htmlEncode($this->title) ?></title>
+    <title><?= $this->values->title ?></title>
 
     <!--<link href="<?/*= Url::to('/css/bootstrap-grid.css') */?>" rel="stylesheet" media="all" />-->
     <link href="<?= Url::to('/css/main.css') ?>" rel="stylesheet" media="all" />

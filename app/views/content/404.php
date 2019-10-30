@@ -1,9 +1,9 @@
 <?php
 /* @var $this app\core\View */
-
-$this->title = 'Error 404. Страница не найдена.';
+echo $this->uusl;
+$this->values->title = 'Error 404. Страница не найдена.';
 ?>
-<div class="global_message"><?= \app\core\html\Safe::htmlEncode($this->title) ?>
+<div class="global_message"><?= $this->values->title ?>
     <br>
     <a href="/">Домой</a>
 </div>
