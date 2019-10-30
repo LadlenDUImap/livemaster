@@ -38,12 +38,12 @@ class City extends DatabaseRecord
         $nameLength = mb_strlen($value, 'UTF-8');
 
         if (!$nameLength) {
-            throw new \Exception('Название города должно быть заполнено.');
+            return 'Название города должно быть заполнено.';
         }
         if ($nameLength > 30) {
-            throw new \Exception('Название города НЕ должно быть больше 30 символов.');
+            return 'Название города НЕ должно быть больше 30 символов.';
         }
 
-        return true;
+        return false;
     }
 }

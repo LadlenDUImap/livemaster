@@ -6,14 +6,6 @@ use app\core\html\ModelList;
 /* @var $this app\core\View */
 /* @var $values array */
 
-$cities = [];
-foreach ($values['cities'] as $city) {
-    $cities[] = [
-        'name' => $city->name,
-        'value' => $city->id,
-    ];
-}
-
 $cityList = new ModelList([
     'create' => Url::to('/city/create'),
     'delete' => Url::to('/city/delete'),
@@ -47,8 +39,8 @@ $cityList = new ModelList([
 
 <div class="body" id="ml-new-element-container">
     <?php
-    if ($cities) {
-        foreach ($cities as $city) {
+    if ($values['cities']) {
+        foreach ($values['cities'] as $city) {
             echo $this->render(__DIR__ . '/_row.php', compact('cityList', 'city'));
         }
     } else {
