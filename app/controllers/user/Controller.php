@@ -11,6 +11,8 @@ class Controller extends \app\base\Controller
 {
     public function actionUpdate()
     {
+        assert(!empty($_POST['lm_form_id']));
+
         $state = 'error';
         $data = [];
 
@@ -51,6 +53,8 @@ class Controller extends \app\base\Controller
 
     public function actionDelete()
     {
+        assert(!empty($_POST['lm_form_id']));
+
         $state = 'error';
         $data = [];
 
