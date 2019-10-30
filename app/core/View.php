@@ -2,13 +2,8 @@
 
 namespace app\core;
 
-use app\base\FixedProps;
-
-class View extends FixedProps
+class View extends \app\base\FixedProps
 {
-    /** @var Container заголовок страницы. */
-    //public $title;
-
     /** @var string подключаемые CSS файлы. */
     public $css = '';
 
@@ -31,23 +26,13 @@ class View extends FixedProps
     /**
      * Сгенерировать PHP файл.
      *
-     * @param string $file Путь к файлу.
-     * @param \app\core\Container $values Контейнер со значениями для файла.
-     * @return string Сгенерированный файл.
-     */
-    //public static function getPhpFileContent($file, Container $values = null)
-
-    /**
-     * Сгенерировать PHP файл.
-     *
      * @param string $_file_ Путь к файлу.
      * @param mixed $values
      * @return string
      */
     public function render($_file_, $values = null)
     {
-        if (!$values)
-        {
+        if (!$values) {
             $values = new Container;
         }
 
