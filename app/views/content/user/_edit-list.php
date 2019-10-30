@@ -18,7 +18,7 @@ foreach ($values['cities'] as $city) {
     ];
 }
 
-$cityList = new ModelList([
+$userList = new ModelList([
     'create' => Url::to('/user/create'),
     'delete' => Url::to('/user/delete'),
     'update' => Url::to('/user/update'),
@@ -57,7 +57,7 @@ $cityList = new ModelList([
     <?php
     if ($users) {
         foreach ($users as $user) {
-            echo $this->render(__DIR__ . '/_row.php', compact('cityList', 'user', 'cities'));
+            echo $this->render(__DIR__ . '/_row.php', compact('userList', 'user', 'cities'));
         }
     } else {
         echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет пользователей</div></div>';

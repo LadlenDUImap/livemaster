@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers\user;
+namespace app\controllers\city;
 
 use app\core\html\Form;
 use app\core\Web;
@@ -11,8 +11,7 @@ class Controller extends \app\base\Controller
 {
     public function actionIndex()
     {
-        die(33);
-        return $this->render('index', ['cities' => City::getAll()]);
+        return $this->render('city/index', ['cities' => City::getAll()]);
     }
 
     public function actionUpdate()

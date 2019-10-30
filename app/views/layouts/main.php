@@ -27,7 +27,7 @@ use app\core\Url;
     <nav class="nav">
         <ul>
             <li><a href="<?= Url::to('/') ?>">Пользователи</a></li>
-            <li><a href="<?= Url::to('/city') ?>">Города</a></li>
+            <li><a href="<?= Url::to('/city/') ?>">Города</a></li>
         </ul>
     </nav>
 

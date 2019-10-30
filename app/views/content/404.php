@@ -1,4 +1,5 @@
 <?php
+
 /* @var $this app\core\View */
 
 $this->values->title = 'Error 404. Страница не найдена.';

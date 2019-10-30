@@ -1,7 +1,5 @@
 <?php
 
-use app\core\Url;
-
 /* @var $this app\core\View */
 /* @var $values array */
 
