@@ -2,13 +2,12 @@
 
 namespace app\core;
 
-use app\core\Container;
-use app\base\Controller;
+use app\base\FixedProps;
 
-class View
+class View extends FixedProps
 {
-    /** @var string заголовок страницы. */
-    public $title;
+    /** @var Container заголовок страницы. */
+    //public $title;
 
     /** @var string подключаемые CSS файлы. */
     public $css = '';
