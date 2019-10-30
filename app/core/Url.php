@@ -11,7 +11,7 @@ class Url
     public static function getWebRootPath(): string
     {
         if (!self::$webRootPath) {
-            self::$webRootPath = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
+            self::$webRootPath = str_replace('web/index.php', '', $_SERVER['SCRIPT_NAME']);
         }
 
         return self::$webRootPath;
