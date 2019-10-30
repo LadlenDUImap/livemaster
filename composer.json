@@ -1,0 +1,11 @@
+{
+  "name": "ladlen/livemaster-users-cities",
+  "description": "Test for Livemaster",
+  "require": {
+    "php": "^7.1"
+  },
+
+  "require-dev": {
+    "phpunit/phpunit": "^8"
+  }
+}
