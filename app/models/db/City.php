@@ -3,6 +3,7 @@
 namespace app\models\db;
 
 use app\base\DatabaseRecord;
+use app\core\Lm;
 
 class City extends DatabaseRecord
 {
@@ -43,7 +44,23 @@ class City extends DatabaseRecord
         if ($nameLength > 30) {
             return 'Название города НЕ должно быть больше 30 символов.';
         }
+        if (Lm::inst()->db->select(static::$_tableName, ['name' => $value])) {
+            return 'Такой город уже есть.';
+        }
 
         return false;
+    }
+
+    public function delete()
+    {
+        // Проверим нет ли связи с другими таблицами
+        $this->setErrors(null);
+
+        if (Lm::inst()->db->select(User::tableName(), ['city_id' => $this->getId()])) {
+            $this->setErrors(['Этот город используетс как знаение пользовател. Удалите.']);
+            return fale;
+        }
+
+        return parent::delete();
     }
 }
