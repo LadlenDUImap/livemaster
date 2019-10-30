@@ -24,6 +24,13 @@ use app\core\Url;
 <body>
 
 <div class="container">
+    <nav class="nav">
+        <ul>
+            <li><a href="<?= Url::to('/') ?>">Пользователи</a></li>
+            <li><a href="<?= Url::to('/city') ?>">Города</a></li>
+        </ul>
+    </nav>
+
     <?= $values->raw('content') ?>
 </div>
 

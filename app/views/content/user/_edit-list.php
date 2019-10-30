@@ -46,23 +46,23 @@ $cityList = new ModelList([
 
 <header><h3 class="header">Список пользователей</h3></header>
 
-    <div class="row head">
-        <div class="col">Имя</div>
-        <div class="col">Возраст</div>
-        <div class="col">Город</div>
-        <div class="col">&nbsp;</div>
-    </div>
+<div class="row head">
+    <div class="col">Имя</div>
+    <div class="col">Возраст</div>
+    <div class="col">Город</div>
+    <div class="col">&nbsp;</div>
+</div>
 
-    <div class="body" id="ml-new-element-container">
-        <?php
-        if ($users) {
-            foreach ($users as $user) {
-                echo $this->render(__DIR__ . '/_user-row.php', compact('cityList', 'user', 'cities'));
-            }
-        } else {
-            echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет пользователей</div></div>';
+<div class="body" id="ml-new-element-container">
+    <?php
+    if ($users) {
+        foreach ($users as $user) {
+            echo $this->render(__DIR__ . '/_row.php', compact('cityList', 'user', 'cities'));
         }
-        ?>
-    </div>
+    } else {
+        echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет пользователей</div></div>';
+    }
+    ?>
+</div>
 
 <button id="btn-add-user" class="ml-new-add-button">Добавить пользователя</button>

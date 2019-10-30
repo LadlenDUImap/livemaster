@@ -9,6 +9,12 @@ use app\models\db\City;
 
 class Controller extends \app\base\Controller
 {
+    public function actionIndex()
+    {
+        die(33);
+        return $this->render('index', ['cities' => City::getAll()]);
+    }
+
     public function actionUpdate()
     {
         assert(!empty($_POST['lm_form_id']));
