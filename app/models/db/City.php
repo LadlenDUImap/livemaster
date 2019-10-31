@@ -57,8 +57,8 @@ class City extends DatabaseRecord
         $this->setErrors(null);
 
         if (Lm::inst()->db->select(User::tableName(), ['city_id' => $this->getId()])) {
-            $this->setErrors(['Этот город используетс как знаение пользовател. Удалите.']);
-            return fale;
+            $this->setErrors(['Этот город установлен как город одного из пользователей. Настройте правильные города для пользователей перед удалением.']);
+            return false;
         }
 
         return parent::delete();
