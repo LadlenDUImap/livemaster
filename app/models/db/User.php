@@ -106,10 +106,12 @@ class User extends DatabaseRecord
         return false;
     }
 
-    protected function validateCity(string $value)
+    protected function validateCity(?string $value)
     {
-        if (!Lm::inst()->db->select(City::tableName(), ['id' => $value])) {
-            return 'Такого города нет.';
+        if ($value !== null) {
+            if (!Lm::inst()->db->select(City::tableName(), ['id' => $value])) {
+                return 'Такого города нет.';
+            }
         }
 
         return false;
