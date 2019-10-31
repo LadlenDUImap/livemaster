@@ -66,8 +66,7 @@ class User extends DatabaseRecord
                 break;
             }
             case 'city_id': {
-                // здесь можно проверить есть ли такой город,
-                // но в этом мало практической необходимости
+                $errMsg = $this->validateCity($value);
                 break;
             }
             default: {
@@ -107,10 +106,19 @@ class User extends DatabaseRecord
         return false;
     }
 
+    protected function validateCity(string $value)
+    {
+        if (!Lm::inst()->db->select(City::tableName(), ['id' => $value])) {
+            return 'Такого города нет.';
+        }
+
+        return false;
+    }
+
     public function validatePropertyBulk(array $properties)
     {
         if (!$errorMessages = parent::validatePropertyBulk($properties)) {
-            if ($rows = Lm::inst()->db->select(static::$_tableName, $properties)) {
+            if (Lm::inst()->db->select(static::$_tableName, $properties)) {
                 $errorMessages[] = 'Такой пользователь уже есть.';
             }
         }
