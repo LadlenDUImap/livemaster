@@ -102,7 +102,7 @@ CSS
     var templateElements = $templateElements;
     var actions = $actions;
     
-    var jQueryElements = {".ml-hidden-edit-element":$(".ml-hidden-edit-element")};
+    //var jQueryElements = {".ml-hidden-edit-element":$(".ml-hidden-edit-element")};
     
     $(".ml-overlap-edit-element").click(function() {
         if (lastModifiedInfo) {
@@ -121,7 +121,7 @@ CSS
         lastModifiedInfo = {"elem-overlap":elemOverlap, "elem-edit-wrapper":elemEditWrapper, "elem-edit":elemEdit, "elem-edit-old-value":elemEdit.val()};
     });
     
-    jQueryElements[".ml-hidden-edit-element"].change(function(e) {
+    $(".ml-hidden-edit-element").change(function(e) {
         elementChanged($(this));
     }).blur(function() {
         updateElement($(this));
@@ -228,8 +228,9 @@ CSS
     }
     
     function showErrorMessages(messages) {
-        if (messages.length) {
-            alert(Utils.assocArrayJoin(messages, "\\n"));
+        var msg = Utils.assocArrayJoin(messages, "\\n");
+        if (msg.length) {
+            alert(msg);
         } else {
             alert('Неизвестная ошибка');
         }

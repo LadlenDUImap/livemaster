@@ -7,12 +7,12 @@ use app\core\html\ModelList;
 /* @var $values array */
 
 $users = $values['users'];
-$cities[] = [
+$cities[0] = [
     'name' => '-- Город не выбран --',
     'value' => 0,
 ];
 foreach ($values['cities'] as $city) {
-    $cities[] = [
+    $cities[$city->id] = [
         'name' => $city->name,
         'value' => $city->id,
     ];
