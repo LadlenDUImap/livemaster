@@ -171,7 +171,7 @@ CSS
                        alert('Элемент успешно добавлен.');
                        location.reload(true);
                     } else if (data.state == "error") {
-                        alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
+                        showErrorMessages(data.data["error-messages"]);
                     }
                     correctAttributes(formElem, data);
                 }
@@ -217,7 +217,7 @@ CSS
                 if (data.state == "success") {
                    resetLastModified();
                 } else if (data.state == "error") {
-                    alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
+                    showErrorMessages(data.data["error-messages"]);
                     elem.focus();
                 }
                 correctAttributes(formElem, data);
@@ -225,6 +225,14 @@ CSS
         }).fail(function(jqXHR, textStatus, error) {
             alert("Ошибка на сервере " + jqXHR.status + ": " + error);
         });
+    }
+    
+    function showErrorMessages(messages) {
+        if (messages.length) {
+            alert(Utils.assocArrayJoin(messages, "\\n"));
+        } else {
+            alert('Неизвестная ошибка');
+        }
     }
     
     function deleteElement(formElem) {
@@ -241,7 +249,7 @@ CSS
                            formElem.remove();
                            //lastModifiedInfo = false;
                         } else if (data.state == "error") {
-                            alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
+                            showErrorMessages(data.data["error-messages"]);
                         }
                     }
                 }).fail(function(jqXHR, textStatus, error) {

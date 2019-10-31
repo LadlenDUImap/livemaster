@@ -66,6 +66,12 @@ class Controller extends \app\base\Controller
             $user = new City($_POST['lm_form_id']);
             if ($user->delete()) {
                 $state = 'success';
+            } else {
+                if ($errors = $user->getErrors()) {
+                    $data['error-messages'] = $errors;
+                } else {
+                    throw new \Exception('Внутренняя ошибка.');
+                }
             }
         } catch (\Exception $e) {
             $data['error-messages'] = [

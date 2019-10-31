@@ -62,6 +62,8 @@ class Controller extends \app\base\Controller
             $user = new User($_POST['lm_form_id']);
             if ($user->delete()) {
                 $state = 'success';
+            } else {
+                throw new \Exception('Внутренняя ошибка.');
             }
         } catch (\Exception $e) {
             $data['error-messages'] = [
