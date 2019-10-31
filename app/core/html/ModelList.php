@@ -96,25 +96,81 @@ class ModelList
         lastModifiedInfo = {"elem-overlap":elemOverlap, "elem-edit-wrapper":elemEditWrapper, "elem-edit":elemEdit, "elem-edit-old-value":elemEdit.val()};
     });
     
-    jQueryElements[".ml-hidden-edit-element"].change(function() {
+    jQueryElements[".ml-hidden-edit-element"].change(function(e) {
+        e.stopImmediatePropagation();
+        $(this).off("blur");
         elementChanged($(this));
-    });
-    
-    jQueryElements[".ml-hidden-edit-element"].keypress(function(event) {
+    }).blur(function(e) {
+        var t = $(this);
+        setTimeout(function() { t.focus(); }, 0);
+        //e.cancelBubble = true;
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        $(this).focus();
+        updateElement($(this));
+        cl('blur');
+        return false;
+    }).keypress(function(event) {
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if(keycode == '13'){
             $(this).blur();
             return false;
         }
+    }).focus(function(e){
+       $(this).on("blur", function(e){
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            $(this).focus();
+            cl('blur 2');
+       });
+    }).focusout(function(e) {
+        e.cancelBubble = true;
+        e.stopImmediatePropagation();
+            e.preventDefault();
+        updateElement($(this));
+        $(this).focus();
+        cl('focusout');
+        return false;
     });
     
-    jQueryElements[".ml-hidden-edit-element"].blur(function() {
+    /*$(document).click(function(e) {
+        cl('click 1');
+        if (lastModifiedInfo) {
+            cl('click 2');
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            return false;
+        }
+    });*/
+    
+    /*jQueryElements[".ml-hidden-edit-element"].keypress(function(event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            $(this).blur();
+            return false;
+        }
+    });*/
+    
+    /*jQueryElements[".ml-hidden-edit-element"].focusout(function(e) {
+        e.cancelBubble = true;
         updateElement($(this));
-    });
+        cl('focusout');
+        return false;
+    });*/
+    
+    /*jQueryElements[".ml-hidden-edit-element"].blur(function(e) {
+        //e.cancelBubble = true;
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        updateElement($(this));
+        cl('blur');
+        return false;
+    });*/
     
     templateElements["new"]["element-container"]["elem"] = $(templateElements["new"]["element-container"]["selector"]);
     
     $(templateElements["new"]["add-button"]["selector"]).click(function() {
+        cl('add');
         var elemContainer = templateElements["new"]["element-container"]["elem"];
         if (elemContainer.data("newElementProcessing") != "in-process") {
             elemContainer.data("newElementProcessing", "in-process");
@@ -127,6 +183,7 @@ class ModelList
     });
     
     $(templateElements["delete-button"]["selector"]).click(function() {
+        cl('delete');
         var formElem = $(this).closest('form');
         deleteElement(formElem);
         return false;
@@ -190,12 +247,6 @@ class ModelList
         $.post(actions["update"], formElem.serialize(), function(data) {
             if (data) {
                 if (data.state == "success") {
-                   /*if (lastModifiedInfo) {
-                        lastModifiedInfo["elem-edit-wrapper"].hide();
-                        lastModifiedInfo["elem-overlap"].show();
-                        //lastModifiedInfo["elem-edit"].blur();
-                        lastModifiedInfo = false;
-                    }*/
                    resetLastModified();
                 } else if (data.state == "error") {
                     alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
@@ -220,6 +271,7 @@ class ModelList
                         if (data.state == "success") {
                            alert("Элемент успешно удалён.");
                            formElem.remove();
+                           //lastModifiedInfo = false;
                         } else if (data.state == "error") {
                             alert(Utils.assocArrayJoin(data.data["error-messages"], "\\n"));
                         }
