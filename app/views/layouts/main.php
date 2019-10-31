@@ -22,7 +22,9 @@ use app\core\Url;
     <script>
         function cl(msg) {
             <?php if (LM_DEBUG): ?>
-            console.log("LM_DEBUG: " + msg);
+            if (window.console) {
+                console.log("LM_DEBUG: " + msg);
+            }
             <?php endif; ?>
         }
     </script>
