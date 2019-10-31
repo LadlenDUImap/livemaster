@@ -23,6 +23,11 @@ class View extends \app\base\FixedProps
         $this->js .= '<script>' . $code . '</script>';
     }
 
+    public function addCssCode($css)
+    {
+        $this->css .= "<style>\n$css\n</style>";
+    }
+
     /**
      * Сгенерировать PHP файл.
      *
