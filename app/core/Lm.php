@@ -2,7 +2,7 @@
 
 namespace app\core;
 
-use app\helpers\Helper;
+use app\base\Controller;
 use app\base\Singleton;
 
 /**
@@ -14,18 +14,21 @@ use app\base\Singleton;
  */
 class Lm extends Singleton
 {
+    /** @var  array */
     protected $config;
 
+    /** @var  Controller */
     protected $controller;
 
 
-    public function run($config)
+    public function run(array $config)
     {
         $this->config = $config;
 
         DiConfiguration::set($this, $config['components']);
 
         try {
+            //Web::refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
             if (!Lm::inst()->csrf->validateCsrfToken()) {
                 Web::refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
             }
@@ -52,7 +55,7 @@ class Lm extends Singleton
         return $this->controller;
     }
 
-    public function setController($controller)
+    public function setController(Controller $controller)
     {
         $this->controller = $controller;
     }

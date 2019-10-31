@@ -60,6 +60,29 @@ class ModelList
 
         $this->_templateElements = array_replace_recursive($this->_templateElements, $templateElements);
 
+        Lm::inst()->getController()->getView()->addCssCode(<<<CSS
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    /*background-color: #000;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;*/
+    z-index: 10000;
+}
+
+.ml-hidden-edit-element-wrapper {
+    z-index: 10001;
+    position: relative;
+}
+CSS
+);
+
         if (self::$_firstInit) {
             $this->registerJs();
             self::$_firstInit = false;
@@ -86,6 +109,8 @@ class ModelList
             return false;
         }
         
+        $('<div id="overlay"><\/div>').appendTo(document.body);
+        
         var elemOverlap = $(this);
         var elemEditWrapper = elemOverlap.next(".ml-hidden-edit-element-wrapper");
         elemOverlap.hide();
@@ -97,75 +122,17 @@ class ModelList
     });
     
     jQueryElements[".ml-hidden-edit-element"].change(function(e) {
-        e.stopImmediatePropagation();
-        $(this).off("blur");
         elementChanged($(this));
-    }).blur(function(e) {
-        var t = $(this);
-        setTimeout(function() { t.focus(); }, 0);
-        //e.cancelBubble = true;
-        e.stopImmediatePropagation();
-        e.preventDefault();
-        $(this).focus();
+    }).blur(function() {
         updateElement($(this));
         cl('blur');
-        return false;
     }).keypress(function(event) {
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if(keycode == '13'){
             $(this).blur();
             return false;
         }
-    }).focus(function(e){
-       $(this).on("blur", function(e){
-            e.stopImmediatePropagation();
-            e.preventDefault();
-            $(this).focus();
-            cl('blur 2');
-       });
-    }).focusout(function(e) {
-        e.cancelBubble = true;
-        e.stopImmediatePropagation();
-            e.preventDefault();
-        updateElement($(this));
-        $(this).focus();
-        cl('focusout');
-        return false;
     });
-    
-    /*$(document).click(function(e) {
-        cl('click 1');
-        if (lastModifiedInfo) {
-            cl('click 2');
-            e.stopImmediatePropagation();
-            e.preventDefault();
-            return false;
-        }
-    });*/
-    
-    /*jQueryElements[".ml-hidden-edit-element"].keypress(function(event) {
-        var keycode = (event.keyCode ? event.keyCode : event.which);
-        if(keycode == '13'){
-            $(this).blur();
-            return false;
-        }
-    });*/
-    
-    /*jQueryElements[".ml-hidden-edit-element"].focusout(function(e) {
-        e.cancelBubble = true;
-        updateElement($(this));
-        cl('focusout');
-        return false;
-    });*/
-    
-    /*jQueryElements[".ml-hidden-edit-element"].blur(function(e) {
-        //e.cancelBubble = true;
-        e.stopImmediatePropagation();
-        e.preventDefault();
-        updateElement($(this));
-        cl('blur');
-        return false;
-    });*/
     
     templateElements["new"]["element-container"]["elem"] = $(templateElements["new"]["element-container"]["selector"]);
     
@@ -233,6 +200,7 @@ class ModelList
             //lastModifiedInfo["elem-edit"].blur();
             lastModifiedInfo = false;
         }
+        $("#overlay").remove();
     }
     
     function updateElement(elem) {
@@ -288,7 +256,6 @@ class ModelList
     }
     
     function elementChanged(currElem) {
-        //var currElem = $(this);
         var currentValue = (currElem.prop("tagName") == 'SELECT') ? currElem.find("option:selected").text() : currElem.val();
         currElem.parent(".ml-hidden-edit-element-wrapper").prev(".ml-overlap-edit-element").text(currentValue);      
     }
