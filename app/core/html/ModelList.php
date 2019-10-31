@@ -81,7 +81,7 @@ class ModelList
     position: relative;
 }
 CSS
-);
+        );
 
         if (self::$_firstInit) {
             $this->registerJs();
@@ -131,6 +131,16 @@ CSS
         if(keycode == '13'){
             $(this).blur();
             return false;
+        }
+    }).keyup(function(event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '27'){
+            if (lastModifiedInfo && lastModifiedInfo["elem-edit-old-value"]) {
+                $(this).val(lastModifiedInfo["elem-edit-old-value"]);
+                elementChanged($(this));
+                $(this).blur();
+                return false;
+            }
         }
     });
     
