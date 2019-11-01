@@ -5,6 +5,12 @@
     "php": "^7.1"
   },
 
+  "autoload": {
+    "classmap": [
+      "."
+    ]
+  },
+
   "require-dev": {
     "phpunit/phpunit": "^8"
   }
