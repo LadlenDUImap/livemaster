@@ -28,7 +28,6 @@ class Lm extends Singleton
         DiConfiguration::set($this, $config['components']);
 
         try {
-            //Web::refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
             if (!Lm::inst()->csrf->validateCsrfToken()) {
                 Web::refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
             }
@@ -59,35 +58,4 @@ class Lm extends Singleton
     {
         $this->controller = $controller;
     }
-
-    /**
-     * Запись логов.
-     *
-     * @param string|\Exception $message Сообщение или объект исключения.
-     * @return string Текст, подготовленный для сохранения в лог.
-     */
-    /*public function log($message)
-    {
-        $errorStr = '';
-
-        if (is_string($message)) {
-            $errorStr .= $message;
-        } elseif ($message instanceof \Exception) {
-            $errorStr .= sprintf(
-                "Произошла ошибка.\nCode: %s.\nMessage: %s.\nFile: %s.\nLine: %s.\nTrace: %s\n",
-                $message->getCode(),
-                $message->getMessage(),
-                $message->getFile(),
-                $message->getLine(),
-                $message->getTraceAsString()
-            );
-        } else {
-            $errorStr .= 'Неизвестная ошибка в функции логирования.';
-        }
-
-        $msg = date(DATE_RFC822) . ":\n" . $errorStr . "\n-------------------------------------------\n\n";
-        error_log($msg);
-
-        return $errorStr;
-    }*/
 }
