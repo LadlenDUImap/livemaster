@@ -19,9 +19,21 @@ class CityTest extends TestCase
         $this->city = null;
     }
 
-    public function testCorrectProperty(): void
+    /**
+     * @dataProvider correctPropertyDataProvider
+     */
+    public function testCorrectProperty($name, $value, $expected): void
     {
-        $res = $this->city->correctProperty('name', '   34    123 ');
-        $this->assertEquals('34 123', $res);
+        $result = $this->city->correctProperty($name, $value);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function correctPropertyDataProvider()
+    {
+        return [
+            ['name', '   123     78 ', '123 78'],
+            ['dummy', '   123     78 ', '123     78'],
+            ['name', 'true_value', false],
+        ];
     }
 }
