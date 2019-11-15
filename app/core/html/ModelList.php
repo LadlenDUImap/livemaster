@@ -161,6 +161,10 @@ CSS
     
     $(templateElements["delete-button"]["selector"]).click(function() {
         cl('delete');
+        if (lastModifiedInfo) {
+            cl('delete discarded');
+            return false;
+        }
         var formElem = $(this).closest('form');
         deleteElement(formElem);
         return false;
