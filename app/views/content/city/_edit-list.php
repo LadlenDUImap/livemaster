@@ -20,34 +20,34 @@ $cityList = new ModelList([
     ];
     $city = new \app\models\db\City();
     $form = new \app\core\html\Form();
-    echo $form->begin(0)
-        . '<section class="row item">'
-        . '<div class="col">' . $form->textInput($city, 'name', $rowParams) . '</div>'
-        . '<div class="col">'
+    echo $form->begin(0, ['class' => 'div-table-row item'])
+        //. '<section class="div-table-row item">'
+        . '<div class="div-table-col">' . $form->textInput($city, 'name', $rowParams) . '</div>'
+        . '<div class="div-table-col">'
         . '<button class="ml-new-save-button">Сохранить</button><button class="ml-new-save-cancel-button">Отменить</button>'
         . '</div>'
-        . '</section>'
+        //. '</section>'
         . $form->end();
     ?></div>
 
 <header><h3 class="header">Список городов</h3></header>
 
-<div class="divTable">
-    <div class="divTableHeading">
-        <div class="row">
-            <div class="divTableHead">Название</div>
-            <div class="divTableHead">&nbsp;</div>
+<div class="div-table">
+    <div class="div-table-heading">
+        <div class="div-table-row">
+            <div class="div-table-head">Название</div>
+            <div class="div-table-head">&nbsp;</div>
         </div>
     </div>
 
-    <div class="divTableBody" id="ml-new-element-container">
+    <div class="div-table-body" id="ml-new-element-container">
         <?php
         if ($values['cities']) {
             foreach ($values['cities'] as $city) {
                 echo $this->render(__DIR__ . '/_row.php', compact('cityList', 'city'));
             }
         } else {
-            echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет городов</div></div>';
+            echo '<div class="div-table-row item" style="padding: 10px;font-weight: bold"><div class="col">Нет городов</div></div>';
         }
         ?>
     </div>

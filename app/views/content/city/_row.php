@@ -9,8 +9,8 @@ $rowParams = [
 ];
 
 echo //'<section class="row item">'
-    $values['cityList']->beginElement($values['city']->getId(), ['class' => 'row item'])
-    . '<div class="col">' . $values['cityList']->textInput($values['city'], 'name', $rowParams) . '</div>'
-    . '<div class="col"><button class="ml-delete-button">Удалить</button></div>'
+    $values['cityList']->beginElement($values['city']->getId(), ['class' => 'div-table-row item'])
+    . '<div class="div-table-col">' . $values['cityList']->textInput($values['city'], 'name', $rowParams) . '</div>'
+    . '<div class="div-table-col"><button class="ml-delete-button">Удалить</button></div>'
     . $values['cityList']->endElement();
 //. '</section>';

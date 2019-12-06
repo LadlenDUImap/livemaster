@@ -29,7 +29,7 @@ class ModelList
             /*'save-button' => [
                 'selector' => '.ml-new-save-button',
             ],*/
-            // кнопка сохранения нового элемента после заполнения
+            // кнопка отмены сохранения нового элемента после заполнения
             'save-cancel-button' => [
                 'selector' => '.ml-new-save-cancel-button',
             ],
@@ -152,7 +152,8 @@ CSS
         if (elemContainer.data("newElementProcessing") != "in-process") {
             elemContainer.data("newElementProcessing", "in-process");
             var html = $(templateElements["new"]["template-container"]["selector"]).html();
-            elemContainer.append('<div class="ml-new-element-wrapper">' + html + '<\/div>');
+            //elemContainer.append('<div class="ml-new-element-wrapper">' + html + '<\/div>');
+            elemContainer.append(html);
             addNewElementProcessStart();
         } else {
             alert("Новый элемент уже в процессе создания.");
@@ -172,12 +173,14 @@ CSS
     
     function addNewElementProcessStart() {
         $(templateElements["new"]["save-cancel-button"]["selector"]).unbind().click(function() {
-            $(this).closest(".ml-new-element-wrapper").remove();
+            //$(this).closest(".ml-new-element-wrapper").remove();
+            $(this).closest("form").remove();
             templateElements["new"]["element-container"]["elem"].data("newElementProcessing", "no-process");
             return false;
         });
         
-        $(".ml-new-element-wrapper form").unbind().submit(function() {
+        //$(".ml-new-element-wrapper form").unbind().submit(function() {
+        $("form.lm_form_0").unbind().submit(function() {
             var formElem = $(this);
             $.post(actions["create"], formElem.serialize(), function(data) {
                 if (data) {
