@@ -34,7 +34,7 @@ $cityList = new ModelList([
 
 <div class="div-table">
     <div class="div-table-heading">
-        <div class="div-table-row">
+        <div class="div-table-row head">
             <div class="div-table-head">Название</div>
             <div class="div-table-head">&nbsp;</div>
         </div>

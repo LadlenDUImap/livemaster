@@ -57,7 +57,7 @@ table, div {
     width:30%;
 }*/
 
-.div-table-col {
+.div-table-col, .div-table-head {
     text-align: center;
     padding: 5px;
 }
@@ -126,7 +126,6 @@ table, div {
 }
 
 /* //NAVIGATION */
-
 
 /* DivTable.com */
 .div-table {
