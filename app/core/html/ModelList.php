@@ -288,11 +288,11 @@ JS
         );
     }
 
-    public function beginElement($id)
+    public function beginElement($id, $props = [])
     {
         $this->_currentForm = new Form();
 
-        return $this->_currentForm->begin($id);
+        return $this->_currentForm->begin($id, $props);
     }
 
     public function endElement()

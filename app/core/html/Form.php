@@ -13,10 +13,12 @@ class Form
     //protected static $id = 1;
 
 
-    public function begin($id)
+    public function begin($id, $props = [])
     {
+        $classAdditional = isset($props['class']) ? (' ' . $props['class']) : '';
+
         //$id = $id ?? self::$id;
-        return '<form class="lm_form_' . $id . '">'
+        return '<form class="lm_form_' . $id . $classAdditional . '">'
             . '<input type="hidden" name="lm_form_id" value="' . Safe::htmlEncode($id) . '" />'
             . '<input type="hidden" name="' . Lm::inst()->csrf->getCsrfTokenName() . '" value="' . Safe::htmlEncode(Lm::inst()->csrf->getCsrfToken()) . '" />';
     }

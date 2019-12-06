@@ -33,7 +33,7 @@ table {
     background-color: black;
 }
 
-.col {
+/*.col {
     position: relative;
     width: 100%;
 }
@@ -45,6 +45,17 @@ table {
     flex-grow: 1;
     max-width: 100%;
 }
+
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.row {
+    width:30%;
+}*/
 
 .col {
     text-align: center;
@@ -72,15 +83,6 @@ table {
 
 .ml-overlap-edit-element:hover {
     background-color: grey;
-}
-
-.row {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    /*margin-right: -15px;
-    margin-left: -15px;*/
 }
 
 /*@media only screen and (max-width: 320px) {*/
@@ -123,3 +125,35 @@ table {
     background-color: #4CAF50;
 }
 /* //NAVIGATION */
+
+
+/* DivTable.com */
+.divTable{
+    display: table;
+    width: 100%;
+}
+.row {
+    display: table-row;
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-header-group;
+}
+.col, .divTableHead {
+    border: 1px solid #999999;
+    display: table-cell;
+    padding: 3px 10px;
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-header-group;
+    font-weight: bold;
+}
+.divTableFoot {
+    background-color: #EEE;
+    display: table-footer-group;
+    font-weight: bold;
+}
+.divTableBody {
+    display: table-row-group;
+}

@@ -32,21 +32,25 @@ $cityList = new ModelList([
 
 <header><h3 class="header">Список городов</h3></header>
 
-<div class="row head">
-    <div class="col">Название</div>
-    <div class="col">&nbsp;</div>
-</div>
+<div class="divTable">
+    <div class="divTableHeading">
+        <div class="row">
+            <div class="divTableHead">Название</div>
+            <div class="divTableHead">&nbsp;</div>
+        </div>
+    </div>
 
-<div class="body" id="ml-new-element-container">
-    <?php
-    if ($values['cities']) {
-        foreach ($values['cities'] as $city) {
-            echo $this->render(__DIR__ . '/_row.php', compact('cityList', 'city'));
+    <div class="divTableBody" id="ml-new-element-container">
+        <?php
+        if ($values['cities']) {
+            foreach ($values['cities'] as $city) {
+                echo $this->render(__DIR__ . '/_row.php', compact('cityList', 'city'));
+            }
+        } else {
+            echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет городов</div></div>';
         }
-    } else {
-        echo '<div class="row item" style="padding: 10px;font-weight: bold"><div class="col">Нет городов</div></div>';
-    }
-    ?>
+        ?>
+    </div>
 </div>
 
 <button id="btn-add-user" class="ml-new-add-button">Добавить город</button>
