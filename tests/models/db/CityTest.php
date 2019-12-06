@@ -3,6 +3,10 @@
 use PHPUnit\Framework\TestCase;
 use app\models\db\City;
 
+/**
+ * @requires PHP >= 7.1
+ * 
+ */
 class CityTest extends TestCase
 {
     /** @var  City */
@@ -16,7 +20,7 @@ class CityTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->city = null;
+        unset($this->city);
     }
 
     /**
@@ -25,8 +29,13 @@ class CityTest extends TestCase
     public function testCorrectProperty($name, $value, $expected): void
     {
         $result = $this->city->correctProperty($name, $value);
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
+
+    /*public function testValidateProperty()
+    {
+
+    }*/
 
     public function correctPropertyDataProvider()
     {
