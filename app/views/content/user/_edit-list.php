@@ -44,7 +44,7 @@ $userList = new ModelList([
         . $form->end();
     ?></div>
 
-<header><h3 class="header">Список пользователей</h3></header>
+<header><h3 class="header">Список пользователей<span class="users-info-str"></span></h3></header>
 
 <div class="div-table">
     <div class="div-table-heading">
@@ -63,7 +63,13 @@ $userList = new ModelList([
                 echo $this->render(__DIR__ . '/_row.php', compact('userList', 'user', 'cities'));
             }
         } else {
-            echo '<div class="div-table-row item" style="padding: 10px;font-weight: bold"><div class="col">Нет пользователей</div></div>';
+            //echo '<div class="div-table-row item" style="padding: 10px;font-weight: bold"><div class="col">Нет пользователей</div></div>';
+            $this->addJsCode(<<<JS
+            (function() {
+              $(".users-info-str").text(' - нет пользователей');
+            })();
+JS
+            );
         }
         ?>
     </div>

@@ -30,7 +30,7 @@ $cityList = new ModelList([
         . $form->end();
     ?></div>
 
-<header><h3 class="header">Список городов</h3></header>
+<header><h3 class="header">Список городов<span class="cities-info-str"></span></h3></header>
 
 <div class="div-table">
     <div class="div-table-heading">
@@ -47,7 +47,13 @@ $cityList = new ModelList([
                 echo $this->render(__DIR__ . '/_row.php', compact('cityList', 'city'));
             }
         } else {
-            echo '<div class="div-table-row item" style="padding: 10px;font-weight: bold"><div class="col">Нет городов</div></div>';
+            //echo '<div class="div-table-row item" style="padding: 10px;font-weight: bold"><div class="col">Нет городов</div></div>';
+            $this->addJsCode(<<<JS
+            (function() {
+              $(".cities-info-str").text(' - нет городов');
+            })();
+JS
+            );
         }
         ?>
     </div>
