@@ -67,12 +67,12 @@ class ModelList
     left: 0;
     width: 100%;
     height: 100%;
-    background: transparent;
-    /*background-color: #000;
-    filter:alpha(opacity=50);
-    -moz-opacity:0.5;
-    -khtml-opacity: 0.5;
-    opacity: 0.5;*/
+    /*background: transparent;*/
+    background-color: #000;
+    filter:alpha(opacity=10);
+    -moz-opacity:0.1;
+    -khtml-opacity: 0.1;
+    opacity: 0.1;
     z-index: 10000;
 }
 
@@ -80,6 +80,12 @@ class ModelList
     z-index: 10001;
     position: relative;
 }
+
+/*
+#dialog, .ui-front {
+    z-index: 10002 !important;
+}*/
+
 CSS
         );
 
@@ -218,6 +224,7 @@ CSS
             lastModifiedInfo = false;
         }
         $("#overlay").remove();
+        $(".error-subtext").remove();
     }
     
     function updateElement(elem) {
@@ -234,7 +241,7 @@ CSS
                 if (data.state == "success") {
                    resetLastModified();
                 } else if (data.state == "error") {
-                    showErrorMessages(data.data["error-messages"]);
+                    showErrorMessagesSubtext(data.data["error-messages"], elem);
                     elem.focus();
                 }
                 correctAttributes(formElem, data);
@@ -249,8 +256,21 @@ CSS
         if (msg.length) {
             alert(msg);
         } else {
-            alert('Неизвестная ошибка');
+            alert('Неизвестная ошибка. Повторите пожалуйста позже и/или перезагрузите страницу.');
         }
+    }
+    
+    function showErrorMessagesSubtext(messages, elem) {
+        $(".error-subtext").remove();
+        var errHtml = '<div class="error-subtext">';
+        var msg = Utils.assocArrayJoin(messages, "<br>");
+        if (msg.length) {
+            errHtml += msg;
+        } else {
+            errHtml += 'Неизвестная ошибка.<br>Повторите пожалуйста позже и/или перезагрузите страницу.';
+        }
+        errHtml += '<\/div>';
+        elem.after(errHtml);
     }
     
     function deleteElement(formElem) {

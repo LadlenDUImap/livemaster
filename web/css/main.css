@@ -96,6 +96,12 @@ table, div {
     margin: 1em 0;
 }
 
+.error-subtext {
+    color: red;
+    font-size: smaller;
+    margin-top: 5px;
+}
+
 /* NAVIGATION */
 .nav ul {
     list-style-type: none;

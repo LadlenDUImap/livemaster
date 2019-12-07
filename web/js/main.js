@@ -38,10 +38,14 @@ $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
     }
 });
 
+/*window.alert = function (message) {
+ $("#dialog-info").text(message);
+ $("#dialog").dialog();
+ };*/
+
 /*$(document).ajaxComplete(function (event, xhr, settings) {
-    alert('4444');
-    // if (settings.url == "ajax/test.html") {
-    //     $(".log").text("Triggered ajaxSuccess handler. The Ajax response was: " +
-    //         xhr.responseText);
-    // }
-});*/
+ // if (settings.url == "ajax/test.html") {
+ //     $(".log").text("Triggered ajaxSuccess handler. The Ajax response was: " +
+ //         xhr.responseText);
+ // }
+ });*/
