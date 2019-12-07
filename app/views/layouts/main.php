@@ -15,6 +15,7 @@ use app\core\Url;
 
     <title><?= $this->values->title ?></title>
 
+    <!--<link href="<?/*= Url::to('/css/jquery-ui.css') */?>" rel="stylesheet" media="all"/>-->
     <link href="<?= Url::to('/css/main.css') ?>" rel="stylesheet" media="all"/>
 
     <?= $this->css ?>
@@ -42,8 +43,13 @@ use app\core\Url;
     <?= $values->raw('content') ?>
 </div>
 
+<!--<div id="dialog" title="Инфо:">
+    <p id="dialog-info"></p>
+</div>-->
+
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
 <script src="<?= Url::to('/js/jquery.min.js') ?>"></script>
+<!--<script src="<?/*= Url::to('/js/jquery-ui.js') */?>"></script>-->
 <script src="<?= Url::to('/js/main.js') ?>"></script>
 
 <?= $this->js ?>
