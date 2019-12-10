@@ -164,7 +164,6 @@ abstract class DatabaseRecord
         }
     }
 
-
     /**
      * Коррекция значения, например, удаление не нужных пробелов по краям строки.
      *
@@ -214,7 +213,7 @@ abstract class DatabaseRecord
      * @param array $properties (См. вверху)
      * @return array список ошибок или пустой массив если ошибок не найдено
      */
-    public function validatePropertyBulk(array $properties)
+    public function validatePropertyBulk(array $properties): array
     {
         $errorMessages = [];
 
@@ -233,7 +232,7 @@ abstract class DatabaseRecord
         return $this->{static::$_idName};
     }
 
-    public function setId($value)
+    public function setId($value): void
     {
         $this->setProp(static::$_idName, $value);
     }
@@ -246,12 +245,12 @@ abstract class DatabaseRecord
         return $rows;
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         return $this->_isNew;
     }
 
-    public static function getAll()
+    public static function getAll(): array
     {
         $items = [];
 
@@ -267,7 +266,7 @@ abstract class DatabaseRecord
         return $items;
     }
 
-    public function save()
+    public function save(): bool
     {
         $result = false;
 
@@ -284,7 +283,7 @@ abstract class DatabaseRecord
         return $result;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $result = false;
 

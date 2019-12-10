@@ -108,7 +108,7 @@ class User extends DatabaseRecord
         return false;
     }
 
-    public function validatePropertyBulk(array $properties)
+    public function validatePropertyBulk(array $properties): array
     {
         if (!$errorMessages = parent::validatePropertyBulk($properties)) {
             if (Lm::$app->db->select(static::$_tableName, $properties)) {

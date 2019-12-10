@@ -51,7 +51,7 @@ class City extends DatabaseRecord
         return false;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         // Проверим нет ли связи с другими таблицами
         $this->setErrors(null);
