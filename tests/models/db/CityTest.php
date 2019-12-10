@@ -38,6 +38,10 @@ class CityTest extends TestCase
     {
         $result = self::$city->validateProperty('name', 'Правильное Название');
         $this->assertSame(false, $result);
+
+        $result = self::$city->validateProperty('name', '');
+        $this->assertTrue(is_string($result), 'Тест пустой строки. Получен тип "' . gettype($result) . '" вместо строки.');
+        echo "\nТест пустой строки выдал '$result'\n";
     }
 
     public function correctPropertyDataProvider()

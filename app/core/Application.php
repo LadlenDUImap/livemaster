@@ -39,12 +39,11 @@ class Application
     {
         $this->config = $config;
         Lm::$app = $this;
+        DiConfiguration::set($this, $this->config['components']);
     }
 
     public function run()
     {
-        DiConfiguration::set($this, $this->config['components']);
-
         try {
             if (!$this->csrf->validateCsrfToken()) {
                 $this->web->refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
