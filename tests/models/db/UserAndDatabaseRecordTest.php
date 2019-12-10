@@ -11,7 +11,7 @@ use app\models\db\City;
  * @requires PHP >= 7.1
  *
  */
-class UserTest extends TestCase
+class UserAndDatabaseRecordTest extends TestCase
 {
     /** @var  User */
     private static $user;
@@ -20,9 +20,6 @@ class UserTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         new Application(LM_GLOBAL_CONFIG);
-
-        Lm::$app->db->delete(User::tableName(), []);
-        Lm::$app->db->delete(City::tableName(), []);
 
         self::$user = new User();
     }
@@ -41,8 +38,27 @@ class UserTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function testCRUD()
+    {
+        Lm::$app->db->delete(User::tableName(), []);
+        Lm::$app->db->delete(City::tableName(), []);
+
+        $result =  Lm::$app->db->select(User::tableName());
+        $this->assertSame([], $result);
+
+        $user = new User;
+        $this->assertTrue($user->isNew());
+
+        //$user->name = ;
+
+
+    }
+
     public function testValidateProperty()
     {
+        Lm::$app->db->delete(User::tableName(), []);
+        Lm::$app->db->delete(City::tableName(), []);
+
         // Имя
 
         $result = self::$user->validateProperty('name', 'Правильное Название');
@@ -84,9 +100,28 @@ class UserTest extends TestCase
         $city = new City();
         $city->name = 'test';
         $city->save();
+        $cityId = $city->getId();
 
-        $result = self::$user->validateProperty('city_id', $city->getId());
+        $result = self::$user->validateProperty('city_id', $cityId);
         $this->assertFalse($result, 'Тест наличия города. Получен тип "' . gettype($result) . '"');
+
+
+        // Аналогичный пользователь
+
+        $user = new User();
+        $user->name = 'пользователь_1';
+        $user->age = 20;
+        $user->city_id = $cityId;
+        $user->save();
+
+        $result = self::$user->validatePropertyBulk([
+            'name' => $user->name,
+            'age' => $user->age,
+            'city_id' => $user->city_id,
+        ]);
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result, 'Тест аналогичного пользователя. Получен пустой тип вместо массива с ошибкой.');
+        echo "\nТест аналогичного пользователя выдал " . print_r($result) . "\n";
     }
 
     public function correctPropertyDataProvider()
@@ -98,10 +133,4 @@ class UserTest extends TestCase
             ['age', '   в  оз    ра ст     ', 'в  оз    ра ст'],
         ];
     }
-
-    public function testCRUD()
-    {
-        //$result = self::$user->
-    }
-
 }
