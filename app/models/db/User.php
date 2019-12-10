@@ -12,15 +12,6 @@ class User extends DatabaseRecord
     protected $_attributes = ['id', 'name', 'age', 'city_id'];
 
 
-    /*public function setProp($name, $value)
-    {
-        if ($name === 'city_id' && empty($value)) {
-            $value = null;
-        }
-
-        parent::setProp($name, $value);
-    }*/
-
     protected function prepareProperties(array $properties): array
     {
         if (isset($properties['city_id']) && empty($properties['city_id'])) {

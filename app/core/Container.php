@@ -3,10 +3,13 @@
 namespace app\core;
 
 /**
- * Container хранит переменные, возвращает Container::ReturnIfNotExists если переменная не установлена.
- * Применяется при герерации html шаблонов.
+ * Class Container
  *
- * @package core
+ * Применяется при герерации html шаблонов.
+ * Хранит переменные, при возвращении строки возвращает html-закодиророванную строку.
+ * Если переменная не установлена - возвращает Container::ReturnIfNotExists
+ *
+ * @package app\core
  */
 class Container implements \Iterator, \ArrayAccess, \Countable
 {
@@ -15,6 +18,7 @@ class Container implements \Iterator, \ArrayAccess, \Countable
 
     /** Значение по умолчанию при преобразовании в строку (преобразуется в строку если переменная не установлена). */
     const ReturnIfNotExists = '';
+
 
     public function __construct($objects = [])
     {
@@ -28,8 +32,7 @@ class Container implements \Iterator, \ArrayAccess, \Countable
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->objects))
-        {
+        if (array_key_exists($name, $this->objects)) {
             return \app\core\html\Safe::htmlEncode($this->objects[$name]);
         }
         // Пустой контейнер - необходим чтобы не было ошибки когда объект ссылается на другой объект/значение.
@@ -45,25 +48,20 @@ class Container implements \Iterator, \ArrayAccess, \Countable
      */
     public function __set($name, $val)
     {
-        if (is_array($val))
-        {
+        if (is_array($val)) {
             $this->objects[$name] = new static;
-            foreach ($val as $k => $v)
-            {
+            foreach ($val as $k => $v) {
                 $this->objects[$name]->{$k} = new static;
                 $this->objects[$name]->{$k} = $v;
             }
-        }
-        else
-        {
+        } else {
             $this->objects[$name] = $val;
         }
     }
 
     public function raw($name)
     {
-        if (array_key_exists($name, $this->objects))
-        {
+        if (array_key_exists($name, $this->objects)) {
             return $this->objects[$name];
         }
         // Пустой контейнер - необходим чтобы не было ошибки когда объект ссылается на другой объект/значение.
@@ -86,7 +84,7 @@ class Container implements \Iterator, \ArrayAccess, \Countable
      *
      */
 
-    public function  current()
+    public function current()
     {
         return current($this->objects);
     }
@@ -96,7 +94,7 @@ class Container implements \Iterator, \ArrayAccess, \Countable
         return key($this->objects);
     }
 
-    public function  next()
+    public function next()
     {
         return next($this->objects);
     }
@@ -131,12 +129,9 @@ class Container implements \Iterator, \ArrayAccess, \Countable
 
     public function offsetSet($offset, $value)
     {
-        if (is_null($offset))
-        {
+        if (is_null($offset)) {
             $this->objects[] = $value;
-        }
-        else
-        {
+        } else {
             $this->objects[$offset] = $value;
         }
     }

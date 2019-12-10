@@ -2,14 +2,12 @@
 
 namespace app\core;
 
-use app\base\Component;
-
 /**
  * Csrf служит для защиты от CSRF атак.
  *
  * @package core
  */
-class Csrf extends Component
+class Csrf extends \app\base\Component
 {
     public $token_name;
 
@@ -21,6 +19,7 @@ class Csrf extends Component
 
     /** @var array методы при которых НЕ нужна проверка на CSRF */
     protected $requestMethodsAllowed = ['GET'];
+
 
     public function getCsrfTokenName()
     {

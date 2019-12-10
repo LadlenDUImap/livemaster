@@ -31,6 +31,9 @@ class Application
     /** @var  Web */
     public $web;
 
+    /** @var  Url */
+    public $url;
+
 
     public function __construct(array $config)
     {

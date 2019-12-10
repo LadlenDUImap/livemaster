@@ -17,6 +17,7 @@ abstract class Controller
     /** @var View используется для генерации кода */
     protected $view;
 
+
     /**
      * Действие по умолчанию.
      */

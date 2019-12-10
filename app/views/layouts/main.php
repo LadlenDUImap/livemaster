@@ -1,6 +1,6 @@
 <?php
 
-use app\core\Url;
+use app\core\Lm;
 
 /* @var $this app\core\View */
 /* @var $values app\core\Container */
@@ -15,8 +15,8 @@ use app\core\Url;
 
     <title><?= $this->values->title ?></title>
 
-    <!--<link href="<?/*= Url::to('/css/jquery-ui.css') */?>" rel="stylesheet" media="all"/>-->
-    <link href="<?= Url::to('/css/main.css') ?>" rel="stylesheet" media="all"/>
+    <!--<link href="<?/*= Lm::$app->url->to('/css/jquery-ui.css') */?>" rel="stylesheet" media="all"/>-->
+    <link href="<?= Lm::$app->url->to('/css/main.css') ?>" rel="stylesheet" media="all"/>
 
     <?= $this->css ?>
 
@@ -35,8 +35,8 @@ use app\core\Url;
 <div class="container">
     <nav class="nav">
         <ul>
-            <li><a href="<?= Url::to('/') ?>">Пользователи</a></li>
-            <li><a href="<?= Url::to('/city/') ?>">Города</a></li>
+            <li><a href="<?= Lm::$app->url->to('/') ?>">Пользователи</a></li>
+            <li><a href="<?= Lm::$app->url->to('/city/') ?>">Города</a></li>
         </ul>
     </nav>
 
@@ -48,9 +48,9 @@ use app\core\Url;
 </div>-->
 
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
-<script src="<?= Url::to('/js/jquery.min.js') ?>"></script>
-<!--<script src="<?/*= Url::to('/js/jquery-ui.js') */?>"></script>-->
-<script src="<?= Url::to('/js/main.js') ?>"></script>
+<script src="<?= Lm::$app->url->to('/js/jquery.min.js') ?>"></script>
+<!--<script src="<?/*= Lm::$app->url->to('/js/jquery-ui.js') */?>"></script>-->
+<script src="<?= Lm::$app->url->to('/js/main.js') ?>"></script>
 
 <?= $this->js ?>
 

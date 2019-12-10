@@ -8,6 +8,7 @@ class Log extends Component
 {
     public $log_file_prefix;
 
+
     public function set(string $message, $type = 'info')
     {
         $str = '';

@@ -1,15 +1,15 @@
 <?php
 
-use app\core\Url;
+use \app\core\Lm;
 use app\core\html\ModelList;
 
 /* @var $this app\core\View */
 /* @var $values array */
 
 $cityList = new ModelList([
-    'create' => Url::to('/city/create'),
-    'delete' => Url::to('/city/delete'),
-    'update' => Url::to('/city/update'),
+    'create' => Lm::$app->url->to('/city/create'),
+    'delete' => Lm::$app->url->to('/city/delete'),
+    'update' => Lm::$app->url->to('/city/update'),
 ]);
 
 ?>

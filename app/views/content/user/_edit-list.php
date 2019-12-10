@@ -1,6 +1,6 @@
 <?php
 
-use app\core\Url;
+use app\core\Lm;
 use app\core\html\ModelList;
 
 /* @var $this app\core\View */
@@ -19,9 +19,9 @@ foreach ($values['cities'] as $city) {
 }
 
 $userList = new ModelList([
-    'create' => Url::to('/user/create'),
-    'delete' => Url::to('/user/delete'),
-    'update' => Url::to('/user/update'),
+    'create' => Lm::$app->url->to('/user/create'),
+    'delete' => Lm::$app->url->to('/user/delete'),
+    'update' => Lm::$app->url->to('/user/update'),
 ]);
 
 ?>

@@ -2,28 +2,29 @@
 
 namespace app\core;
 
-class Url
+class Url extends \app\base\Component
 {
     /** @var  string URL путь к корневой директории (слеш на конце) */
-    protected static $webRootPath;
+    protected $webRootPath;
 
 
-    public static function getWebRootPath(): string
+    public function __construct()
     {
-        if (!self::$webRootPath) {
-            self::$webRootPath = str_replace('web/index.php', '', $_SERVER['SCRIPT_NAME']);
-        }
-
-        return self::$webRootPath;
+        $this->webRootPath = str_replace('web/index.php', '', $_SERVER['SCRIPT_NAME']);
     }
 
-    public static function to(string $path): string
+    public function getWebRootPath(): string
+    {
+        return $this->webRootPath;
+    }
+
+    public function to(string $path): string
     {
         $path = trim($path);
 
         if (isset($path[0]) && $path[0] == '/') {
             if (!isset($path[1]) || $path[1] != '/') {
-                return self::getWebRootPath() . substr($path, 1);
+                return $this->getWebRootPath() . substr($path, 1);
             }
         }
 

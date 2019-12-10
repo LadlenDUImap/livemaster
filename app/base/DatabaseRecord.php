@@ -89,27 +89,12 @@ abstract class DatabaseRecord
         return $this->_errors;
     }
 
-    //$this->_attributes - это только те атрибуты, которые можно устанавливать
-    /*public function getAttributes()
-    {
-        return $this->_attributes;
-    }*/
-
     /**
      * @return array [<название> => <значение>]
      */
     public function getProperties()
     {
         return $this->_setAttributes;
-        /*$properties = [];
-
-        foreach ((new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC) as $prop) {
-            if (!$prop->isStatic()) {
-                $properties[$prop->getName()] = $this->{$prop->getName()};
-            }
-        }
-
-        return $properties;*/
     }
 
     protected function setProperties(array $properties)
@@ -164,15 +149,6 @@ abstract class DatabaseRecord
     {
         return $properties;
     }
-
-    /*public function getAttr($name)
-    {
-        if (!key_exists($name, $this->_attributes)) {
-            throw new \Exception("Не существует значение `$name`");
-        }
-
-        return $this->_attributes[$name];
-    }*/
 
     public function setProp($name, $value)
     {

@@ -17,8 +17,9 @@ $config = [
         ],
         'web' => [
             'class' => 'app\core\Web',
-            'token_name' => '_csrf',
-            'token_salt' => 'uIlmkI873d+)$7',
+        ],
+        'url' => [
+            'class' => 'app\core\Url',
         ],
     ],
     'params' => $params,
