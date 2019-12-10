@@ -74,7 +74,7 @@ class Pdo extends \app\base\Component implements IDatabase
 
     public function select(string $tableName, array $condition = [], array $toSelect = ['*']): ?array
     {
-        $result = false;
+        $result = null;
 
         $tableName = $this->makeNameSafe($tableName);
 
