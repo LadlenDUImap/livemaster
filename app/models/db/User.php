@@ -5,6 +5,12 @@ namespace app\models\db;
 use app\base\DatabaseRecord;
 use app\core\Lm;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property int $age
+ * @property int $city_id
+ */
 class User extends DatabaseRecord
 {
     protected static $_tableName = 'users';
@@ -108,6 +114,12 @@ class User extends DatabaseRecord
         return false;
     }
 
+    /**
+     * Переопределим для проверки наличия такого же пользователя.
+     *
+     * @param array $properties
+     * @return array
+     */
     public function validatePropertyBulk(array $properties): array
     {
         if (!$errorMessages = parent::validatePropertyBulk($properties)) {

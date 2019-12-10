@@ -5,6 +5,10 @@ namespace app\models\db;
 use app\base\DatabaseRecord;
 use app\core\Lm;
 
+/**
+ * @property int $id
+ * @property string $name
+ */
 class City extends DatabaseRecord
 {
     protected static $_tableName = 'cities';
