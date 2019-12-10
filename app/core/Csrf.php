@@ -47,13 +47,13 @@ class Csrf extends Component
 
     protected function storeCsrfToken($csrfToken)
     {
-        Web::startSession();
+        Lm::$app->web->startSession();
         $_SESSION['csrf']['token'] = $csrfToken;
     }
 
     protected function loadCsrfToken()
     {
-        Web::startSession();
+        Lm::$app->web->startSession();
         return (!empty($_SESSION['csrf']['token'])) ? $_SESSION['csrf']['token'] : null;
     }
 

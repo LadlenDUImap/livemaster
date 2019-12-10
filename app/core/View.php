@@ -13,6 +13,7 @@ class View extends \app\base\FixedProps
     /** @var \app\core\Container дополнительные (глобальные) значения. */
     public $values;
 
+
     public function __construct()
     {
         $this->values = new Container;

@@ -3,6 +3,7 @@
 namespace app\controllers\city;
 
 use app\core\html\Form;
+use app\core\Lm;
 use app\core\Web;
 use app\helpers\HtmlHelper;
 use app\models\db\City;
@@ -33,7 +34,7 @@ class Controller extends \app\base\Controller
 
         $data['corrected-attributes'] = HtmlHelper::keys2HtmlModelName($model, $model->getCorrectedAttributes());
 
-        Web::sendJsonResponse($state, $data);
+        Lm::$app->web->sendJsonResponse($state, $data);
     }
 
     public function actionCreate()
@@ -52,7 +53,7 @@ class Controller extends \app\base\Controller
 
         $data['corrected-attributes'] = HtmlHelper::keys2HtmlModelName($model, $model->getCorrectedAttributes());
 
-        Web::sendJsonResponse($state, $data);
+        Lm::$app->web->sendJsonResponse($state, $data);
     }
 
     public function actionDelete()
@@ -80,6 +81,6 @@ class Controller extends \app\base\Controller
             ];
         }
 
-        Web::sendJsonResponse($state, $data);
+        Lm::$app->web->sendJsonResponse($state, $data);
     }
 }

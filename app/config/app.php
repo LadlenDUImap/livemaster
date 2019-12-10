@@ -15,6 +15,11 @@ $config = [
             'token_name' => '_csrf',
             'token_salt' => 'uIlmkI873d+)$7',
         ],
+        'web' => [
+            'class' => 'app\core\Web',
+            'token_name' => '_csrf',
+            'token_salt' => 'uIlmkI873d+)$7',
+        ],
     ],
     'params' => $params,
 ];

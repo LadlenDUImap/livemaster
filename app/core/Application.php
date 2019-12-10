@@ -3,6 +3,7 @@
 namespace app\core;
 
 use app\base\Controller;
+use app\base\IDatabase;
 
 /**
  * Class Application
@@ -18,6 +19,19 @@ class Application
     protected $config;
 
 
+    /** @var  IDatabase */
+    public $db;
+
+    /** @var  Csrf */
+    public $csrf;
+
+    /** @var  Log */
+    public $log;
+
+    /** @var  Web */
+    public $web;
+
+
     public function __construct(array $config)
     {
         $this->config = $config;
@@ -29,17 +43,17 @@ class Application
         DiConfiguration::set($this, $this->config['components']);
 
         try {
-            if (!Lm::$app->csrf->validateCsrfToken()) {
-                Web::refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
+            if (!$this->csrf->validateCsrfToken()) {
+                $this->web->refreshWithMessage('Неверный CSRF токен. Возможно вышла сессия, попробуйте перезагрузить страницу.', 'no-job-show-message');
             }
 
             (new Router)->run();
         } catch (\Exception $e) {
             if (LM_DEBUG) {
-                $displayMsg = Lm::$app->log->set($e, 'error');
+                $displayMsg = $this->log->set($e, 'error');
             } else {
                 $msg = sprintf(_('Ошибка на сервере, код %s. Пожалуйста сообщите администрации.'), $e->getCode());
-                $displayMsg = Lm::$app->log->set($msg, 'error');
+                $displayMsg = $this->log->set($msg, 'error');
             }
             echo $displayMsg;
         }
