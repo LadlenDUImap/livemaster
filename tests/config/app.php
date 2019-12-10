@@ -8,7 +8,7 @@ $config = [
         'db' => $db,
         'log' => [
             'class' => 'app\core\Log',
-            'log_file_prefix' => LM_TEST_DIR . 'runtime/log/php-livemaster',
+            'log_file_prefix' => APP_DIR . 'runtime/log/php-livemaster',
         ],
         'csrf' => [
             'class' => 'app\core\Csrf',

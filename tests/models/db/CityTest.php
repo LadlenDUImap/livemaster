@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use app\models\db\City;
+use app\core\Application;
 
 /**
  * @requires PHP >= 7.1
@@ -15,7 +16,7 @@ class CityTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        (new app\core\Application(LM_GLOBAL_CONFIG))->run();
+        new Application(LM_GLOBAL_CONFIG);
         self::$city = new City();
     }
 
