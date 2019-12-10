@@ -1,6 +1,6 @@
 <?php
 
-namespace app\base;
+//namespace app\base;
 
 /**
  * Singleton помогает превратить класс в singleton.

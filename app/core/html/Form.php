@@ -20,7 +20,7 @@ class Form
         //$id = $id ?? self::$id;
         return '<form class="lm_form_' . $id . $classAdditional . '">'
             . '<input type="hidden" name="lm_form_id" value="' . Safe::htmlEncode($id) . '" />'
-            . '<input type="hidden" name="' . Lm::inst()->csrf->getCsrfTokenName() . '" value="' . Safe::htmlEncode(Lm::inst()->csrf->getCsrfToken()) . '" />';
+            . '<input type="hidden" name="' . Lm::$app->csrf->getCsrfTokenName() . '" value="' . Safe::htmlEncode(Lm::$app->csrf->getCsrfToken()) . '" />';
     }
 
     public function end()

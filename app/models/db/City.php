@@ -44,7 +44,7 @@ class City extends DatabaseRecord
         if ($nameLength > 30) {
             return 'Название города НЕ должно быть больше 30 символов.';
         }
-        if (Lm::inst()->db->select(static::$_tableName, ['name' => $value])) {
+        if (Lm::$app->db->select(static::$_tableName, ['name' => $value])) {
             return 'Такой город уже есть.';
         }
 
@@ -56,7 +56,7 @@ class City extends DatabaseRecord
         // Проверим нет ли связи с другими таблицами
         $this->setErrors(null);
 
-        if (Lm::inst()->db->select(User::tableName(), ['city_id' => $this->getId()])) {
+        if (Lm::$app->db->select(User::tableName(), ['city_id' => $this->getId()])) {
             $this->setErrors(['Этот город установлен как город одного из пользователей. Настройте правильные города для пользователей перед удалением.']);
             return false;
         }

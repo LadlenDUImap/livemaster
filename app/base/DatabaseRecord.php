@@ -61,7 +61,7 @@ abstract class DatabaseRecord
 
     public static function getDb(): IDatabase
     {
-        return Lm::inst()->db;
+        return Lm::$app->db;
     }
 
     public static function tableName()

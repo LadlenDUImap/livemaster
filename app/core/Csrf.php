@@ -25,7 +25,7 @@ class Csrf extends Component
     public function getCsrfTokenName()
     {
         return $this->token_name;
-        //return Lm::inst()->csrf->token_name;
+        //return Lm::$app->csrf->token_name;
     }
 
     /**
@@ -37,7 +37,7 @@ class Csrf extends Component
     {
         if (!$csrfToken = $this->loadCsrfToken())
         {
-            //$salt = Lm::inst()->csrf->token_salt;       //'uIlmkI873d';
+            //$salt = Lm::$app->csrf->token_salt;       //'uIlmkI873d';
             $csrfToken = $this->token_salt . ':' .  md5(openssl_random_pseudo_bytes(15));
             $this->storeCsrfToken($csrfToken);
         }
@@ -88,7 +88,7 @@ class Csrf extends Component
             {
                 $ret = true;
             } else {
-                Lm::inst()->log->set('Неизвестный метод: ' . $method, 'error');
+                Lm::$app->log->set('Неизвестный метод: ' . $method, 'error');
             }
         }
 

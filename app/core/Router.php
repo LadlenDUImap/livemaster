@@ -46,7 +46,7 @@ class Router
 
         $controller = new $class;
 
-        Lm::inst()->setController($controller);
+        Lm::$app->setController($controller);
 
         Web::sendHtmlResponse($controller->$action());
     }

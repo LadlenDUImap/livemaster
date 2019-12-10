@@ -109,7 +109,7 @@ class User extends DatabaseRecord
     protected function validateCity(?string $value)
     {
         if ($value !== null) {
-            if (!Lm::inst()->db->select(City::tableName(), ['id' => $value])) {
+            if (!Lm::$app->db->select(City::tableName(), ['id' => $value])) {
                 return 'Такого города нет.';
             }
         }
@@ -120,7 +120,7 @@ class User extends DatabaseRecord
     public function validatePropertyBulk(array $properties)
     {
         if (!$errorMessages = parent::validatePropertyBulk($properties)) {
-            if (Lm::inst()->db->select(static::$_tableName, $properties)) {
+            if (Lm::$app->db->select(static::$_tableName, $properties)) {
                 $errorMessages[] = 'Такой пользователь уже есть.';
             }
         }

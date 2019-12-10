@@ -39,4 +39,5 @@ spl_autoload_register(function ($className) {
     require $fileName;
 });
 
-\app\core\Lm::inst()->run($config);
+(new app\core\Application($config))->run();
+

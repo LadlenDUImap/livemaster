@@ -91,7 +91,7 @@ class Pdo extends \app\base\Component implements IDatabase
 
         try {
             if (LM_DEBUG) {
-                Lm::inst()->log->set('Команда SQL: ' . $query);
+                Lm::$app->log->set('Команда SQL: ' . $query);
             }
             if ($STH = $this->DBH->prepare($query)) {
                 $STH->setFetchMode(\PDO::FETCH_ASSOC);
@@ -107,7 +107,7 @@ class Pdo extends \app\base\Component implements IDatabase
                 throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; CONDITION: ' . print_r($condition));
             }
         } catch (\Exception $e) {
-            Lm::inst()->log->set($e, 'error');
+            Lm::$app->log->set($e, 'error');
         }
 
         return $result;
@@ -118,7 +118,7 @@ class Pdo extends \app\base\Component implements IDatabase
         $result = false;
 
         if (LM_DEBUG) {
-            Lm::inst()->log->set('Команда SQL: ' . $query);
+            Lm::$app->log->set('Команда SQL: ' . $query);
         }
 
         try {
@@ -130,7 +130,7 @@ class Pdo extends \app\base\Component implements IDatabase
                 throw new \Exception('Ошибка подготовки запроса PDO. QUERY: ' . $query . '; VALUES: ' . print_r($values));
             }
         } catch (\Exception $e) {
-            Lm::inst()->log->set($e, 'error');
+            Lm::$app->log->set($e, 'error');
         }
 
         return $result;

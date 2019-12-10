@@ -60,7 +60,7 @@ class ModelList
 
         $this->_templateElements = array_replace_recursive($this->_templateElements, $templateElements);
 
-        Lm::inst()->getController()->getView()->addCssCode(<<<CSS
+        Lm::$app->getController()->getView()->addCssCode(<<<CSS
 #overlay {
     position: fixed;
     top: 0;
@@ -69,10 +69,10 @@ class ModelList
     height: 100%;
     /*background: transparent;*/
     background-color: #000;
-    filter:alpha(opacity=10);
-    -moz-opacity:0.1;
-    -khtml-opacity: 0.1;
-    opacity: 0.1;
+    filter:alpha(opacity=5);
+    -moz-opacity:0.05;
+    -khtml-opacity: 0.05;
+    opacity: 0.05;
     z-index: 10000;
 }
 
@@ -101,7 +101,7 @@ CSS
 
         $actions = json_encode($this->_actions);
 
-        LM::inst()->getController()->getView()->addJsCode(<<<JS
+        Lm::$app->getController()->getView()->addJsCode(<<<JS
 (function() {
     var lastModifiedInfo;
     
