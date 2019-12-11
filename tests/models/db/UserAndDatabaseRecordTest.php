@@ -38,20 +38,53 @@ class UserAndDatabaseRecordTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    public function correctPropertyDataProvider()
+    {
+        return [
+            ['name', '   123     45 ', '123 45'],
+            ['dummy', '   123     4 ', '123     4'],
+            ['name', 'Не Подлежит Коррекции', false],
+            ['age', '   в  оз    ра ст     ', 'в  оз    ра ст'],
+        ];
+    }
+
     public function testCRUD()
     {
         Lm::$app->db->delete(User::tableName(), []);
         Lm::$app->db->delete(City::tableName(), []);
 
-        $result =  Lm::$app->db->select(User::tableName());
+        $result = Lm::$app->db->select(User::tableName());
         $this->assertSame([], $result);
 
         $user = new User;
         $this->assertTrue($user->isNew());
 
-        //$user->name = ;
+        $user->name = 'My User Name';
+        $user->age = '31';
+        $user->save();
 
+        $this->assertFalse($user->isNew());
 
+        $user_2 = new User($user->getId());
+        $this->assertSame(
+            [$user->name, $user->age, $user->city_id],
+            [$user_2->name, $user_2->age, $user_2->city_id]
+        );
+
+        $city = new City;
+        $city->name = 'Moscow';
+        $city->save();
+
+        $user_2->name = 'My User Name Mod';
+        $user_2->age = '40';
+        $user_2->city_id = $city->getId();
+        $user_2->save();
+
+        $user_3 = new User($user->getId());
+        $this->assertSame(
+            [$user_3->name, $user_3->age, $user_3->city_id],
+            ['My User Name Mod', '40', $city->getId()]
+        );
     }
 
     public function testValidateProperty()
@@ -122,15 +155,5 @@ class UserAndDatabaseRecordTest extends TestCase
         $this->assertIsArray($result);
         $this->assertNotEmpty($result, 'Тест аналогичного пользователя. Получен пустой тип вместо массива с ошибкой.');
         echo "\nТест аналогичного пользователя выдал " . print_r($result) . "\n";
-    }
-
-    public function correctPropertyDataProvider()
-    {
-        return [
-            ['name', '   123     45 ', '123 45'],
-            ['dummy', '   123     4 ', '123     4'],
-            ['name', 'Не Подлежит Коррекции', false],
-            ['age', '   в  оз    ра ст     ', 'в  оз    ра ст'],
-        ];
     }
 }
