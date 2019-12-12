@@ -40,7 +40,7 @@ abstract class DatabaseRecord
     {
         if ($id) {
             if (!$this->load([static::$_idName => $id])) {
-                throw new \Exception('Неправильный ID: ' . $id);
+                throw new \Exception('Неправильный ID: ' . $id, 404);
             }
         }
     }

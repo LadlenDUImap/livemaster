@@ -32,16 +32,6 @@ class ControllerTest extends TestCase
         self::$controller = null;
     }
 
-    public function setUp(): void
-    {
-        $webMock = $this->getMockBuilder(app\core\Web::class)
-            ->setMethods(['callExit', 'sendHeader'])
-            ->getMock();
-        /*$webMock->expects($this->any())
-            ->method('callExit');*/
-        Lm::$app->web = $webMock;
-    }
-
     protected function fillUserPostInfo($cityIdParam = null)
     {
         static $cityId;
@@ -60,6 +50,11 @@ class ControllerTest extends TestCase
 
     public function testActionCreate()
     {
+        $webMock = $this->getMockBuilder(app\core\Web::class)
+            ->setMethods(['callExit', 'sendHeader'])
+            ->getMock();
+        Lm::$app->web = $webMock;
+
         $city = new City;
         $city->name = 'Тестовый Город';
         $city->save();
@@ -89,8 +84,41 @@ class ControllerTest extends TestCase
         $this->assertNotEmpty($outputArray['data']['error-messages']);
     }
 
-    /*public function testActionUpdate()
+    public function testActionUpdate()
     {
+        $allUsers = User::getAll();
 
-    }*/
+        $_POST = [];
+        $_POST['lm_form_id'] = $allUsers[0]->getId();
+        $_POST['User']['name'] = 'Новый Юзер Модифицированный';
+        $_POST['User']['age'] = '120';
+        $_POST['ajax'] = 'true';
+
+        self::$controller->actionUpdate();
+
+        $outputJson = $this->getActualOutputForAssertion();
+        $this->assertJsonStringEqualsJsonString('{"state":"success","data":{"corrected-attributes":[]}}', $outputJson);
+
+        $modUser = new User($allUsers[0]->getId());
+        $this->assertSame('Новый Юзер Модифицированный', $modUser->name);
+        $this->assertSame('120', $modUser->age);
+    }
+
+    public function testActionDelete()
+    {
+        $allUsers = User::getAll();
+
+        $_POST = [];
+        $_POST['lm_form_id'] = $allUsers[0]->getId();
+        $_POST['ajax'] = 'true';
+
+        self::$controller->actionDelete();
+
+        $outputJson = $this->getActualOutputForAssertion();
+        $this->assertJsonStringEqualsJsonString('{"state":"success","data":[]}', $outputJson);
+
+        $this->expectExceptionCode(404);
+
+        new User($allUsers[0]->getId());
+    }
 }
