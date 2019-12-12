@@ -11,7 +11,7 @@ use app\models\db\City;
  * @requires PHP >= 7.1
  *
  */
-class UserAndDatabaseRecordTest extends TestCase
+class ControllerTest extends TestCase
 {
     /** @var  app\controllers\user\Controller */
     protected static $controller;
@@ -35,51 +35,36 @@ class UserAndDatabaseRecordTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testActionUpdate()
+    public function testActionCreate()
     {
         $webMock = $this->getMockBuilder(app\core\Web::class)
-            //->setMethods(['dieWithTheString'])
-            ->setMethods(null)
+            ->setMethods(['callExit'])
             ->getMock();
-
-        /*$webMock->expects($this->once())
-            ->method('dieWithTheString');*/
-
+        $webMock->expects($this->atLeastOnce())
+            ->method('callExit');
         Lm::$app->web = $webMock;
-
 
         $city = new City;
         $city->name = 'Тестовый Город';
         $city->save();
-
 
         $_POST['User']['name'] = 'Новый Юзер';
         $_POST['User']['age'] = '12';
         $_POST['User']['city_id'] = $city->getId();
         $_POST['ajax'] = 'true';
 
+        //$this->expectOutputString('{"state":"success","data":{"corrected-attributes":[]}}');
         self::$controller->actionCreate();
 
-        //print_r($result);
-        //$this->expectOutputString('YOU SHALL NOT PASS');
+        $outputJson = $this->getActualOutput();
+        $this->assertJsonStringEqualsJsonString('{"state":"success","data":{"corrected-attributes":[]}}', $outputJson);
+        //$this->
 
-
-        /*$originalClassName = app\controllers\user\Controller::class;
-
-        //$stub = $this->createStub($originalClassName);
-
-//        $stub->method('actionUpdate')
-//            ->willReturn('foo');
-
-        //$this->assertSame('foo', $stub->actionUpdate());
-        $mock = $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            //->disableOriginalClone()
-            //->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-
-        $this->assertSame('foo', $mock->actionUpdate());*/
+        //echo "\n>>>$output<<<\n";
     }
 
+    /*public function testActionUpdate()
+    {
+
+    }*/
 }

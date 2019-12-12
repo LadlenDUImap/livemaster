@@ -54,7 +54,8 @@ class Web extends \app\base\Component
     public function sendJsonResponse($state, $data = [])
     {
         header('Content-Type: application/json');
-        $this->dieWithTheString(json_encode(['state' => $state, 'data' => $data]));
+        echo json_encode(['state' => $state, 'data' => $data]);
+        $this->callExit();
     }
 
     /**
@@ -65,11 +66,12 @@ class Web extends \app\base\Component
     public function sendHtmlResponse($html)
     {
         header('Content-Type: text/html; charset=UTF-8');
-        $this->dieWithTheString($html);
+        echo $html;
+        $this->callExit();
     }
 
-    public function dieWithTheString($str)
+    public function callExit()
     {
-        die($str);
+        exit;
     }
 }
