@@ -32,35 +32,61 @@ class ControllerTest extends TestCase
         self::$controller = null;
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testActionCreate()
+    public function setUp(): void
     {
         $webMock = $this->getMockBuilder(app\core\Web::class)
-            ->setMethods(['callExit'])
+            ->setMethods(['callExit', 'sendHeader'])
             ->getMock();
-        $webMock->expects($this->atLeastOnce())
-            ->method('callExit');
+        /*$webMock->expects($this->any())
+            ->method('callExit');*/
         Lm::$app->web = $webMock;
+    }
 
+    protected function fillUserPostInfo($cityIdParam = null)
+    {
+        static $cityId;
+
+        if ($cityIdParam) {
+            $cityId = $cityIdParam;
+        }
+
+        $userPost['User']['name'] = 'Новый Юзер';
+        $userPost['User']['age'] = '12';
+        $userPost['User']['city_id'] = $cityId;
+        $userPost['ajax'] = 'true';
+
+        return $userPost;
+    }
+
+    public function testActionCreate()
+    {
         $city = new City;
         $city->name = 'Тестовый Город';
         $city->save();
 
-        $_POST['User']['name'] = 'Новый Юзер';
-        $_POST['User']['age'] = '12';
-        $_POST['User']['city_id'] = $city->getId();
-        $_POST['ajax'] = 'true';
+        $_POST = $this->fillUserPostInfo($city->getId());
 
-        //$this->expectOutputString('{"state":"success","data":{"corrected-attributes":[]}}');
         self::$controller->actionCreate();
 
-        $outputJson = $this->getActualOutput();
-        $this->assertJsonStringEqualsJsonString('{"state":"success","data":{"corrected-attributes":[]}}', $outputJson);
-        //$this->
+        $outputJson = $this->getActualOutputForAssertion();
+        $this->assertJsonStringEqualsJsonString('{"data":{"corrected-attributes":[]},"state":"success"}', $outputJson);
+    }
 
-        //echo "\n>>>$output<<<\n";
+    public function testActionCreateSame()
+    {
+        self::$controller->actionCreate();
+
+        $outputJson = $this->getActualOutputForAssertion();
+        $this->assertJson($outputJson);
+
+        $outputArray = json_decode($outputJson, true);
+
+        $this->assertArrayHasKey('state', $outputArray);
+        $this->assertSame($outputArray['state'], 'error');
+
+        $this->assertArrayHasKey('data', $outputArray);
+        $this->assertArrayHasKey('error-messages', $outputArray['data']);
+        $this->assertNotEmpty($outputArray['data']['error-messages']);
     }
 
     /*public function testActionUpdate()

@@ -99,11 +99,11 @@ class UserAndDatabaseRecordTest extends TestCase
 
         $result = self::$user->validateProperty('name', '');
         $this->assertTrue(is_string($result), 'Тест пустого имени. Получен тип "' . gettype($result) . '" вместо строки ошибки.');
-        echo "\nТест пустого имени выдал '$result'\n";
+        fwrite(STDOUT, "\nТест пустого имени выдал '$result'\n");
 
         $result = self::$user->validateProperty('name', 'значение больше 30 символов 12345');
         $this->assertTrue(is_string($result), 'Тест слишком длинного имени. Получен тип "' . gettype($result) . '" вместо строки ошибки.');
-        echo "\nТест слишком длинного имени выдал '$result'\n";
+        fwrite(STDOUT,"\nТест слишком длинного имени выдал '$result'\n");
 
 
         // Возраст
@@ -113,22 +113,22 @@ class UserAndDatabaseRecordTest extends TestCase
 
         $result = self::$user->validateProperty('age', '');
         $this->assertTrue(is_string($result), 'Тест пустого возраста. Получен тип "' . gettype($result) . '" вместо строки ошибки.');
-        echo "\nТест пустого возраста выдал '$result'\n";
+        fwrite(STDOUT, "\nТест пустого возраста выдал '$result'\n");
 
         $result = self::$user->validateProperty('age', '14text');
         $this->assertTrue(is_string($result), 'Тест возраста с не-числовыми символами. Получен тип "' . gettype($result) . '" вместо строки ошибки.');
-        echo "\nТест возраста с не-числовыми символами выдал '$result'\n";
+        fwrite(STDOUT, "\nТест возраста с не-числовыми символами выдал '$result'\n");
 
         $result = self::$user->validateProperty('age', '1400');
         $this->assertTrue(is_string($result), 'Тест слишком большого возраста. Получен тип "' . gettype($result) . '" вместо строки ошибки.');
-        echo "\nТест слишком большого возраста выдал '$result'\n";
+        fwrite(STDOUT, "\nТест слишком большого возраста выдал '$result'\n");
 
 
         // Город
 
         $result = self::$user->validateProperty('city_id', '1');
         $this->assertTrue(is_string($result), 'Тест отстутствия города. Получен тип "' . gettype($result) . '" вместо строки ошибки.');
-        echo "\nТест отстутствия города выдал '$result'\n";
+        fwrite(STDOUT, "\nТест отстутствия города выдал '$result'\n");
 
         $city = new City();
         $city->name = 'test';
@@ -154,6 +154,6 @@ class UserAndDatabaseRecordTest extends TestCase
         ]);
         $this->assertIsArray($result);
         $this->assertNotEmpty($result, 'Тест аналогичного пользователя. Получен пустой тип вместо массива с ошибкой.');
-        echo "\nТест аналогичного пользователя выдал " . print_r($result) . "\n";
+        fwrite(STDOUT, "\nТест аналогичного пользователя выдал " . print_r($result, true) . "\n");
     }
 }

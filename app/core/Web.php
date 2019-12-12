@@ -39,8 +39,7 @@ class Web extends \app\base\Component
      */
     public function startSession()
     {
-        if (session_id() == '' || !isset($_SESSION))
-        {
+        if (session_id() == '' || !isset($_SESSION)) {
             session_start();
         }
     }
@@ -53,7 +52,7 @@ class Web extends \app\base\Component
      */
     public function sendJsonResponse($state, $data = [])
     {
-        header('Content-Type: application/json');
+        $this->sendHeader('Content-Type: application/json');
         echo json_encode(['state' => $state, 'data' => $data]);
         $this->callExit();
     }
@@ -65,9 +64,14 @@ class Web extends \app\base\Component
      */
     public function sendHtmlResponse($html)
     {
-        header('Content-Type: text/html; charset=UTF-8');
+        $this->sendHeader('Content-Type: text/html; charset=UTF-8');
         echo $html;
         $this->callExit();
+    }
+
+    public function sendHeader($content)
+    {
+        header($content);
     }
 
     public function callExit()
