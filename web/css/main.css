@@ -57,10 +57,10 @@ table, div {
     width:30%;
 }*/
 
-.div-table-col, .div-table-head {
+/*.div-table-col, .div-table-head {
     text-align: center;
     padding: 5px;
-}
+}*/
 
 #btn-add-user {
     margin-top: 1.5em;
@@ -149,6 +149,8 @@ table, div {
 }
 
 .div-table-col, .div-table-head {
+    text-align: center;
+    width: 25%;
     border: 1px solid #999999;
     display: table-cell;
     padding: 3px 10px;
